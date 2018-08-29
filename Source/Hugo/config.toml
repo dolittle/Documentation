@@ -1,0 +1,23 @@
+baseURL = "/"
+languageCode = "en-us"
+
+title = "Dolittle Documentation"
+theme = "kraiklyn"
+
+pygmentsCodeFences = true
+pygmentsStyle = "monokailight"
+
+[params]
+#externalTitle = "Dolittle Documentation"
+sidebarColor = "default"
+customCss = []
+
+[[menu.shortcuts]]
+name = "Dolittle on Github"
+url = "https://github.com/dolittle/home"
+weight = 10
+
+[[menu.shortcuts]]
+name = "Dolittle Home"
+url = "https://dolittle.com"
+weight = 20
