@@ -1,11 +1,8 @@
 {
-    "https://github.com/dolittle/dotnet.fundamentals.git": {
-        "name": ".NET Fundamentals"
+    "https://github.com/dolittle/home.git": {
+        "name": "Home"
     },
-    "https://github.com/dolittle/runtime.git": {
-        "name": "Runtime"
-    },
-    "https://github.com/dolittle/dotnet.sdk.git": {
-        "name": ".NET SDK"
+    "https://github.com/dolittle/documentation.git": {
+        "name": "Documentation"
     }
 }
