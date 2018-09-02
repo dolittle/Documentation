@@ -1,44 +1,19 @@
 #!/usr/local/bin/node
-const { spawnSync } = require('child_process');
+const helpers = require('./helpers');
+const globals = require('./globals');
 const fs = require('fs');
-const allowedRepositories = require('./repositories.json');
 let repositoryUrl = "";
 let repositoryConfiguration = {};
 let repositoryPath = "";
 // https://dolittle.blob.core.windows.net/documentation
 
-function deleteFolderRecursive(path) {
-    if (fs.existsSync(path)) {
-      fs.readdirSync(path).forEach(function(file, index){
-        var curPath = path + "/" + file;
-        if (fs.lstatSync(curPath).isDirectory()) { // recurse
-          deleteFolderRecursive(curPath);
-        } else { // delete file
-          fs.unlinkSync(curPath);
-        }
-      });
-      fs.rmdirSync(path);
-    }
-  };
-
-function run(program, args, workingDir) {
-    let result = spawnSync(program, args, {
-        cwd: workingDir,
-        stdio: [null, process.stdout, process.stderr ]
-    });
-
-    if( result.stdout ) console.log(`${result.stdout}`);
-
-    return result;
-}
-
 
 function hasClone() {
-    let path = `repositories/${repositoryConfiguration.name}`;
+    let path = `${globals.paths.repositories}/${repositoryConfiguration.name}`;
     if( fs.existsSync(path) ) {
         let gitPath = `${path}/.git`;
         if( fs.existsSync(gitPath)) return true;
-        deleteFolderRecursive(path);
+        helpers.deleteFolderRecursive(path);
     }
 
     return false;
@@ -46,7 +21,7 @@ function hasClone() {
 
 function clone() {
     console.log(`Cloning ${repositoryUrl} into ${repositoryConfiguration.name} in working dir repositories`);
-    run('git', [
+    helpers.run('git', [
         'clone',
         '--recurse-submodules',
         repositoryUrl,
@@ -56,7 +31,7 @@ function clone() {
 
 function createSymbolicLink() {
     let linkTarget = `../${repositoryPath}/Documentation`;
-    let linkSource = `content/${repositoryConfiguration.name}`;
+    let linkSource = `${globals.paths.content}/${repositoryConfiguration.name}`;
 
     console.log(`Creating symlink for ${linkSource} to ${linkTarget}`);
     if( fs.existsSync(linkSource)) {
@@ -68,12 +43,12 @@ function createSymbolicLink() {
 }
 
 function pullChanges() {
-    run('git', [
+    helpers.run('git', [
         'reset',
         '--hard'
     ], repositoryPath);
 
-    run('git', [
+    helpers.run('git', [
         'pull'
     ], repositoryPath);
 }
@@ -94,11 +69,11 @@ function handleCurrentRepository() {
 }
 
 if( process.argv.length == 2 ) {
-    for( var property in allowedRepositories ) {
-        repositoryConfiguration = allowedRepositories[property];
+    for( var property in globals.allowedRepositories ) {
+        repositoryConfiguration = globals.allowedRepositories[property];
         console.log(`Handling repository : ${repositoryConfiguration.name} - ${property}`)
         repositoryUrl = property;
-        repositoryPath = `repositories/${repositoryConfiguration.name}`;
+        repositoryPath = `${globals.paths.repositories}/${repositoryConfiguration.name}`;
     
         handleCurrentRepository();
     }
@@ -109,18 +84,18 @@ if( process.argv.length == 2 ) {
     }
 
     repositoryUrl = process.argv[2];
-    if (!allowedRepositories.hasOwnProperty(repositoryUrl)) {
+    if (!globals.allowedRepositories.hasOwnProperty(repositoryUrl)) {
         console.log('You have to provide an allowed repository');
         process.exit();
     }
 
-    repositoryConfiguration = allowedRepositories[repositoryUrl];
-    repositoryPath = `repositories/${repositoryConfiguration.name}`;
+    repositoryConfiguration = globals.allowedRepositories[repositoryUrl];
+    repositoryPath = `${globals.paths.repositories}/${repositoryConfiguration.name}`;
 
     console.log(`Build documentation based on changes from ${repositoryUrl}`);
 
     handleCurrentRepository();
 }
 
-run('hugo');
+helpers.run('hugo');
 upload();
