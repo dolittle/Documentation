@@ -3,6 +3,7 @@ title: Getting started
 description: Learn how to get started with documentation
 keywords: Contributing
 author: einari
+weight: 1
 ---
 
 The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”,

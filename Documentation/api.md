@@ -3,6 +3,7 @@ title: API documentation
 description: Learn about how to make sure APIs are documented
 keywords: Contributing
 author: einari
+weight: 2
 ---
 
 All public APIs **MUST** be documented regardless of what language and use-case.
