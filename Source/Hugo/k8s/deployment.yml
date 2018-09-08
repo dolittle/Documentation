@@ -1,0 +1,19 @@
+---
+  kind: Deployment
+  apiVersion: extensions/v1beta1
+  metadata:
+    name: documentation
+    namespace: dolittle
+  spec:
+    template:
+      metadata:
+        labels:
+          app: documentation
+          name: documentation
+      spec:
+        containers:
+        - name: styles
+          image: dolittle/documentation
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 3000
