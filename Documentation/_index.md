@@ -72,6 +72,14 @@ In order to cross-reference content that sits in a different repository.....
 More details coming soon
 {{% /notice %}}
 
+## Diagrams / Figures
+
+All diagrams and figures **SHOULD** be done using the [Mermaid](https://docdock.netlify.com/shortcodes/mermaid/) shortcode.
+Mermaid has more features and is well documented [here](https://mermaidjs.github.io).
+
+Some diagrams/figures might not be possible to do using Mermaid, these can then be images. Beware however how you create these
+images and make sure they comply with the look and feel.
+
 ## Images
 
 All images should be kept close to the markdown file using it.
