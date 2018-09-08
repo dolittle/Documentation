@@ -9,9 +9,11 @@ const app = express();
 app.use(express.static('public'));
 
 app.post('/updateRepository', (request, response) => {
-    let incomingRepo = request.query.url || '';
+    let incomingRepo = decodeURIComponent(request.query.url).toLowerCase() || '';
 
     for( var repository in repositories ) {
+        repository = repository.toLowerCase();
+
         if( repository == incomingRepo ) {
             let repositoryPath = path.join(process.cwd(), 'repositories', repositories[repository].name);
             let git = simpleGit(repositoryPath);
@@ -19,7 +21,7 @@ app.post('/updateRepository', (request, response) => {
 
             helpers.run('hugo');
             response.send('Pulled and generated new pages');
-            break;
+            return;
         }
     }
     response.statusCode = 500;
