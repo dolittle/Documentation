@@ -1,6 +1,3 @@
-[submodule "Source/Hugo/themes/kraiklyn"]
-	path = Source/Hugo/themes/kraiklyn
-	url = https://github.com/jsnjack/kraiklyn.git
 [submodule "Source/Hugo/themes/docdock"]
 	path = Source/Hugo/themes/docdock
 	url = https://github.com/vjeantet/hugo-theme-docdock.git
