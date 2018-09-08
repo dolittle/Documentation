@@ -1,13 +1,35 @@
 ---
-title: "Documentation"
+title: Writing documentation
+description: Learn about how to contribute to documentation
+keywords: Contributing
+author: einari
 ---
 
-This is how you write documentation
-https://gohugo.io/content-management/urls/
+The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”,
+“RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in
+[RFC 2119](https://tools.ietf.org/html/rfc2119).
 
+## Process
 
-http://docdock.netlify.com/
+Our documentation is generated using something called [Hugo](https://gohugo.io).
+It basically works with Markdown and turns this into HTML pages that we then host. The documentation
+sits separated in the repository it belongs and is expected to be in a folder called `Documentation`
+inside at the root of the repository. Documentation is updated whenever a [pull request](https://help.github.com/articles/about-pull-requests/)
+goes through, it will automatically trigger Hugo to re-render the pages.
 
+### Theme
+
+The Hugo theme we've chosen to base everything from is called [DocDock](http://docdock.netlify.com).
+We're adhering to the guidelines and documentation of the theme in combination with Hugos guidelines.
+
+## Links
 
 https://gohugo.io/content-management/cross-references/
 
+### Relative
+
+### Cross Repositories
+
+## Working locally
+
+[Something](./api)
