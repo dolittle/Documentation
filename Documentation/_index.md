@@ -24,12 +24,18 @@ We're adhering to the guidelines and documentation of the theme in combination w
 
 ## Links
 
-https://gohugo.io/content-management/cross-references/
+When adding links to other pages you **MUST NOT** include the file extension `.md` - otherwise the link
+will be broken. For instance, linking to the [API](./api) documentation is done by adding a markdown link
+as follows:
 
-### Relative
+```markdown
+[API](./api)
+```
+
+Even though the file is actually called `api.md`.
 
 ### Cross Repositories
 
 ## Working locally
 
-[Something](./api)
+
