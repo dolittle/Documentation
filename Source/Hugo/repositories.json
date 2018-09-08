@@ -1,6 +1,9 @@
 {
     "https://github.com/dolittle/home.git": {
-        "name": "Home"
+        "name": "About"
+    },
+    "https://github.com/dolittle/dotnet.sdk.git": {
+        "name": "C# SDK"
     },
     "https://github.com/dolittle/documentation.git": {
         "name": "Documentation"
