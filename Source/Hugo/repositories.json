@@ -3,9 +3,12 @@
         "name": "About"
     },
     "https://github.com/dolittle/dotnet.sdk.git": {
-        "name": "C# SDK"
+        "name": "DotNET SDK"
     },
     "https://github.com/dolittle/documentation.git": {
         "name": "Documentation"
+    },
+    "https://github.com/dolittle-tools/cli.git": {
+        "name": "CLI Tool"
     }
 }
