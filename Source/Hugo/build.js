@@ -64,7 +64,7 @@ function handleCurrentRepository() {
     } else {
         pullChanges();
     }
-    
+ 
     createSymbolicLink();   
 }
 
