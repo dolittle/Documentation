@@ -91,7 +91,7 @@ transparency such as [png](https://en.wikipedia.org/wiki/Portable_Network_Graphi
 
 ## Writing
 
-All documentation is written in markdown following the [GitHub flavor](https://help.github.com/categories/writing-on-github/).
+All documentation is written in markdown following the [GitHub flavor](https://github.github.com/gfm/).
 Markdown can be written using the simplest of editors (Pico, Nano, Notepad), but there are editors out there that gives
 great value and guides you through giving you feedback on errors. Editors like [Visual Studio Code](http://code.visualstudio.com/)
 and [Sublime Text](http://sublimetext.com) comes highly recommended. VSCode has for instance a [markdown preview feature](https://code.visualstudio.com/Docs/languages/markdown).
