@@ -94,6 +94,13 @@ To make sure the folders aren't getting cluttered and to have some structure, pu
                 [image files]
 ```
 
+{{% notice warning %}}
+The URL to the image needs to be fully qualified, typically pointing to the GitHub URL.
+This is something being worked on and registered as an issue [here](https://github.com/dolittle/Documentation/issues/13).
+
+Read more [here](http://docdock.netlify.com/create-page/page-images/)
+{{% /notice %}}
+
 Images should not have backgrounds that assume the background of the site, instead you **SHOULD** be using file formats with support for
 transparency such as [png](https://en.wikipedia.org/wiki/Portable_Network_Graphics).
 
