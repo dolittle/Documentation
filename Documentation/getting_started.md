@@ -45,7 +45,7 @@ $ ln -s <repository-folder>/Documentation <folder-name>
 
 Windows:
 ```shell
-c:> mklink /d <repository-folder>\Documentation <folder-name>
+c:> mklink /d <folder-name> <repository-folder>\Documentation 
 ```
 
 Example:
@@ -57,7 +57,7 @@ $ ln -s /Projects/Dolittle/Runtime/Documentation Overview
 
 Windows:
 ```shell
-c:> mklink /d c:\Projects\Dolittle\Runtime\Documentation Overview
+c:> mklink /d Overview c:\Projects\Dolittle\Runtime\Documentation 
 ```
 
 Chances are you are contributing to the code of the repository and you can therefor leave it in place and maintain
