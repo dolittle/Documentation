@@ -65,6 +65,22 @@ code and documentation side-by-side.
 
 ### Building and running
 
+
+#### Install dependencies
+You need to install node dependencies in the `Source/Hugo` folder. You can do this through using npm or yarn.
+
+NPM:
+```shell
+$ npm install
+```
+
+Yarn:
+```shell
+$ yarn
+```
+
+
+#### Install Hugo
 You will need to [install Hugo](https://gohugo.io/getting-started/installing).
 Once you have Hugo installed, you open a shell and navigate to the `Source/Hugo` folder.
 From this you simply do:
