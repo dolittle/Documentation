@@ -36,7 +36,8 @@ The system is relying on all content sitting in the `content` folder:
 
 Its expecting a folder for each top-level repository and the content of the `Documentation` folder directly in this.
 This is best achieved by creating a symbolic link to the repositories `Documentation` folder.
-Open a shell and navigate to the `content` folder.
+
+Open a shell and **navigate to the `content` folder**.
 
 Unix:
 ```shell
