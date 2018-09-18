@@ -11,7 +11,7 @@ pygmentsStyle = "monokailight"
 [params]
 #externalTitle = "Dolittle Documentation"
 sidebarColor = "default"
-customCss = []
+customCss = ['css/dolittle.css']
 
 [[menu.shortcuts]]
 name = "Dolittle on Github"
