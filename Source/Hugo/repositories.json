@@ -10,5 +10,8 @@
     },
     "https://github.com/dolittle-tools/cli.git": {
         "name": "CLI Tool"
+    },
+    "https://github.com/dolittle-interaction/Dolittle.styles.git": {
+        "name": "Styles"
     }
 }
