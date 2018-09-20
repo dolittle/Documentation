@@ -36,7 +36,8 @@ The system is relying on all content sitting in the `content` folder:
 
 Its expecting a folder for each top-level repository and the content of the `Documentation` folder directly in this.
 This is best achieved by creating a symbolic link to the repositories `Documentation` folder.
-Open a shell and navigate to the `content` folder.
+
+Open a shell and **navigate to the `content` folder**.
 
 Unix:
 ```shell
@@ -45,7 +46,7 @@ $ ln -s <repository-folder>/Documentation <folder-name>
 
 Windows:
 ```shell
-c:> mklink /d <repository-folder>\Documentation <folder-name>
+c:> mklink /d <folder-name> <repository-folder>\Documentation 
 ```
 
 Example:
@@ -57,7 +58,7 @@ $ ln -s /Projects/Dolittle/Runtime/Documentation Overview
 
 Windows:
 ```shell
-c:> mklink /d c:\Projects\Dolittle\Runtime\Documentation Overview
+c:> mklink /d Overview c:\Projects\Dolittle\Runtime\Documentation 
 ```
 
 Chances are you are contributing to the code of the repository and you can therefor leave it in place and maintain
@@ -65,6 +66,22 @@ code and documentation side-by-side.
 
 ### Building and running
 
+
+#### Install dependencies
+You need to install node dependencies in the `Source/Hugo` folder. You can do this through using npm or yarn.
+
+NPM:
+```shell
+$ npm install
+```
+
+Yarn:
+```shell
+$ yarn
+```
+
+
+#### Install Hugo
 You will need to [install Hugo](https://gohugo.io/getting-started/installing).
 Once you have Hugo installed, you open a shell and navigate to the `Source/Hugo` folder.
 From this you simply do:
