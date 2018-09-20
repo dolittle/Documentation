@@ -21,12 +21,12 @@ RUN npm install
 RUN mkdir repositories
 RUN mkdir content
 
+ADD repositories.json repositories.json
 ADD build.js build.js
 ADD helpers.js helpers.js
 ADD globals.js globals.js
 ADD versioning.js versioning.js
 ADD BuildVersion.js BuildVersion.js
-ADD repositories.json repositories.json
 ADD config.toml config.toml
 
 
