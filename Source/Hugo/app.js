@@ -20,7 +20,7 @@ app.post('/updateRepository', (request, response) => {
 
             console.log('Pulling latest');
             let git = simpleGit(repositoryPath);
-            git.pull().exec(() => {
+            git.pull('origin', 'master', {'-f': null}).exec(() => {
                 console.log('Pulled - run Hugo');
                 helpers.run('hugo');
 
