@@ -2,6 +2,9 @@
     "https://github.com/dolittle/home.git": {
         "name": "About"
     },
+    "https://github.com/dolittle/Runtime.git" :{
+        "name": "Overview"
+    },
     "https://github.com/dolittle/dotnet.sdk.git": {
         "name": "DotNET SDK"
     },
