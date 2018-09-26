@@ -5,5 +5,8 @@ author: Dolittle
 keywords: Documentation
 weight: 1
 ---
+
 # Welcome to Dolittle documentation
 
+{{% videolist %}}
+{{% hotlist %}}
