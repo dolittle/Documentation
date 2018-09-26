@@ -3,3 +3,6 @@ content
 public
 repositories
 resources
+
+!content/_index.md
+!content/_footer.md
