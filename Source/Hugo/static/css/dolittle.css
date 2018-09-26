@@ -2,9 +2,7 @@ html,
 body {
     font-size: 100%;
 }
-/* body {
-    background-color: #e0e0e0;
-} */
+
 h1,
 h2,
 h3,
@@ -48,19 +46,22 @@ article > aside .menu {
     }
 }
 .flex-row .link-item {
-    box-shadow: 0.125rem 0.125rem 0.25rem 0.125rem rgba(82, 90, 99, 0.3);
+    box-shadow: 0.0625rem 0.0625rem 0.125rem 0.0625rem rgba(82, 90, 99, 0.3);
+    background-color: #f4f4f4;
     display: block;
     font-size: 1.5rem;
     font-weight: 200;
+    text-align: center;
     text-transform: uppercase;
-    padding: 1rem 2rem;
+    padding: 2rem;
     color: #525a63;
-    margin: 2rem 0;
+    margin: 1rem 0;
     transform: translateY(0);
-    transition: box-shadow 0.2s ease-in-out;
+    transition: all 0.1s ease-in-out;
 }
 .flex-row a.link-item:hover {
-    box-shadow: 0.25rem 0.25rem 1rem 0 rgba(82, 90, 99, 0.7);
+    box-shadow: 0.0625rem 0.25rem 0.4rem 0 rgba(82, 90, 99, 0.7);
+    transform: translate(-0.125rem, -0.125rem);
 }
 @media (min-width: 1024px) {
     .flex-row {
