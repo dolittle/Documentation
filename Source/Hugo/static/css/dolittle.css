@@ -9,6 +9,7 @@ h3,
 h4,
 h5,
 h6 {
+    color: #666;
     line-height: 1em;
     font-weight: 300;
 }
@@ -78,6 +79,7 @@ article > aside .menu {
         flex: 1 1 auto;
         margin: 1rem;
         width: 33%;
+        max-width: 50%;
     }
     .flex-row .link-item {
         flex: 1 1 auto;
