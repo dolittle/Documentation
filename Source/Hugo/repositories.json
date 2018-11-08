@@ -8,11 +8,11 @@
     "https://github.com/dolittle/dotnet.sdk.git": {
         "name": "DotNET SDK"
     },
-    "https://github.com/dolittle/dotnet.fundamentals.git": {
-        "name": "DotNET Fundamentals"
-    },
     "https://github.com/dolittle/documentation.git": {
         "name": "Documentation"
+    },
+    "https://github.com/dolittle-interaction/javascript.client.aurelia.git": {
+        "name": "Aurelia"
     },
     "https://github.com/dolittle-tools/cli.git": {
         "name": "CLI"
