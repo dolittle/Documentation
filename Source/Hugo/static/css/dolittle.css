@@ -15,6 +15,18 @@ h6 {
 }
 header {
     background-color: #525a63;
+    height: 3rem;
+    padding: 0 0.75rem;
+    margin-bottom: 0;
+}
+header .logo{
+ line-height: 1.15;
+}
+header p {
+    margin: 0;
+}
+header svg {
+    height: 1.75rem;
 }
 header:after {
     background: none;
