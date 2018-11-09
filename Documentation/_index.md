@@ -3,6 +3,7 @@ title: Writing documentation
 description: Learn about how to contribute to documentation
 keywords: Contributing
 author: einari
+weight: 5
 ---
 
 The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”,
