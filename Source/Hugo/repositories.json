@@ -2,6 +2,9 @@
     "https://github.com/dolittle/home.git": {
         "name": "General"
     },
+    "https://github.com/dolittle/dotnet.fundamentals.git": {
+        "name": ".NET Fundamentals"
+    },
     "https://github.com/dolittle/runtime.git": {
         "name": "Overview"
     },
