@@ -3,9 +3,6 @@ public
 repositories
 
 content
-!content/_index.md
-!content/_footer.md
-!content/_header.md
 
 node_modules
 yarn.lock
