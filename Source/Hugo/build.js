@@ -30,8 +30,9 @@ function clone() {
 }
 
 function createSymbolicLink() {
-    let linkTarget = `../${repositoryPath}/Documentation`;
-    let linkSource = `${globals.paths.content}/${repositoryConfiguration.name}`;
+    let relativeLinkTargetPathPart = getRelativePathPart(repositoryConfiguration.path)
+    let linkTarget = `${relativeLinkTargetPathPart}${repositoryPath}/Documentation`;
+    let linkSource = `${globals.paths.content}/${repositoryConfiguration.path}/${repositoryConfiguration.name}`;
 
     console.log(`Creating symlink for ${linkSource} to ${linkTarget}`);
     if( fs.existsSync(linkSource)) {
@@ -40,6 +41,11 @@ function createSymbolicLink() {
     }
     console.log(`Creating symlink for ${linkSource}`);
     fs.symlinkSync(linkTarget, linkSource, 'dir');
+}
+
+function getRelativePathPart(path) {
+    let relativePathPart = '../';
+    return path ? relativePathPart + path.split('/').flat().map(() => '../').join() : relativePathPart;
 }
 
 function pullChanges() {
