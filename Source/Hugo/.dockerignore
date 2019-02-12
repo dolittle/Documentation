@@ -8,9 +8,8 @@ resources
 !content/_footer.md
 !content/_header.md
 
-!content/API/_index.md
-!content/Application/_index.md
-!content/Domain_Logic/_index.md
-!content/Frontend/_index.md
-!content/Getting_started/_index.md
-!content/Tools/_index.md
+!content/api/_index.md
+!content/backend/_index.md
+!content/contributing/_index.md
+!content/frontend/_index.md
+!content/tools/_index.md
