@@ -76,8 +76,8 @@ content
 |---_index.md
 |---getting started [linked to home/Documentation]
 |---contributing
-|   |---_index.md
-|   |---where_to_start        
-|   |   |---_index.md
-|   |   |---guidelines [linked to learning/Documentation]
+    |---_index.md
+    |---where_to_start        
+        |---_index.md
+        |---guidelines [linked to learning/Documentation]
 ```
