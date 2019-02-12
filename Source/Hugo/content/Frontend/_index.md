@@ -5,7 +5,3 @@ author: Dolittle
 keywords: Documentation
 weight: 4
 ---
-
-Commands
-Events
-Query

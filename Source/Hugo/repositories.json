@@ -1,38 +1,38 @@
 {
     "https://github.com/dolittle/home.git": {
-        "name": "Guidelines",
-        "path": "Contributing"
+        "name": "guidelines",
+        "path": "contributing"
     },
     "https://github.com/dolittle/dotnet.fundamentals.git": {
-        "name": ".NET Fundamentals",
-        "path": "API"
+        "name": ".net fundamentals",
+        "path": "api"
     },
     "https://github.com/dolittle/runtime.git": {
-        "name": "Domain Logic",
-        "path": ""
+        "name": "overview",
+        "path": "backend"
     },
     "https://github.com/dolittle/dotnet.sdk.git": {
-        "name": "DotNET SDK",
-        "path": "API"
+        "name": "dotnet sdk",
+        "path": "backend"
     },
     "https://github.com/dolittle/documentation.git": {
-        "name": "Documentation",
-        "path": "Contributing"
+        "name": "documentation",
+        "path": "contributing"
     },
     "https://github.com/dolittle-interaction/javascript.client.aurelia.git": {
-        "name": "Aurelia",
-        "path": "Frontend"
+        "name": "aurelia",
+        "path": "frontend"
     },
     "https://github.com/dolittle-tools/cli.git": {
-        "name": "CLI",
-        "path": "Tools"
+        "name": "cli",
+        "path": "tools"
     },
-    "https://github.com/dolittle-interaction/Dolittle.styles.git": {
-        "name": "Styles",
-        "path": "Frontend"
+    "https://github.com/dolittle-interaction/dolittle.styles.git": {
+        "name": "styles",
+        "path": "frontend"
     },
-    "https://github.com/dolittle/Learning.git": {
-        "name": "Getting Started",
+    "https://github.com/dolittle/learning.git": {
+        "name": "getting started",
         "path": ""
     }
 }
