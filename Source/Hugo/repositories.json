@@ -4,7 +4,7 @@
         "path": "contributing"
     },
     "https://github.com/dolittle/dotnet.fundamentals.git": {
-        "name": ".net fundamentals",
+        "name": "dotnet fundamentals",
         "path": "api"
     },
     "https://github.com/dolittle/runtime.git": {
