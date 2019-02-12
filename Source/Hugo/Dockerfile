@@ -19,7 +19,7 @@ ADD themes/docdock themes/docdock
 RUN npm install
 
 RUN mkdir repositories
-RUN mkdir content
+ADD content content
 
 ADD repositories.json repositories.json
 ADD build.js build.js

@@ -7,3 +7,9 @@ resources
 !content/_index.md
 !content/_footer.md
 !content/_header.md
+
+!content/api/_index.md
+!content/backend/_index.md
+!content/contributing/_index.md
+!content/frontend/_index.md
+!content/tools/_index.md
