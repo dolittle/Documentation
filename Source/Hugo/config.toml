@@ -1,30 +1,110 @@
 baseURL = "/"
-languageCode = "en-us"
-canonifyURLs = true
+theme = "dot"
 
-title = "Dolittle Documentation"
-theme = "docdock"
-
-pygmentsCodeFences = true
-pygmentsStyle = "monokailight"
 
 [params]
-#externalTitle = "Dolittle Documentation"
-menushortcutsnewtab = true
-showVisitedLinks = true # default is false
-ordersectionsby = "weight" # ordersectionsby = "title"
-disableNavChevron = false # set true to hide next/prev chevron, default is false
-highlightClientSide = true # set true to use highlight.pack.js instead of the default hugo chroma highlighter
+primaryColor = "#ff4b00"
+secondaryColor = "#f4f4f4"
+textColor = "#525a63"
+textColorDark = "#333"
+whiteColor = "#ffffff"
 
-[outputs]
-home = [ "HTML", "RSS", "JSON"]
+[Languages]
 
-[[menu.shortcuts]]
-name = "<i class='fa fa-github'></i> <label>Dolittle on Github</label>"
-url = "https://github.com/dolittle/home"
-weight = 10
+  # English Language
+  [Languages.en]
+  languageName = "En"
+  weight = 1
+  languageCode = "en-us"
+  title = "Dolittle Documentation"
+  dateFormat = "2 January 2006"
+  home = "Home"
+  logo = "Dolittle"
+  copyright = "The Hugo Documents are copyright © gethugothemes 2018."
 
-[[menu.shortcuts]]
-name = "<img src=\"/images/dolittle-white.svg\" /><label>Dolittle Home</label>"
-url = "https://dolittle.com"
-weight = 20
+    # navigation
+    [Languages.en.menu]
+    
+      [[Languages.en.menu.main]]
+        weight = 2
+        name = "Faq"
+        url = "/faq"
+        
+      [[Languages.en.menu.main]]
+        weight = 2
+        name = "contact"
+        url = "/contact"
+        
+      [[Languages.en.menu.main]]
+        weight = 2
+        name = "pages"
+        url = "/pages"
+        hasChildren = true
+
+          [[Languages.en.menu.main]]
+          parent = "pages"
+          name = "Elements"
+          URL = "/elements"
+          weight = 1
+
+          [[Languages.en.menu.main]]
+          parent = "pages"
+          name = "Installation"
+          URL = "/installation"
+          weight = 2
+
+          [[Languages.en.menu.main]]
+          parent = "pages"
+          name = "Billing and Pricing"
+          URL = "/billing-pricing"
+          weight = 3
+
+          [[Languages.en.menu.main]]
+          parent = "pages"
+          name = "Features"
+          URL = "/features"
+          weight = 4
+
+
+
+
+    # banner
+    [Languages.en.params.banner]
+      title = "Support Center & Knowledge base"
+      description = "Find advice and answers from our support team fast or get in touch"
+      image = "images/banner.jpg"
+      placeholder = "Have a question? Just ask here or enter terms"
+
+    # Topics
+    [Languages.en.params.topics]
+      title = "Find your answer by subject"
+    
+    # call to action
+    [Languages.en.params.cta]
+      enable = true
+      title = "Didn't find an answer to your question?"
+      description = "Musce libero nunc, dignissim quis turpis quis, semper vehicula dolor. Suspendisse tincidunt consequat quam."
+      btnText = "contact us"
+      btnURL = "/contact"
+
+    # contact
+    [Languages.en.params.contact]
+      title = "Got Any Questions"
+      content = "Submit the form and confirm your email address at <a class='text-primary' href='https://formspree.io/'>Formspree</a> Then add the following lines to contact page YAML Front Matter."
+
+    # footer social icon
+    [[Languages.en.socialIcon]]
+      icon = "ti-facebook"
+      URL = "/#"
+
+    [[Languages.en.socialIcon]]
+      icon = "ti-twitter-alt"
+      URL = "/#"
+      
+    [[Languages.en.socialIcon]]
+      icon = "ti-vimeo-alt"
+      URL = "/#"
+      
+    [[Languages.en.socialIcon]]
+      icon = "ti-instagram"
+      URL = "/#"
