@@ -1,0 +1,31 @@
+baseURL = "/"
+languageCode = "en-us"
+canonifyURLs = true
+
+title = "Dolittle Documentation"
+theme = "docdock"
+
+pygmentsCodeFences = true
+pygmentsStyle = "monokailight"
+
+
+[params]
+#externalTitle = "Dolittle Documentation"
+menushortcutsnewtab = true
+showVisitedLinks = true # default is false
+ordersectionsby = "weight" # ordersectionsby = "title"
+disableNavChevron = false # set true to hide next/prev chevron, default is false
+highlightClientSide = true # set true to use highlight.pack.js instead of the default hugo chroma highlighter
+
+[outputs]
+home = [ "HTML", "RSS", "JSON"]
+
+[[menu.shortcuts]]
+name = "<i class='fa fa-github'></i> <label>Dolittle on Github</label>"
+url = "https://github.com/dolittle/home"
+weight = 10
+
+[[menu.shortcuts]]
+name = "<img src=\"/images/dolittle-white.svg\" /><label>Dolittle Home</label>"
+url = "https://dolittle.com"
+weight = 20
