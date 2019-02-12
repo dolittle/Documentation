@@ -45,7 +45,7 @@ function createSymbolicLink() {
 
 function getRelativePathPart(path) {
     let relativePathPart = '../';
-    return path ? relativePathPart + path.split('/').flat().map(() => '../').join() : relativePathPart;
+    return path ? relativePathPart + path.split('/').map(() => '../').join() : relativePathPart;
 }
 
 function pullChanges() {
