@@ -1,15 +1,15 @@
 {
     "https://github.com/dolittle/home.git": {
-        "name": "General",
-        "path": "Getting_started"
+        "name": "Contribute",
+        "path": ""
     },
     "https://github.com/dolittle/dotnet.fundamentals.git": {
         "name": ".NET Fundamentals",
         "path": "API"
     },
     "https://github.com/dolittle/runtime.git": {
-        "name": "Overview",
-        "path": "Domain_Logic"
+        "name": "Domain Logic",
+        "path": ""
     },
     "https://github.com/dolittle/dotnet.sdk.git": {
         "name": "DotNET SDK",
