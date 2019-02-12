@@ -1,7 +1,7 @@
 ---
 title: API
-description: How to getting started
+description: Building your domain in specific languages
 author: Dolittle
-keywords: Documentation
+keywords: DDD, SDK, C#, node, javascript
 weight: 5
 ---

@@ -1,7 +1,7 @@
 {
     "https://github.com/dolittle/home.git": {
-        "name": "Contribute",
-        "path": ""
+        "name": "Guidelines",
+        "path": "Contributing"
     },
     "https://github.com/dolittle/dotnet.fundamentals.git": {
         "name": ".NET Fundamentals",
@@ -17,7 +17,7 @@
     },
     "https://github.com/dolittle/documentation.git": {
         "name": "Documentation",
-        "path": "Tools"
+        "path": "Contributing"
     },
     "https://github.com/dolittle-interaction/javascript.client.aurelia.git": {
         "name": "Aurelia",
