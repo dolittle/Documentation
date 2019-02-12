@@ -34,10 +34,10 @@ The system is relying on all content sitting in the `content` folder:
         └── content
 ```
 
-Its expecting a folder for each top-level repository and the content of the `Documentation` folder directly in this.
+The `repositories.json` file configures at which path (sub-folder) under the content folder repositories will be linked to, and with which name. The content folder should contain the parent folders, with a matching `index.md` and the contents of the `Documentation` folder from the repository directly in this.
 This is best achieved by creating a symbolic link to the repositories `Documentation` folder.
 
-Open a shell and **navigate to the `content` folder**.
+Open a shell and **navigate to the correct sub-folder in the `content` folder**.
 
 Unix:
 ```shell
@@ -53,12 +53,12 @@ Example:
 
 Unix:
 ```shell
-$ ln -s /Projects/Dolittle/Runtime/Documentation Overview
+$ ln -s /Projects/Dolittle/Runtime/Documentation overview
 ```
 
 Windows:
 ```shell
-c:> mklink /d Overview c:\Projects\Dolittle\Runtime\Documentation 
+c:> mklink /d overview c:\Projects\Dolittle\Runtime\Documentation 
 ```
 
 Chances are you are contributing to the code of the repository and you can therefor leave it in place and maintain
