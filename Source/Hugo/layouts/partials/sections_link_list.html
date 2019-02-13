@@ -1,0 +1,19 @@
+<li class="section">
+    <a href="{{- .RelPermalink -}}">{{- .Title -}}</a>
+    {{- if .Sections -}}
+    <ul class="sections">
+        {{- range .Sections -}}
+        <li class="section">
+            {{- partial "sections_link_list.html" . -}}
+            {{- if .Data.Pages -}}
+            <ul class="pages">
+                {{- range.Data.Pages -}}
+                {{- partial "section_pages_link_list.html" . -}}
+                {{- end -}}
+            </ul>
+            {{- end -}}
+        </li>
+        {{- end -}}
+    </ul>
+    {{- end -}}
+</li>
