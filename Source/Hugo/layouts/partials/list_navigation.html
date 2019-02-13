@@ -1,0 +1,21 @@
+{{- $currentNode := . -}}
+<ul class="list-styled">
+    {{- range .Sections -}}
+        {{- if eq .Parent.Title $currentNode.Title -}}
+            {{- partial "sections_link_list.html" . -}}            
+                {{- if .Data.Pages -}}
+                {{- range.Sections -}}
+                {{- partial "section_pages_link_list.html" . -}}
+                {{- end -}}
+                {{- if .Data.Pages -}}
+                <ul class="pages">
+                    {{- range.Data.Pages -}}
+                    {{- partial "section_pages_link_list.html" . -}}
+                    {{- end -}}
+                </ul>
+                {{- end -}}
+    
+            {{- end -}}
+        {{- end -}}
+    {{- end -}}
+</ul>

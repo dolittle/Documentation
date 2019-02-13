@@ -22,48 +22,48 @@ whiteColor = "#ffffff"
   logo = "Dolittle"
   copyright = "The Hugo Documents are copyright © gethugothemes 2018."
 
-    # navigation
-    [Languages.en.menu]
+    # # navigation
+    # [Languages.en.menu]
     
-      [[Languages.en.menu.main]]
-        weight = 2
-        name = "Faq"
-        url = "/faq"
+    #   [[Languages.en.menu.main]]
+    #     weight = 2
+    #     name = "Faq"
+    #     url = "/faq"
         
-      [[Languages.en.menu.main]]
-        weight = 2
-        name = "contact"
-        url = "/contact"
+    #   [[Languages.en.menu.main]]
+    #     weight = 2
+    #     name = "contact"
+    #     url = "/contact"
         
-      [[Languages.en.menu.main]]
-        weight = 2
-        name = "pages"
-        url = "/pages"
-        hasChildren = true
+    #   [[Languages.en.menu.main]]
+    #     weight = 2
+    #     name = "pages"
+    #     url = "/pages"
+    #     hasChildren = true
 
-          [[Languages.en.menu.main]]
-          parent = "pages"
-          name = "Elements"
-          URL = "/elements"
-          weight = 1
+    #       [[Languages.en.menu.main]]
+    #       parent = "pages"
+    #       name = "Elements"
+    #       URL = "/elements"
+    #       weight = 1
 
-          [[Languages.en.menu.main]]
-          parent = "pages"
-          name = "Installation"
-          URL = "/installation"
-          weight = 2
+    #       [[Languages.en.menu.main]]
+    #       parent = "pages"
+    #       name = "Installation"
+    #       URL = "/installation"
+    #       weight = 2
 
-          [[Languages.en.menu.main]]
-          parent = "pages"
-          name = "Billing and Pricing"
-          URL = "/billing-pricing"
-          weight = 3
+    #       [[Languages.en.menu.main]]
+    #       parent = "pages"
+    #       name = "Billing and Pricing"
+    #       URL = "/billing-pricing"
+    #       weight = 3
 
-          [[Languages.en.menu.main]]
-          parent = "pages"
-          name = "Features"
-          URL = "/features"
-          weight = 4
+    #       [[Languages.en.menu.main]]
+    #       parent = "pages"
+    #       name = "Features"
+    #       URL = "/features"
+    #       weight = 4
 
 
 
