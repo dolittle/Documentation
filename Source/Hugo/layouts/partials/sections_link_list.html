@@ -3,7 +3,7 @@
     {{- if .Sections -}}
     <ul class="sections">
         {{- range .Sections -}}
-        <li class="section">
+        <li class="folder">
             {{- partial "sections_link_list.html" . -}}
             {{- if .Data.Pages -}}
             <ul class="pages">

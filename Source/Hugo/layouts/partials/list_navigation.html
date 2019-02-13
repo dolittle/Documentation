@@ -1,21 +1,19 @@
-{{- $currentNode := . -}}
-<ul class="list-styled">
-    {{- range .Sections -}}
-        {{- if eq .Parent.Title $currentNode.Title -}}
-            {{- partial "sections_link_list.html" . -}}            
-                {{- if .Data.Pages -}}
-                {{- range.Sections -}}
+<nav>
+    <a href="{{ .Permalink }}">
+        <h4 class="mb-4">{{ .Title }}</h4>
+    </a>
+    <ul class="list-styled">
+        {{- range .Sections -}}
+        {{- partial "sections_link_list.html" . -}}
+        {{- end -}}
+        {{- if .Data.Pages -}}
+        <li>
+            <ul class="pages">
+                {{- range.Pages -}}
                 {{- partial "section_pages_link_list.html" . -}}
                 {{- end -}}
-                {{- if .Data.Pages -}}
-                <ul class="pages">
-                    {{- range.Data.Pages -}}
-                    {{- partial "section_pages_link_list.html" . -}}
-                    {{- end -}}
-                </ul>
-                {{- end -}}
-    
-            {{- end -}}
+            </ul>
+        </li>
         {{- end -}}
-    {{- end -}}
-</ul>
+    </ul>
+</nav>

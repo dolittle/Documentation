@@ -1,10 +1,28 @@
 .list-styled {
 }
+
+.list-styled li {
+    padding: 0;
+}
 .list-styled .section {
-    padding: 0 0 0 20px;
+    border-top: 1px dotted #666;
 }
-.list-styled .folder {
+.list-styled .section .section {
+    border-top: 0;
+    margin-left: 10px;
 }
-.list-styled .pages {
-    padding: 0 0 0 30px;
+
+.list-styled .sections .pages {
+    margin-left: 20px;
+}
+.list-styled li::before {
+    display: none;
+}
+.list-styled .section::before {
+}
+.list-styled .psge::before {
+}
+.list-styled a {
+    font-weight: 400;
+    font-size: 1rem;
 }

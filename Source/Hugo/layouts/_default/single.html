@@ -15,14 +15,9 @@
     <div class="row">
       <div class="col-lg-3">
         <div class="p-4 bg-white sticky-top">
-            {{$currentNode := .}}
-            <nav class="sidebar-menu">
-              <ul class="list-styled">
-                {{- range .Site.Sections.ByWeight -}}
-                  {{template "menu" dict "sect" . "currentnode" $currentNode}}
-                {{- end -}}
-              </ul>
-            </nav>
+            {{- $rootSpace := .GetPage .Section -}}
+            {{- partial "list_navigation.html" $rootSpace -}}
+
     
             {{define "menu"}}
             {{- $currentNode := .currentnode -}}
@@ -34,7 +29,7 @@
               {{- $numberOfPages := (add (len .Pages) (len .Sections)) -}}
               {{if ne $numberOfPages 0}}
               <ul class="{{ if .IsAncestor $currentNode }}sub-menu{{ end }}">
-              {{- .Scratch.Set "pages" .Data.Pages -}}
+              {{- .Scratch.Set "pages" .Sections -}}
               {{- $pages := (.Scratch.Get "pages") -}}
                 {{- range $pages.ByWeight -}}
                   {{template "menu" dict "sect" . "currentnode" $currentNode}}
