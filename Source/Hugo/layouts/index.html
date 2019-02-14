@@ -1,7 +1,7 @@
 {{ partial "head.html" . }}
 
 {{ "<!-- header -->" | safeHTML }}
-<header class="hero-section overlay bg-cover banner" data-background="{{ .Site.Params.banner.image | absURL }}">
+<header class="hero-section overlay bg-cover banner" data-background="{{ .Site.Params.banner.image | relURL }}">
   <div class="container mb-100">
     {{ "<!-- navigation -->" | safeHTML }}
     {{ partial "navigation.html" . }}
