@@ -17,33 +17,6 @@
         <div class="p-4 bg-white sticky-top">
             {{- $rootSpace := .GetPage .Section -}}
             {{- partial "list_navigation.html" $rootSpace -}}
-
-    
-            {{define "menu"}}
-            {{- $currentNode := .currentnode -}}
-            {{ with .sect }}
-            {{ if in .Site.Params.menu_exclusion .Section }}
-            {{- else -}}
-              {{- safeHTML .Params.head -}}
-            <li class="{{ if .IsAncestor $currentNode }}parent d-block {{ end }}{{ if eq .UniqueID $currentNode.UniqueID }} active {{ end }}{{ if .Params.alwaysopen }} parent {{ end }}"><a href="{{ .URL }}">{{ .Title }}</a>
-              {{- $numberOfPages := (add (len .Pages) (len .Sections)) -}}
-              {{if ne $numberOfPages 0}}
-              <ul class="{{ if .IsAncestor $currentNode }}sub-menu{{ end }}">
-              {{- .Scratch.Set "pages" .Sections -}}
-              {{- $pages := (.Scratch.Get "pages") -}}
-                {{- range $pages.ByWeight -}}
-                  {{template "menu" dict "sect" . "currentnode" $currentNode}}
-                {{- end -}}
-              </ul>
-              {{end}}
-            </li>
-            {{- end -}}
-            {{- else -}}
-              {{- if not .Params.Hidden -}}
-              <li class="{{ if eq .UniqueID $currentNode.UniqueID }}active{{ end }}"><a href="{{ .URL }}">{{ .Title }}</a></li>
-              {{- end -}}
-            {{ end -}}
-            {{ end }}
         </div>
       </div>
       <div class="col-lg-9">
