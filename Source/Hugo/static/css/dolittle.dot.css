@@ -4,25 +4,40 @@
 .list-styled li {
     padding: 0;
 }
-.list-styled .section {
-    border-top: 1px dotted #666;
+.list-styled > .section {
+    margin-bottom: 1.5rem;
 }
-.list-styled .section .section {
-    border-top: 0;
-    margin-left: 10px;
+.list-styled > .section > a {
+    font-weight: bold;
+    font-size: 1rem;
+}
+.list-styled .section {
 }
 
+.list-styled .section .section {
+    border-bottom: 1px solid #dedede;
+    padding: 0.5rem;
+    border-top: 0;
+    padding-left: 0;
+}
+.list-styled .sections {
+}
 .list-styled .sections .pages {
-    margin-left: 20px;
+    padding-left: 1rem;
+    margin-bottom: 1rem;
 }
 .list-styled li::before {
     display: none;
 }
 .list-styled .section::before {
 }
-.list-styled .psge::before {
+.list-styled .page::before {
 }
 .list-styled a {
     font-weight: 400;
-    font-size: 1rem;
+    font-size: 0.875rem;
+    padding: 0.325rem;
+    line-height: 0.875rem;
+}
+.list-styled a:hover {
 }
