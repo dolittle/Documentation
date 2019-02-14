@@ -4,7 +4,9 @@
     </a>
     <ul class="list-styled">
         {{- range .Sections -}}
-        {{- partial "sections_link_list.html" . -}}
+        <li class="{{ .Kind }}">
+            {{- partial "sections_link_list.html" . -}}
+        </li>
         {{- end -}}
         {{- if .Data.Pages -}}
         <li>
