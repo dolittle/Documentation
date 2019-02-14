@@ -3,7 +3,7 @@ title: API documentation
 description: Learn about how to make sure APIs are documented
 keywords: Contributing
 author: einari
-weight: 3
+weight: 4
 ---
 The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”,
 “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in
