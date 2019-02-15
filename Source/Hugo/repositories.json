@@ -4,7 +4,7 @@
         "path": "contributing"
     },
     "https://github.com/dolittle/dotnet.fundamentals.git": {
-        "name": "dotnet fundamentals",
+        "name": "dotnet-fundamentals",
         "path": "api"
     },
     "https://github.com/dolittle/runtime.git": {
@@ -12,7 +12,7 @@
         "path": "backend"
     },
     "https://github.com/dolittle/dotnet.sdk.git": {
-        "name": "dotnet sdk",
+        "name": "dotnet-sdk",
         "path": "backend"
     },
     "https://github.com/dolittle/documentation.git": {
@@ -32,7 +32,7 @@
         "path": "frontend"
     },
     "https://github.com/dolittle/learning.git": {
-        "name": "getting started",
+        "name": "getting-started",
         "path": ""
     }
 }
