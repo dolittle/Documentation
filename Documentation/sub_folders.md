@@ -5,9 +5,6 @@ keywords: Contributing
 author: Dolittle
 weight: 2
 ---
-The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”,
-“RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in
-[RFC 2119](https://tools.ietf.org/html/rfc2119).
 
 The `content` folder is the base for all the content that is created for the documentation solution. The actual contents are pulled from the linked-to repositories as defined in `repositories.json`. It's also possible to build out a helper structure to aid with the linking and grouping of documentation across repositories.
 
