@@ -5,9 +5,6 @@ keywords: Contributing
 author: einari
 weight: 1
 ---
-The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”,
-“RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in
-[RFC 2119](https://tools.ietf.org/html/rfc2119).
 
 Writing documentation can be done by just working on each repository individually or you can work with the documentation
 engine and see the end result while working. This is a good idea to get a feeling for how it will look like and verify
