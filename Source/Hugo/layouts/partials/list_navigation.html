@@ -5,7 +5,7 @@
     </a>
     <ul class="list-styled">
         {{- range .root.Sections -}}
-        {{- $isActivePath := in (string $currentURL) (lower .Dir) -}}
+        {{- $isActivePath := in (string $currentURL) (lower (replace .Dir " " "-")) -}}
         <li class="root_section {{ if $isActivePath -}}active{{- end -}}">
             {{- partial "sections_link_list.html"  (dict "page" . "CurrentURL" $currentURL) -}}
             {{- if .Data.Pages -}}
