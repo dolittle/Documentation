@@ -85,15 +85,66 @@
 
 .notices {
     background-color: #f5f5f5;
-    border-left: 0.25rem solid #ffcf00;
+    border-left: 0.25rem solid #004366;
     padding: 0.75rem;
     margin: 1.5rem;
+}
+.notices.note {
+    border-color: #ffcf00;
+}
+.notices.tip {
+    border-color: #33b9e6;
+    background-color: rgba(255, 207, 0, 0.1);
+    padding: 1rem;
 }
 .notices.warning {
     border-color: #ff4b00;
     background-color: rgba(255, 0, 0, 0.1);
 }
+.notices.Important,
+.notices.Important {
+    border-color: #ff4b00;
+}
 .notices p {
-    font-size: 1.25rem;
+    font-size: 0.875rem;
     margin: 0;
+}
+.notices p + p {
+    margin-top: 1.5rem;
+}
+.notices.tip p {
+    font-size: 1.125rem;
+}
+
+.children a {
+    box-shadow: 0.0625rem 0.0625rem 0.125rem 0.0625rem rgba(82, 90, 99, 0.3);
+    background-color: #f4f4f4;
+    display: block;
+    font-size: 1rem;
+    font-weight: 400;
+    text-align: center;
+    text-transform: uppercase;
+    padding: 0.5rem 1rem;
+    color: #525a63;
+    margin:0.5rem;
+    transform: translateY(0);
+    transition: all 0.1s ease-in-out;
+}
+.children a:hover {
+    box-shadow: 0.0625rem 0.25rem 0.4rem 0 rgba(82, 90, 99, 0.7);
+    transform: translate(-0.0625rem, -0.0625rem);
+}
+@media (min-width: 1024px) {
+    .children {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: stretch;
+        flex-wrap: wrap;
+    }
+    .flex-row li {
+        flex: 1 1 auto;
+        margin: 0.5rem;
+        width: 20rem;
+    }
 }
