@@ -74,3 +74,15 @@
 .spaces .space_link {
     height: 100%;
 }
+
+.navbar .navbar-brand {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+.navbar .navbar-brand img {
+    margin-bottom: 0;
+    height: 2.875rem;
+}
+.hero-section {
+    padding-bottom: 5rem;
+  }
