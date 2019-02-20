@@ -1,13 +1,20 @@
-<a href="{{- .RelPermalink -}}">{{- .Title -}}</a>
-{{- if .Sections -}}
+{{- $currentURL := .CurrentURL -}}
+{{- $page := .page -}}
+{{ $isCurrentPage := eq (string .CurrentURL) .page.URL }}
+
+<a href="{{- $page.RelPermalink -}}" class="{{- if $isCurrentPage -}}current_page{{- end }}"> {{- $page.Title -}}</a>
+<i class="ti-plus expand"></i>
+
+{{- if $page.Sections -}}
 <ul class="sections">
-    {{- range .Sections -}}
-    <li class="{{ .Kind}}">
-        {{- partial "sections_link_list.html" . -}}
+    {{- range $page.Sections -}}
+    {{- $isActivePath := in (string $currentURL) (lower .Dir) -}}
+    <li class="{{ .Kind}} {{ if $isActivePath -}}active{{- end -}}">
+        {{- partial "sections_link_list.html" (dict "page" . "CurrentURL" $currentURL) -}}
         {{- if .Data.Pages -}}
         <ul class="pages">
             {{- range.Data.Pages -}}
-            {{- partial "section_pages_link_list.html" . -}}
+            {{- partial "section_pages_link_list.html" (dict "page" . "CurrentURL" $currentURL) -}}
             {{- end -}}
         </ul>
         {{- end -}}

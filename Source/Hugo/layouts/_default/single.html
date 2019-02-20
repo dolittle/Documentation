@@ -16,8 +16,8 @@
       <div class="col-lg-3">
         <div class="p-4 bg-white sticky-top">
             {{- $rootSpace := .GetPage .Section -}}
-            {{- partial "list_navigation.html" $rootSpace -}}
-        </div>
+            {{- partial "list_navigation.html" (dict "root" $rootSpace "CurrentURL" .URL) -}}
+          </div>
       </div>
       <div class="col-lg-9">
         <div class="p-5 bg-white">

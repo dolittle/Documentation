@@ -1,43 +1,76 @@
 .list-styled {
+    font-size: 0.875rem;
+    line-height: 1rem;
 }
 
 .list-styled li {
     padding: 0;
-}
-.list-styled > .section {
-    margin-bottom: 1.5rem;
-}
-.list-styled > .section > a {
-    font-weight: bold;
-    font-size: 1rem;
-}
-.list-styled .section {
+    position: relative;
 }
 
-.list-styled .section .section {
-    border-bottom: 1px solid #dedede;
-    padding: 0.5rem;
-    border-top: 0;
-    padding-left: 0;
-}
-.list-styled .sections {
-}
-.list-styled .sections .pages {
-    padding-left: 1rem;
-    margin-bottom: 1rem;
-}
 .list-styled li::before {
     display: none;
 }
-.list-styled .section::before {
+
+.list-styled .current_page {
+    background-color: #efefef;
+    border-left: 0.1875rem solid #ff4b00;
+    text-indent: -0.1875rem;
 }
-.list-styled .page::before {
-}
-.list-styled a {
+
+.list-styled a,
+.list-styled span {
+    display: block;
     font-weight: 400;
-    font-size: 0.875rem;
-    padding: 0.325rem;
-    line-height: 0.875rem;
+    font-size: inherit;
+    padding: 0.5rem 2rem 0.5rem 0.5rem;
 }
+
 .list-styled a:hover {
+    text-decoration: underline;
+}
+.list-styled li i {
+    position: absolute;
+    top: 0.5rem;
+    right: 1rem;
+    transition: transform 0.3s;
+}
+.list-styled li.active > i {
+    transform: rotate(45deg);
+}
+.list-styled .section a,
+.list-styled .root_section .pages a {
+    padding-left: 0.75rem;
+}
+.list-styled .section .sections a,
+.list-styled .section .pages a {
+    padding-left: 1.5rem;
+}
+.list-styled .root_section {
+    overflow: hidden;
+    border-top: 0.0625rem solid #ccc;
+    max-height: 1.9375rem;
+    transform: translate(0);
+    transition: max-height 0.93s ease-in-out;
+}
+.list-styled .root_section.active {
+    max-height: 400rem;
+}
+
+.list-styled .root_section .sections li,
+.list-styled .root_section .pages li {
+    display: none;
+}
+/* .list-styled li.active ~ li,
+.list-styled .root_section.active .sections li.active,
+.list-styled .root_section.active .pages li.active {
+    display: block;
+} */
+.list-styled .root_section.active > ul > li,
+.list-styled .root_section .active > ul > li {
+    display: block;
+}
+
+.spaces .space_link {
+    height: 100%;
 }

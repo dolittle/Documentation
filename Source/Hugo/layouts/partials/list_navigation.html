@@ -1,21 +1,29 @@
+{{- $currentURL := .CurrentURL -}}
 <nav>
-    <a href="{{ .Permalink }}">
-        <h4 class="mb-4">{{ .Title }}</h4>
+    <a href="{{ .root.Permalink }}">
+        <h4 class="mb-4">{{ .root.Title }}</h4>
     </a>
     <ul class="list-styled">
-        {{- range .Sections -}}
-        <li class="{{ .Kind }}">
-            {{- partial "sections_link_list.html" . -}}
-        </li>
-        {{- end -}}
-        {{- if .Data.Pages -}}
-        <li>
+        {{- range .root.Sections -}}
+        {{- $isActivePath := in (string $currentURL) (lower .Title) -}}
+        <li class="root_section {{ if $isActivePath -}}active{{- end -}}">
+            {{- partial "sections_link_list.html"  (dict "page" . "CurrentURL" $currentURL) -}}
+            {{- if .Data.Pages -}}
             <ul class="pages">
                 {{- range.Pages -}}
-                {{- partial "section_pages_link_list.html" . -}}
+                {{- partial "section_pages_link_list.html" (dict "page" . "CurrentURL" $currentURL) -}}
                 {{- end -}}
             </ul>
+            {{- end -}}
         </li>
+        {{- end -}}
+        {{ .Pages}}
+        {{- if .root.Pages -}}
+        <ul class="pages">
+            {{- range .root.Pages -}}
+            {{- partial "section_pages_link_list.html" (dict "page" . "CurrentURL" $currentURL) -}}
+            {{- end -}}
+        </ul>
         {{- end -}}
     </ul>
 </nav>
