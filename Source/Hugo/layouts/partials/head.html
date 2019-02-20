@@ -2,6 +2,15 @@
 <html  lang="{{ with .Site.LanguageCode }}{{ . }}{{ else }}en-US{{ end }}">
 
 <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-134642628-2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-134642628-2');
+  </script>
   <meta charset="utf-8">
   <title>{{ .Title }}</title>
 
@@ -46,7 +55,10 @@
   <link rel="icon" type="image/png" href="{{"images/favicon_16x16.png" | relURL}}" sizes="16x16">
   <link rel="icon" type="image/png" href="{{"images/favicon_32x32.png" | relURL}}" sizes="32x32">
   <link rel="icon" type="image/png" href="{{"images/favicon_96_96.png" | relURL}}" sizes="96x96">
+  
+  
   <link href="{{"css/dolittle.dot.css" | relURL}}" rel="stylesheet">
+
 </head>
 
 <body>
