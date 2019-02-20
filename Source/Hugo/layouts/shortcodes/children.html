@@ -43,7 +43,6 @@
 		{{- if and .Params.hidden (not $.showhidden) }}
 		{{- else}}
 
-<span>
 {{- if hasPrefix $.style "h"}}
 	{{- $num := sub ( int (trim $.style "h") ) 1 }}
 	{{- $numn := add $num $.count }}
@@ -68,7 +67,6 @@
 <p>{{.Summary}}</p>
 				{{- end}}
 			{{- end}}
-</span>
 
 
 			{{- if lt $.count $.depth}}
