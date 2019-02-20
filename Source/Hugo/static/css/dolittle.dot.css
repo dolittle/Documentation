@@ -61,11 +61,7 @@
 .list-styled .root_section .pages li {
     display: none;
 }
-/* .list-styled li.active ~ li,
-.list-styled .root_section.active .sections li.active,
-.list-styled .root_section.active .pages li.active {
-    display: block;
-} */
+
 .list-styled .root_section.active > ul > li,
 .list-styled .root_section .active > ul > li {
     display: block;
