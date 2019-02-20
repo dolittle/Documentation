@@ -58,14 +58,14 @@
 {{ "<!-- topics -->" | safeHTML }}
 <section class="section bg-gray">
   <div class="container">
-      <div class="row justify-content-center">
+      <div class="row justify-content-center spaces">
           <div class="col-12 text-center">
             {{with .Site.Params.topics.title}} <h2 class="section-title">{{ . }}</h2> {{ end }}
           </div>
           {{ "<!-- topic-item -->" | safeHTML }}
           {{ range (where .Site.Pages "Type" "space") }}
           <div class="col-lg-4 col-sm-6 mb-4">
-            <a href="{{ .Permalink }}" class="px-4 py-5 bg-white shadow text-center d-block">
+            <a href="{{ .Permalink }}" class="px-4 py-5 bg-white shadow text-center d-block space_link">
               <i class="{{ .Params.Icon }} icon text-dark d-block mb-4"></i>
               <h3 class="mb-3">{{ .Title }}</h3>
               <p class="mb-0">{{ .Params.Description }}</p>
