@@ -5,7 +5,11 @@
     </a>
     <ul class="list-styled">
         {{- range .root.Sections -}}
-        {{- $isActivePath := in (string $currentURL) (lower (replace .Dir " " "-")) -}}
+        {{- $page_slug := .Dir -}}
+        {{- if not .Dir -}}
+        {{$page_slug = .Title}}
+        {{- end -}}
+        {{- $isActivePath := in (string $currentURL) (lower (replace $page_slug " " "-")) -}}
         <li class="root_section {{ if $isActivePath -}}active{{- end -}}">
             {{- partial "sections_link_list.html"  (dict "page" . "CurrentURL" $currentURL) -}}
             {{- if .Data.Pages -}}
