@@ -94,17 +94,22 @@ whiteColor = "#ffffff"
 
     # footer social icon
     [[Languages.en.socialIcon]]
-      icon = "ti-facebook"
-      URL = "/#"
+      icon = "ti-github"
+      URL = "https://github.com/dolittle"
 
     [[Languages.en.socialIcon]]
+      icon = "ti-linkedin"
+      URL = "https://www.linkedin.com/company/dolittle/"
+      
+    [[Languages.en.socialIcon]]
       icon = "ti-twitter-alt"
-      URL = "/#"
+      URL = "https://twitter.com/dolittle"
       
     [[Languages.en.socialIcon]]
-      icon = "ti-vimeo-alt"
-      URL = "/#"
-      
+      icon = "ti-facebook"
+      URL = "https://www.facebook.com/dolittleX/"
+
     [[Languages.en.socialIcon]]
-      icon = "ti-instagram"
-      URL = "/#"
+      icon = "ti-youtube"
+      URL = "https://www.youtube.com/channel/UCO54aeNeVzKFYVo7sVsXlAA"
+
