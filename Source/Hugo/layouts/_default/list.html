@@ -18,37 +18,7 @@
                 <h1 class="text-white mb-4">{{ . }}</h1>
                 {{ end }} {{ with.Site.Params.banner.placeholder }} <input id="search" class="form-control" placeholder="{{ . }}" /> {{ end }}
                 <!-- Javascript -->
-                <script>
-                    $(function() {
-                      var projects = [
-                        {{ range $sectionPages }}
-                          {
-                            value: "{{ .Title }}",
-                            label: "{{ .Title }}",
-                            url:"{{ .Permalink }}"
-                          },
-                        {{ end }}
-                      ];
-                      $( "#search" ).autocomplete({
-                          minLength: 0,
-                          source: projects,
-                          focus: function( event, ui ) {
-                            $( "#search" ).val( ui.item.label );
-                              return false;
-                          },
-                          select: function( event, ui ) {
-                            $( "#search" ).val( ui.item.label );
-                            $( "#project-id" ).val( ui.item.value );
-                            return false;
-                          }
-                      })
-                      .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-                        return $( "<li>" )
-                        .append( "<a href=" + item.url + " + \" &quot;\" +  >" + item.label + "</a>" )
-                        .appendTo( ul );
-                      };
-                    });
-                </script>
+                {{ partial "global_search_script.html" . }}
             </div>
         </div>
     </div>
@@ -58,14 +28,15 @@
 <!-- details page -->
 <section class="single section bg-gray pb-0">
     <div class="container">
-        <div class="row">
+        <div class="row reverse_on_sm_and_below">
             <div class="col-lg-3">
                 <div class="mb-5 bg-white p-4 sticky-top">
                     {{- partial "list_navigation.html" (dict "root" $rootSpace "CurrentURL" .URL) -}}
                 </div>
             </div>
             <div class="col-lg-9">
-                <div class="p-5 bg-white">                       
+                <div class="p-5 bg-white doc_content">
+                    <h1 class="page_title">{{ .Title }}</h1>
                     {{ .Content }}
                 </div>
             </div>

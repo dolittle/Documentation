@@ -1,8 +1,8 @@
 {{- $currentURL := .CurrentURL -}}
-<nav>
-    <a href="{{ .root.Permalink }}">
-        <h4 class="mb-4">{{ .root.Title }}</h4>
-    </a>
+<nav class="left_navigation">
+        <a href="{{ .root.Permalink }}">
+            <h4>{{ .root.Title }}</h4>
+        </a>
     <ul class="list-styled">
         {{- range .root.Sections -}}
         {{- $page_slug := .Dir -}}

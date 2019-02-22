@@ -2,8 +2,8 @@
 {{- $page := .page -}}
 {{ $isCurrentPage := eq (string .CurrentURL) .page.URL }}
 
+<i class="ti-angle-right expand"></i>
 <a href="{{- $page.RelPermalink -}}" class="{{- if $isCurrentPage -}}current_page{{- end }}"> {{- $page.Title -}}</a>
-<i class="ti-plus expand"></i>
 
 {{- if $page.Sections -}}
 <ul class="sections">

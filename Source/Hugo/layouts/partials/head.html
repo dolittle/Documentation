@@ -11,6 +11,7 @@
 
     gtag('config', 'UA-134642628-2');
   </script>
+  <meta name="google-site-verification" content="nGZjXvB39dUPkVrDCf80TLRGojcSjv7tn44u2gbv99c" />
   <meta charset="utf-8">
   <title>{{ .Title }}</title>
 
@@ -46,6 +47,7 @@
   {{ $styles := resources.Get "css/style.css" | minify}}
   <link rel="stylesheet" href="{{ $styles.Permalink }}" integrity="{{ $styles.Data.Integrity }}" media="screen">
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.2.0/anchor.js"></script>
   {{ "<!-- jquiry -->" | safeHTML }}
   <script src="{{ .Site.BaseURL }}plugins/jquery/jquery-1.12.4.js"></script>
 
@@ -58,6 +60,7 @@
   
   
   <link href="{{"css/dolittle.dot.css" | relURL}}" rel="stylesheet">
+
 
 </head>
 

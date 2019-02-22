@@ -1,4 +1,6 @@
 {{ partial "head.html" . }}
+{{- $rootSpace := .GetPage .Section -}}
+{{- $sectionPages := where .Site.Pages "Section" $rootSpace.Section}}
 
 {{ "<!-- navigation -->" | safeHTML }}
 <header class="shadow-bottom position-relative">
@@ -8,11 +10,26 @@
 </header>
 {{ "<!-- /navigation -->" | safeHTML }}
 
-
+<!-- page title -->
+<section class="section bg-dark">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                {{ with.Site.Params.banner.title }}
+                <h1 class="text-white mb-4">{{ . }}</h1>
+                {{ end }} 
+                {{ with.Site.Params.banner.placeholder }} <input id="search" class="form-control" placeholder="{{ . }}" /> {{ end }}
+                <!-- Javascript -->
+                {{ partial "global_search_script.html" . }}
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /page title -->
 <!-- details page -->
 <section class="single pt-5 bg-gray">
   <div class="container">
-    <div class="row">
+    <div class="row reverse_on_sm_and_below">
       <div class="col-lg-3">
         <div class="p-4 bg-white sticky-top">
             {{- $rootSpace := .GetPage .Section -}}
@@ -20,10 +37,12 @@
           </div>
       </div>
       <div class="col-lg-9">
-        <div class="p-5 bg-white">
-            <h2>{{ .Title }}</h2>
+        <div class="p-5 bg-white doc_content">
+            <h1 class="page_title">{{ .Title }}</h1>
             {{ .Content }}
-            <p class="post-meta border-bottom pb-3 mb-0">Updated on {{ .PublishDate.Format "02 Jan 2006" }}</p>
+            {{- if ne (string .PublishDate) "0001-01-01 00:00:00 +0000 UTC" -}}
+            <p class="post-meta border-bottom pb-3 mb-0">Updated on {{ .PublishDate }}</p>
+            {{- end -}}
             {{- $currentNode := . -}}
             <nav class="pagination mt-3">
             {{- template "pagination" dict "menu" .Site.Home "currentnode" $currentNode "menu_exclusion" .Site.Params.menu_exclusion -}}

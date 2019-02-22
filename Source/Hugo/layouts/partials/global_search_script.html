@@ -1,0 +1,32 @@
+<!-- Javascript -->
+<script>
+    $(function() {
+      var projects = [
+        {{ range $.Site.Pages }}
+          {
+            value: "{{ .Title }}",
+            label: "{{ .Title }}",
+            url:"{{ .Permalink }}"
+          },
+        {{ end }}
+      ];
+      $( "#search" ).autocomplete({
+          minLength: 0,
+          source: projects,
+          focus: function( event, ui ) {
+            $( "#search" ).val( ui.item.label );
+              return false;
+          },
+          select: function( event, ui ) {
+            $( "#search" ).val( ui.item.label );
+            $( "#project-id" ).val( ui.item.value );
+            return false;
+          }
+      })
+      .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+        return $( "<li>" )
+        .append( "<a href=" + item.url + " + \" &quot;\" +  >" + item.label + "</a>" )
+        .appendTo( ul );
+      };
+    });
+</script>

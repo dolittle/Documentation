@@ -1,3 +1,22 @@
+h1 {
+    margin-bottom: 1.5rem;
+}
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-bottom: 1.5rem;
+    margin-top: 2rem;
+}
+h1.page_title {
+    margin: 0 0 2rem;
+    padding: 0 0 1rem;
+    text-transform: uppercase;
+    font-size: 1.5rem;
+    font-weight: 200;
+    border-bottom: 0.0625rem solid #ccc;
+}
 .list-styled {
     font-size: 0.875rem;
     line-height: 1rem;
@@ -18,11 +37,11 @@
     text-indent: -0.1875rem;
 }
 
-.list-styled a{
+.list-styled a {
     display: block;
     font-weight: 400;
     font-size: inherit;
-    padding: 0.5rem 2rem 0.5rem 0.5rem;
+    padding: 0.5rem 0.5rem 0.5rem 1.75rem;
 }
 
 .list-styled a:hover {
@@ -30,20 +49,28 @@
 }
 .list-styled li i {
     position: absolute;
-    top: 0.5rem;
-    right: 1rem;
+    top: 0.75rem;
+    left: 0.5rem;
     transition: transform 0.3s;
+    font-size: 0.625rem;
+    font-weight: bold;
 }
 .list-styled li.active > i {
-    transform: rotate(45deg);
+    transform: rotate(90deg);
 }
 .list-styled .section a,
 .list-styled .root_section .pages a {
-    padding-left: 0.75rem;
+    padding-left: 2.75rem;
 }
 .list-styled .section .sections a,
 .list-styled .section .pages a {
-    padding-left: 1.5rem;
+    padding-left: 3.5rem;
+}
+.list-styled .active .section i {
+    left: 1.6rem;
+}
+.list-styled .active .section .section i {
+    left: 2.35rem;
 }
 .list-styled .root_section {
     border-top: 0.0625rem solid #ccc;
@@ -138,5 +165,27 @@
         flex: 1 1 auto;
         margin: 0.5rem;
         width: 20rem;
+    }
+}
+
+.section.bg-dark {
+    padding: 2rem 0;
+}
+
+.space_bar {
+    display: flex;
+    justify-content: flex-start;
+}
+.space_bar > a {
+    flex: 0 0 auto;
+}
+
+.left_navigation h4 {
+    margin-top: 1.2rem;
+}
+
+@media (max-width: 991px) {
+    .reverse_on_sm_and_below {
+        flex-direction: column-reverse;
     }
 }

@@ -1,0 +1,10 @@
+<div class="container">
+    <nav class="space_bar">
+        {{ range (where .Site.Pages "Type" "space") }}
+        <a href="{{ .Permalink }}" class="space_link">
+            <i class="{{ .Params.Icon }} icon"></i>
+            <h3 class="mb-3">{{ .Title }}</h3>
+        </a>
+        {{ end }}
+    </nav>
+</div>
