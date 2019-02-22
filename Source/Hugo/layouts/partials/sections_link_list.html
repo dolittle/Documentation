@@ -1,0 +1,24 @@
+{{- $currentURL := .CurrentURL -}}
+{{- $page := .page -}}
+{{ $isCurrentPage := eq (string .CurrentURL) .page.URL }}
+
+<i class="ti-angle-right expand"></i>
+<a href="{{- $page.RelPermalink -}}" class="{{- if $isCurrentPage -}}current_page{{- end }}"> {{- $page.Title -}}</a>
+
+{{- if $page.Sections -}}
+<ul class="sections">
+    {{- range $page.Sections -}}
+    {{- $isActivePath := in (string $currentURL) (lower .Dir) -}}
+    <li class="{{ .Kind}} {{ if $isActivePath -}}active{{- end -}}">
+        {{- partial "sections_link_list.html" (dict "page" . "CurrentURL" $currentURL) -}}
+        {{- if .Data.Pages -}}
+        <ul class="pages">
+            {{- range.Data.Pages -}}
+            {{- partial "section_pages_link_list.html" (dict "page" . "CurrentURL" $currentURL) -}}
+            {{- end -}}
+        </ul>
+        {{- end -}}
+    </li>
+    {{- end -}}
+</ul>
+{{- end -}}

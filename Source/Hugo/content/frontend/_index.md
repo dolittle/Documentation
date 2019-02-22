@@ -2,6 +2,8 @@
 title: Frontend
 description: Frontend
 author: Dolittle
-keywords: Documentation
+keywords: Frontend
 weight: 4
+type: "space"
+icon: "ti-desktop"
 ---

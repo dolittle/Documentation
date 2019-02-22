@@ -1,7 +1,9 @@
 ---
 title: Tools
-description: Tools
-author: Dolittle
-keywords: Documentation
-weight: 5
+description: We have great tools!
+keywords: Tools
+author: einari, woksin
+weight: 2
+icon: "ti-ruler-pencil"
+type: "space"
 ---

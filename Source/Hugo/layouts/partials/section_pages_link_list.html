@@ -1,0 +1,5 @@
+{{ $isActivePath := in (string .CurrentURL) (string .page.File)}}
+{{ $isCurrentPage := eq (string .CurrentURL) .page.URL }}
+<li class="{{- .page.Kind }} {{ if $isActivePath -}}active{{- end -}}">
+    <a href="{{ .page.RelPermalink }}" class="{{- if $isCurrentPage -}}current_page{{- end }}">{{ .page.Title }}</a>
+</li>
