@@ -47,6 +47,7 @@ h1.page_title {
 .list-styled a:hover {
     text-decoration: underline;
 }
+
 .list-styled li i {
     position: absolute;
     top: 0.75rem;
@@ -55,34 +56,24 @@ h1.page_title {
     font-size: 0.625rem;
     font-weight: bold;
 }
+
 .list-styled li.active > i {
     transform: rotate(90deg);
 }
-.list-styled .section a,
-.list-styled .root_section .pages a {
-    padding-left: 2.75rem;
+
+.list-styled .section ul {
+    padding-left: 0.75rem;
 }
-.list-styled .section .sections a,
-.list-styled .section .pages a {
-    padding-left: 3.5rem;
-}
-.list-styled .active .section i {
-    left: 1.6rem;
-}
-.list-styled .active .section .section i {
-    left: 2.35rem;
-}
-.list-styled .root_section {
+
+.list-styled > li {
     border-top: 0.0625rem solid #ccc;
 }
 
-.list-styled .root_section .sections li,
-.list-styled .root_section .pages li {
+.list-styled li ul li {
     display: none;
 }
 
-.list-styled .root_section.active > ul > li,
-.list-styled .root_section .active > ul > li {
+.list-styled li.active > ul > li {
     display: block;
 }
 
@@ -181,7 +172,10 @@ h1.page_title {
 }
 
 .left_navigation h4 {
-    margin-top: 1.2rem;
+    margin-top: 1.2rem;    
+}
+.left_navigation h4 a {
+    color: inherit;
 }
 
 @media (max-width: 991px) {
