@@ -1,33 +1,15 @@
 {{- $currentURL := .CurrentURL -}}
+{{- $pages :=  (union .root.Pages .root.Sections) -}}
+
 <nav class="left_navigation">
+    <h4>
         <a href="{{ .root.Permalink }}">
-            <h4>{{ .root.Title }}</h4>
+            {{ .root.Title }}
         </a>
+    </h4>
     <ul class="list-styled">
-        {{- range .root.Sections -}}
-        {{- $page_slug := .Dir -}}
-        {{- if not .Dir -}}
-        {{$page_slug = .Title}}
-        {{- end -}}
-        {{- $isActivePath := in (string $currentURL) (lower (replace $page_slug " " "-")) -}}
-        <li class="root_section {{ if $isActivePath -}}active{{- end -}}">
-            {{- partial "sections_link_list.html"  (dict "page" . "CurrentURL" $currentURL) -}}
-            {{- if .Data.Pages -}}
-            <ul class="pages">
-                {{- range.Pages -}}
-                {{- partial "section_pages_link_list.html" (dict "page" . "CurrentURL" $currentURL) -}}
-                {{- end -}}
-            </ul>
-            {{- end -}}
-        </li>
-        {{- end -}}
-        {{ .Pages}}
-        {{- if .root.Pages -}}
-        <ul class="pages">
-            {{- range .root.Pages -}}
-            {{- partial "section_pages_link_list.html" (dict "page" . "CurrentURL" $currentURL) -}}
-            {{- end -}}
-        </ul>
+        {{- range $pages.ByWeight -}}
+        {{- partial "link_item.html" (dict "page" . "CurrentURL" $currentURL) -}}
         {{- end -}}
     </ul>
 </nav>
