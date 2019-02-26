@@ -1,5 +1,11 @@
 baseURL = "/"
+  languageCode = "en-us"
+  DefaultContentLanguage = "en"
+  title = "Dolittle Documentation"
 theme = "dot"
+  home = "Home"
+
+
 pygmentsCodeFences = true
 pygmentsStyle = "monokailight"
 
@@ -10,78 +16,21 @@ textColor = "#525a63"
 textColorDark = "#333"
 whiteColor = "#ffffff"
 
-[Languages]
-
-  # English Language
-  [Languages.en]
-  languageName = "En"
-  weight = 1
-  languageCode = "en-us"
-  title = "Dolittle Documentation"
-  dateFormat = "2 January 2006"
-  home = "Home"
-  logo = "Dolittle"
-  copyright = "The Hugo Documents are copyright © gethugothemes 2018."
-
-    # # navigation
-    # [Languages.en.menu]
-    
-    #   [[Languages.en.menu.main]]
-    #     weight = 2
-    #     name = "Faq"
-    #     url = "/faq"
-        
-      # [[Languages.en.menu.main]]
-      #   weight = 2
-      #   name = "contact"
-      #   url = "/contact"
-        
-    #   [[Languages.en.menu.main]]
-    #     weight = 2
-    #     name = "pages"
-    #     url = "/pages"
-    #     hasChildren = true
-
-    #       [[Languages.en.menu.main]]
-    #       parent = "pages"
-    #       name = "Elements"
-    #       URL = "/elements"
-    #       weight = 1
-
-    #       [[Languages.en.menu.main]]
-    #       parent = "pages"
-    #       name = "Installation"
-    #       URL = "/installation"
-    #       weight = 2
-
-    #       [[Languages.en.menu.main]]
-    #       parent = "pages"
-    #       name = "Billing and Pricing"
-    #       URL = "/billing-pricing"
-    #       weight = 3
-
-    #       [[Languages.en.menu.main]]
-    #       parent = "pages"
-    #       name = "Features"
-    #       URL = "/features"
-    #       weight = 4
-
-
 
 
     # banner
-    [Languages.en.params.banner]
+    [params.banner]
       title = "Support Center & Knowledge base"
       description = "Find advice and answers from our support team fast or get in touch"
       image = "images/banner.jpg"
       placeholder = "Have a question? Just ask here or enter terms"
 
     # Topics
-    [Languages.en.params.topics]
+    [params.topics]
       title = "Find your answer by subject"
     
     # call to action
-    [Languages.en.params.cta]
+    [params.cta]
       enable = false
       title = "Didn't find an answer to your question?"
       description = "Musce libero nunc, dignissim quis turpis quis, semper vehicula dolor. Suspendisse tincidunt consequat quam."
@@ -89,28 +38,88 @@ whiteColor = "#ffffff"
       btnURL = "/contact"
 
     # contact
-    [Languages.en.params.contact]
+    [params.contact]
       title = "Got Any Questions"
       content = "Submit the form and confirm your email address at <a class='text-primary' href='https://formspree.io/'>Formspree</a> Then add the following lines to contact page YAML Front Matter."
 
     # footer social icon
-    [[Languages.en.socialIcon]]
+    [[socialIcon]]
       icon = "ti-github"
       URL = "https://github.com/dolittle"
 
-    [[Languages.en.socialIcon]]
+    [[socialIcon]]
       icon = "ti-linkedin"
       URL = "https://www.linkedin.com/company/dolittle/"
       
-    [[Languages.en.socialIcon]]
+    [[socialIcon]]
       icon = "ti-twitter-alt"
       URL = "https://twitter.com/dolittle"
       
-    [[Languages.en.socialIcon]]
+    [[socialIcon]]
       icon = "ti-facebook"
       URL = "https://www.facebook.com/dolittleX/"
 
-    [[Languages.en.socialIcon]]
+    [[socialIcon]]
       icon = "ti-youtube"
       URL = "https://www.youtube.com/channel/UCO54aeNeVzKFYVo7sVsXlAA"
+
+
+
+[outputs]
+home = [ "HTML", "RSS", "JSON"]
+
+
+[Languages]
+
+  # English Language
+  [Languages.en]
+  languageName = "En"
+  weight = 1
+  dateFormat = "2 January 2006"
+  logo = "Dolittle"
+  copyright = "The Hugo Documents are copyright © gethugothemes 2018."
+
+    # # navigation
+    # [menu]
+    
+    #   [[menu.main]]
+    #     weight = 2
+    #     name = "Faq"
+    #     url = "/faq"
+        
+      # [[menu.main]]
+      #   weight = 2
+      #   name = "contact"
+      #   url = "/contact"
+        
+    #   [[menu.main]]
+    #     weight = 2
+    #     name = "pages"
+    #     url = "/pages"
+    #     hasChildren = true
+
+    #       [[menu.main]]
+    #       parent = "pages"
+    #       name = "Elements"
+    #       URL = "/elements"
+    #       weight = 1
+
+    #       [[menu.main]]
+    #       parent = "pages"
+    #       name = "Installation"
+    #       URL = "/installation"
+    #       weight = 2
+
+    #       [[menu.main]]
+    #       parent = "pages"
+    #       name = "Billing and Pricing"
+    #       URL = "/billing-pricing"
+    #       weight = 3
+
+    #       [[menu.main]]
+    #       parent = "pages"
+    #       name = "Features"
+    #       URL = "/features"
+    #       weight = 4
+
 
