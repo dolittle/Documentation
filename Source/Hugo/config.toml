@@ -1,6 +1,7 @@
 baseURL = "/"
 theme = "dot"
-
+pygmentsCodeFences = true
+pygmentsStyle = "monokailight"
 
 [params]
 primaryColor = "#ff4b00"
