@@ -9,7 +9,7 @@ let repositoryPath = "";
 
 
 function hasClone() {
-    let path = `${globals.paths.repositories}/${repositoryConfiguration.name}`;
+    let path = repositoryPath;
     if( fs.existsSync(path) ) {
         let gitPath = `${path}/.git`;
         if( fs.existsSync(gitPath)) return true;
@@ -29,23 +29,27 @@ function clone() {
     ], 'repositories');
 }
 
-function createSymbolicLink() {
-    let relativeLinkTargetPathPart = getRelativePathPart(repositoryConfiguration.path)
-    let linkTarget = `${relativeLinkTargetPathPart}${repositoryPath}/Documentation`;
-    let linkSource = `${globals.paths.content}/${repositoryConfiguration.path}/${repositoryConfiguration.name}`;
+function createSymbolicLink(target) {
+    console.log(`Creating symlink for ${target}`);
+    try {
+        let linkTarget = fs.realpathSync(`${target}/Documentation`);
+        let linkSource = `${globals.paths.content}/${repositoryConfiguration.path}/${repositoryConfiguration.name}`;
 
-    console.log(`Creating symlink for ${linkSource} to ${linkTarget}`);
-    if( fs.existsSync(linkSource)) {
-        console.log(`Unlinking symlink for ${linkSource}`);
-        fs.unlinkSync(linkSource);
+        if( fs.existsSync(linkSource)) {
+            console.log(`Unlinking symlink for ${linkSource}`);
+            fs.unlinkSync(linkSource);
+        }
+        if( fs.existsSync(linkTarget)) {
+            fs.symlinkSync(linkTarget, linkSource, 'dir');
+            console.log(`Created symlink for ${linkSource} to ${linkTarget}`);    
+        }
+        else {
+            console.log(`Skipping symlink for ${linkSource}. Could not find target ${linkTarget}`);
+        }
+    } catch (e) {
+    console.log(`Could not create symlink for ${target}`, e);
+
     }
-    console.log(`Creating symlink for ${linkSource}`);
-    fs.symlinkSync(linkTarget, linkSource, 'dir');
-}
-
-function getRelativePathPart(path) {
-    let relativePathPart = '../';
-    return path ? relativePathPart + path.split('/').map(() => '../').join() : relativePathPart;
 }
 
 function pullChanges() {
@@ -64,14 +68,20 @@ function upload() {
 }
 
 function handleCurrentRepository() {
-    if (!hasClone()) {
-        console.log('Clone');
-        clone();
-    } else {
-        pullChanges();
+    const isLocalRepository = fs.existsSync(repositoryUrl);
+    if(isLocalRepository){
+        createSymbolicLink(repositoryUrl);           
+    }
+    else{
+        if (!hasClone()) {
+            console.log('Clone');
+            clone();
+        } else {
+            pullChanges();
+        }
+        createSymbolicLink(repositoryPath);   
     }
  
-    createSymbolicLink();   
 }
 
 if( process.argv.length == 2 ) {
