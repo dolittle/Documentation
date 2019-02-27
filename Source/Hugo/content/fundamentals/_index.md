@@ -1,6 +1,6 @@
 ---
-title: API
-description: Building your domain in specific languages
+title: Fundamentals
+description: Dolittle's fundamentals and principles of software development
 author: Dolittle
 keywords: DDD, SDK, C#, node, javascript
 weight: 6
