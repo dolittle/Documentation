@@ -1,5 +1,5 @@
 ---
-title: Tools
+title: Tooling
 description: We have great tools!
 keywords: Tools
 author: einari, woksin
