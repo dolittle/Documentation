@@ -7,7 +7,7 @@
         "name": "overview",
         "path": "fundamentals"
     },
-    "https://github.com/dolittle/dotnet.fundamentals.git": {
+    "https://github.com/dolittle-fundamentals/dotnet.fundamentals.git": {
         "name": "dotnet-fundamentals",
         "path": "fundamentals"
     },
