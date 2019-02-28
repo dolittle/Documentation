@@ -3,11 +3,15 @@
         "name": "getting-started",
         "path": ""
     },
+    "https://github.com/dolittle-fundamentals/Home.git": {
+        "name": "overview",
+        "path": "fundamentals"
+    },
     "https://github.com/dolittle/dotnet.fundamentals.git": {
         "name": "dotnet-fundamentals",
         "path": "fundamentals"
     },
-    "https://github.com/dolittle-runtime/home.git": {
+    "https://github.com/dolittle-runtime/Home.git": {
         "name": "overview",
         "path": "runtime"
     },
