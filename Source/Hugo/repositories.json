@@ -50,5 +50,9 @@
     "https://github.com/dolittle/documentation.git": {
         "name": "documentation",
         "path": "contributing"
+    },
+    "https://github.com/dolittle-platform/home.git": {
+        "name": "overview",
+        "path": "platform"
     }
 }
