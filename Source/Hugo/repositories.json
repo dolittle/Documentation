@@ -11,6 +11,10 @@
         "name": "dotnet-fundamentals",
         "path": "fundamentals"
     },
+    "https://github.com/dolittle-fundamentals/javascript.fundamentals.git": {
+        "name": "javascript-fundamentals",
+        "path": "fundamentals"
+    },
     "https://github.com/dolittle-runtime/Home.git": {
         "name": "overview",
         "path": "runtime"
