@@ -15,11 +15,11 @@
         "name": "overview",
         "path": "runtime"
     },
-    "https://github.com/dolittle/runtime.git": {
+    "https://github.com/dolittle-runtime/runtime.git": {
         "name": "runtime",
         "path": "runtime"
     },
-    "https://github.com/dolittle/dotnet.sdk.git": {
+    "https://github.com/dolittle-runtime/dotnet.sdk.git": {
         "name": "dotnet-sdk",
         "path": "runtime"
     },
