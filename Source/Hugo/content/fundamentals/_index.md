@@ -5,5 +5,5 @@ author: Dolittle
 keywords: DDD, SDK, C#, node, javascript
 weight: 6
 type: "space"
-icon: "ti-settings"
+icon: "ti-pencil"
 ---
