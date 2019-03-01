@@ -31,7 +31,9 @@ The system is relying on all content sitting in the `content` folder:
         └── content
 ```
 
-The `repositories.json` file configures at which path (sub-folder) under the content folder repositories will be linked to, and with which name. The content folder should contain the parent folders, with a matching `index.md` and the contents of the `Documentation` folder from the repository directly in this.
+## Linking to repositories
+
+The `repositories.json` file configures at which path (sub-folder) under the content folder repositories will be linked to, and with which name. The content folder should contain the parent folders, with a matching `_index.md` and the contents of the `Documentation` folder from the repository directly in this.
 This is best achieved by creating a symbolic link to the repositories `Documentation` folder.
 
 Open a shell and **navigate to the correct sub-folder in the `content` folder**.
@@ -61,10 +63,28 @@ c:> mklink /d overview c:\Projects\Dolittle\Runtime\Documentation
 Chances are you are contributing to the code of the repository and you can therefor leave it in place and maintain
 code and documentation side-by-side.
 
-### Building and running
+## Automatically link to local repositories
 
+As an alternative to manually setting up the symlinks to each repository, you can add a `repositories.local.json` file, and run the `build.local.sh` command.
 
-#### Install dependencies
+For any local repositories you want to link to, use the full path to the repository on your local machine instead of the url to the github project. You can also mix these up with public respository urls for convenience.
+
+```json
+  {
+    "/Users/username/code/Dolittle/DotNET.fundamentals/": {
+        "name": "dotnet-fundamentals",
+        "path": "api"
+    },
+    "https://github.com/dolittle-runtime/home.git": {
+        "name": "overview",
+        "path": "runtime"
+    }
+  }
+```
+
+## Building and running
+
+### Install dependencies
 You need to install node dependencies in the `Source/Hugo` folder. You can do this through using npm or yarn.
 
 NPM:
@@ -78,7 +98,7 @@ $ yarn
 ```
 
 
-#### Install Hugo
+### Install Hugo
 You will need to [install Hugo](https://gohugo.io/getting-started/installing).
 Once you have Hugo installed, you open a shell and navigate to the `Source/Hugo` folder.
 From this you simply do:

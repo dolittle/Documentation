@@ -1,5 +1,5 @@
 {{ partial "head.html" . }}
-{{- $rootSpace := .GetPage .Section -}}
+{{- $rootSpace := .Site.GetPage .Section -}}
 {{ "<!-- navigation -->" | safeHTML }}
 <header class="shadow-bottom position-relative">
     <div class="container">

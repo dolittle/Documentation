@@ -8,8 +8,10 @@ resources
 !content/_footer.md
 !content/_header.md
 
-!content/api/_index.md
-!content/backend/_index.md
 !content/contributing/_index.md
-!content/frontend/_index.md
-!content/tools/_index.md
+!content/fundamentals/_index.md
+!content/interaction/_index.md
+!content/interaction/aurelia/_index.md
+!content/platform/_index.md
+!content/runtime/_index.md
+!content/tooling/_index.md
