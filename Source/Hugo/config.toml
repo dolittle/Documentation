@@ -1,13 +1,13 @@
 baseURL = "/"
-  languageCode = "en-us"
-  DefaultContentLanguage = "en"
-  title = "Dolittle Documentation"
+languageCode = "en-us"
+DefaultContentLanguage = "en"
+title = "Dolittle Documentation"
 theme = "dot"
-  home = "Home"
+home = "Home"
 
 
 pygmentsCodeFences = true
-pygmentsStyle = "monokailight"
+pygmentsUseClasses = true
 
 [params]
 primaryColor = "#ff4b00"
