@@ -11,7 +11,9 @@
 {{- end -}}
 
 {{- $isActivePath := in (string $currentURL) (lower $pageSlug) -}}
-<li class="{{ .page.Kind }} {{ if $isActivePath -}}active{{- end -}}">
+{{- if and $isSection (not $isSectionWithChildren) (not $hasContent) -}}
+{{- else -}}
+<li class="{{ .page.Kind }} {{ if $isActivePath }}active{{ end }}">
     {{- if $isSectionWithChildren -}}
     <i class="ti-angle-right expand"></i>
     {{- if $hasContent -}}
@@ -28,3 +30,4 @@
     <a href="{{ .page.RelPermalink }}" class="{{- if $isCurrentPage -}}current_page{{- end }}">{{ .page.Title }}</a>
     {{- end -}}
 </li>
+{{- end -}}
