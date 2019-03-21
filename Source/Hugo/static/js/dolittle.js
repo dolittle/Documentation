@@ -10,7 +10,7 @@
     addAnchorTags();
 
     //left menu expand/collapse
-    $('.list-styled .expand').on('click', function() {
+    $('.list-styled .expand, .list-styled .expand + span').on('click', function() {
         $parent = $(this).parent();
         console.log($parent);
         $parent.toggleClass('active');

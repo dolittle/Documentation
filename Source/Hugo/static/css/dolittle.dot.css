@@ -44,6 +44,15 @@ h1.page_title {
     padding: 0.5rem 0.5rem 0.5rem 1.75rem;
 }
 
+.list-styled span {
+    color: var(--text-color-dark);
+    cursor: pointer;
+    display: block;
+    font-weight: 400;
+    font-size: inherit;
+    padding: 0.5rem 0.5rem 0.5rem 1.75rem;
+}
+
 .list-styled a:hover {
     text-decoration: underline;
 }
