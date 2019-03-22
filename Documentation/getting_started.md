@@ -81,6 +81,10 @@ For any local repositories you want to link to, use the full path to the reposit
     }
   }
 ```
+{{% notice tip %}}
+There are some linked dependencies in certain files, so it's recommended that you copy the content from `repositories.json` into `repositories.local.json` and change the url on the local repository you are working with. As described above.
+{{% /notice %}}
+
 
 ## Building and running
 
