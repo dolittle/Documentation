@@ -11,7 +11,7 @@ The `content` folder is the base for all the content that is created for the doc
 ## Structure
 
 ### Defining folder hierarchy
-To add structure (sub-folders) to the content folder and make these visible, hugo expects an `index.md` available with a front-matter section that defines the title, description, keywords & relative weighting in its parent tree.
+To add structure (sub-folders) to the content folder and make these visible, hugo expects an `_index.md` available with a front-matter section that defines the title, description, keywords & relative weighting in its parent tree.
 
 Note! Only use lower cased folder names.
 
