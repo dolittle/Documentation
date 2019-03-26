@@ -9,6 +9,8 @@ home = "Home"
 pygmentsCodeFences = true
 pygmentsUseClasses = true
 
+refLinksErrorLevel = "WARNING"
+
 [params]
 primaryColor = "#ff4b00"
 secondaryColor = "#f4f4f4"
