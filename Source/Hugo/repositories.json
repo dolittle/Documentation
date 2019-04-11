@@ -35,6 +35,10 @@
         "name": "aurelia-build",
         "path": "interaction/aurelia"
     },
+    "https://github.com/dolittle-interaction/javascript.components.aurelia.git": {
+        "name": "aurelia-components",
+        "path": "interaction/aurelia"
+    },
     "https://github.com/dolittle-interaction/dolittle.styles.git": {
         "name": "styles",
         "path": "interaction"
