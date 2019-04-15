@@ -43,6 +43,10 @@
         "name": "styles",
         "path": "interaction"
     },
+    "https://github.com/dolittle-interaction/WebAssembly.git": {
+        "name": "webassembly",
+        "path": "interaction"
+    },
     "https://github.com/dolittle-tools/cli.git": {
         "name": "cli",
         "path": "tooling"
