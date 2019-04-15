@@ -47,7 +47,10 @@ To avoid this, make sure to explicitly mark the relevant markdown or other stati
 ```
 
 ## Content from other repositories
-The `build.js` task iterates over repositories defined in the `repositories.json` file, and gives them a matching name, and places the link in the relevant sub-folder in the `content` folder.
+
+{{% notice info %}} When linking to a repository for the first time, make sure the `Documentation` folder exists, otherwise the symlink will fail, and the solution won't pick up any documentation changes from that repository. Redeploy when the folder exists.{{% /notice %}}
+
+To link to documentation from another repository, add that repository to the `repositories.json` file located in [Source/Hugo](https://github.com/dolittle/Documentation/blob/master/Source/Hugo/repositories.json) . The repository should have a folder named `Documentation`at its root with its documentation written in markdown.
 
 **Example of repositories.json**
 ```json
@@ -63,8 +66,13 @@ The `build.js` task iterates over repositories defined in the `repositories.json
 }
 ```
 
-**name**: Name of the folder that will be linked to
-**path**: Path under content it will be placed
+|Parameter| Description|
+|---|---|
+|**name**| Name of the folder that will be linked to|
+|**path**| Path under content it will be placed|
+
+The `build.js` task iterates over repositories defined in the `repositories.json` file, and gives them a matching name, and places the link in the relevant sub-folder in the `content` folder.
+
 
 The above `repositories.json` will generate the following output. Note the `_index.md` files should already be in the `content` folder:
 
