@@ -43,7 +43,7 @@
         "name": "styles",
         "path": "interaction"
     },
-    "https://github.com/dolittle-interaction/WebAssembly.git": {
+    "https://github.com/dolittle-interaction/webassembly.git": {
         "name": "webassembly",
         "path": "interaction"
     },
