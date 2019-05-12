@@ -7,7 +7,7 @@
 
 {{- $pageSlug := .page.File -}}
 {{- if $isSection -}}
-{{- $pageSlug := cond (gt (len .page.Dir) 0) .page.Dir .Page.Title -}}
+{{- $pageSlug = cond (gt (len .page.Dir) 0) .page.Dir .Page.Title -}}
 {{- end -}}
 
 {{- $isActivePath := in (string $currentURL) (lower $pageSlug) -}}
