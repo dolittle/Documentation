@@ -2,7 +2,7 @@
     <a class="navbar-brand" href="{{ .Site.BaseURL }}">
         {{$logoUrl := "/images/logos/dolittle_positiv_horisontal.svg"}}
         {{ if .IsHome}}
-        {{$logoUrl := "/images/logos/dolittle_positiv_horisontal_white.svg"}}
+        {{$logoUrl = "/images/logos/dolittle_positiv_horisontal_white.svg"}}
         {{ end }}
         <img class="site_logo" src="{{ $logoUrl }}" alt="{{ .Site.Params.logo }}">
     </a>
