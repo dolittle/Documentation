@@ -3,7 +3,7 @@
         "name": "getting-started",
         "path": ""
     },
-    "https://github.com/dolittle-fundamentals/Home.git": {
+    "https://github.com/dolittle-fundamentals/home.git": {
         "name": "overview",
         "path": "fundamentals"
     },
@@ -15,7 +15,7 @@
         "name": "javascript-fundamentals",
         "path": "fundamentals"
     },
-    "https://github.com/dolittle-runtime/Home.git": {
+    "https://github.com/dolittle-runtime/home.git": {
         "name": "overview",
         "path": "runtime"
     },
@@ -66,5 +66,9 @@
     "https://github.com/dolittle-platform/home.git": {
         "name": "overview",
         "path": "platform"
+    },
+    "https://github.com/dolittle-edge/agent.git": {
+        "name": "agent",
+        "path": "edge"
     }
 }
