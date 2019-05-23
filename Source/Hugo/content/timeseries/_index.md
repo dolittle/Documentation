@@ -1,5 +1,5 @@
 ---
-title: Edge
+title: TimeSeries
 description: Dolittle's TimeSeries Support
 author: Dolittle
 keywords: TimeSeries
