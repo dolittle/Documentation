@@ -74,5 +74,19 @@
     "https://github.com/dolittle-timeseries/modules.git": {
         "name": "modules",
         "path": "timeseries"
+    },
+    "https://github.com/dolittle-timeseries/identitymapper.git": {
+        "name": "identitymapper",
+        "path": "timeseries"
+    },
+    "https://github.com/dolittle-timeseries/historian.git": {
+        "name": "historian",
+        "path": "timeseries"
+    },
+    "https://github.com/dolittle-timeseries/prioritizer.git": {
+        "name": "prioritizer",
+        "path": "timeseries"
     }
+
+
 }
