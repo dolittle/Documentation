@@ -55,8 +55,8 @@
         "name": "boilerplates",
         "path": "tooling"
     },
-    "https://github.com/dolittle-tools/build.git": {
-        "name": "build",
+    "https://github.com/dolittle-tools/azuredevops.git": {
+        "name": "azuredevops",
         "path": "tooling"
     },
     "https://github.com/dolittle/home.git": {
