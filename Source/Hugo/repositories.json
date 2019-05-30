@@ -55,6 +55,10 @@
         "name": "boilerplates",
         "path": "tooling"
     },
+    "https://github.com/dolittle-tools/build.git": {
+        "name": "build",
+        "path": "tooling"
+    },
     "https://github.com/dolittle/home.git": {
         "name": "guidelines",
         "path": "contributing"
@@ -87,6 +91,7 @@
         "name": "prioritizer",
         "path": "timeseries"
     }
+
 
 
 }
