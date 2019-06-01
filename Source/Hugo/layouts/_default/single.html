@@ -30,18 +30,19 @@
     <div class="row reverse_on_sm_and_below">
       <div class="col-lg-3">
         <div class="p-4 bg-white sticky-top">
-            {{- $rootSpace := .GetPage .Section -}}
-            {{- partial "list_navigation.html" (dict "root" $rootSpace "CurrentURL" .URL) -}}
-          </div>
+          {{- $rootSpace := .GetPage .Section -}}
+          {{- partial "list_navigation.html" (dict "root" $rootSpace "CurrentURL" .URL) -}}
+        </div>
       </div>
       <div class="col-lg-9">
         <div class="p-5 bg-white doc_content">
-            <h1 class="page_title">{{ .Title }}</h1>
+          {{- partial "edit_on_github.html" (dict "ctx" $rootSpace "CurrentURL" .URL "CurrentPage" .) -}}    
+          <h1 class="page_title">{{ .Title }}</h1>
             {{ .Content }}
             {{- if ne (string .PublishDate) "0001-01-01 00:00:00 +0000 UTC" -}}
             <p class="post-meta border-bottom pb-3 mb-0">Updated on {{ .PublishDate }}</p>
             {{- end -}}
-            {{- $currentNode := . -}}
+            {{- $currentNode := . -}}            
             <nav class="pagination mt-3">
             {{- template "pagination" dict "menu" .Site.Home "currentnode" $currentNode "menu_exclusion" .Site.Params.menu_exclusion -}}
             {{- with ($.Scratch.Get "prevPage") -}}

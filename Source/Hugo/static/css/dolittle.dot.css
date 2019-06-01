@@ -192,3 +192,13 @@ h1.page_title {
         flex-direction: column-reverse;
     }
 }
+
+.edit-link {
+    position: absolute;
+    top: 50px;
+    right: 66px; 
+}
+
+.edit-link .icon {
+    font-size: 28px;
+}
