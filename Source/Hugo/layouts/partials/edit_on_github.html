@@ -37,7 +37,7 @@
         {{- $canEdit :=cond (ne $repositoryUrl nil) true false -}}
         {{- $editLink := printf "%s/edit/master/Documentation%s" $repositoryUrl $relativePath }}
         {{- if $canEdit -}}
-            <a class="edit-link" href="{{ $editLink }}"><i class="ti-pencil icon"></i></a>
+            <a class="edit-link" href="{{ $editLink }}" target="_blank"><i class="ti-pencil icon"></i></a>
         {{- end -}}
     {{- end -}}
 {{- end -}}
