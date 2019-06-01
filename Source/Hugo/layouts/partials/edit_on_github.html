@@ -19,38 +19,25 @@
     {{- if isset $currentContext.Params "repository" -}}
         {{- $currentScratch.Set "repo" ($currentContext.Param "repository") -}}
         {{- $currentScratch.Set "repoRoot" (path.Dir $currentContext.File.Path) -}}
-        <br>Repository: {{ printf "%#v" ($currentScratch.Get "repo") }}    
-        <br>RepositoryPath: {{ printf "%#v" ($currentScratch.Get "repoRoot") }}    
     {{- end -}}
     
-    <!-- {{- if $isCurrentPage -}}
-        {{- $currentScratch.Set "currentFilePath" $currentContext.File.Path -}}
-    {{- end -}} -->
-
-
-
-<br>---------------
-{{- $currentFilePath := $currentPage.File.Path -}}
-<br>File: {{ $currentFilePath }}
-<br>---------------
-{{- $repositoryUrl := ($currentScratch.Get "repo") -}}
-<br>Repo: {{ $repositoryUrl }}
-<br>---------------
-{{- $repositoryRootFilePath := ($currentScratch.Get "repoRoot") -}}
-<br>RepoRoot: {{ $repositoryRootFilePath }}
-<br>---------------
-{{- $relativePath := (strings.TrimPrefix $repositoryRootFilePath $currentFilePath) -}}
-<br>Relative Path: {{ $relativePath }}
-<br>---------------
-
-{{- $editLink := printf "%s/edit/master/Documentation%s" $repositoryUrl $relativePath }}
-<br>Github Path: {{ $editLink }}
-<br><a href="{{ $editLink }}">Edit on Github</a>
-
-<br>---------------
     {{- if $isSectionWithChildren -}}
         {{- range $pages.ByWeight -}}
             {{- partial "edit_on_github.html" (dict "ctx" . "CurrentURL" $currentURL "CurrentScratch" $currentScratch "CurrentPage" $currentPage) -}}    
+        {{- end -}}
+    {{- end -}}
+    
+    {{- if $isCurrentPage -}}
+        {{- $currentFilePath := $currentPage.File.Path -}}
+        {{- $repositoryUrl := ($currentScratch.Get "repo") -}}
+        {{- $repositoryRootFilePath := ($currentScratch.Get "repoRoot") -}}
+        
+        {{- $relativePath := (strings.TrimPrefix $repositoryRootFilePath $currentFilePath) -}}
+        
+        {{- $canEdit :=cond (ne $repositoryUrl nil) true false -}}
+        {{- $editLink := printf "%s/edit/master/Documentation%s" $repositoryUrl $relativePath }}
+        {{- if $canEdit -}}
+            <a class="btn btn-primary" href="{{ $editLink }}">Edit on Github</a>
         {{- end -}}
     {{- end -}}
 {{- end -}}
