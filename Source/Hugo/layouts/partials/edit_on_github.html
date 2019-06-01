@@ -27,11 +27,6 @@
         {{- $currentScratch.Set "currentFilePath" $currentContext.File.Path -}}
     {{- end -}} -->
 
-    <!-- {{- if $isSectionWithChildren -}} -->
-        <!-- {{- range $pages.ByWeight -}} -->
-            <!-- {{- partial "edit_on_github.html" (dict "ctx" . "CurrentURL" $currentURL "CurrentScratch" $currentScratch "CurrentPage" $currentPage) -}}     -->
-        <!-- {{- end -}} -->
-    <!-- {{- end -}} -->
 
 
 <br>---------------
@@ -53,5 +48,10 @@
 <br><a href="{{ $editLink }}">Edit on Github</a>
 
 <br>---------------
+    {{- if $isSectionWithChildren -}}
+        {{- range $pages.ByWeight -}}
+            {{- partial "edit_on_github.html" (dict "ctx" . "CurrentURL" $currentURL "CurrentScratch" $currentScratch "CurrentPage" $currentPage) -}}    
+        {{- end -}}
+    {{- end -}}
 {{- end -}}
 
