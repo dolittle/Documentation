@@ -4,6 +4,7 @@ description: Learn about how to contribute to documentation
 keywords: Contributing
 author: einari
 weight: 5
+repository: https://github.com/dolittle/Documentation
 ---
 
 ## Process

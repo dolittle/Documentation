@@ -1,0 +1,47 @@
+{{- $currentContext := .ctx -}}
+{{- $currentURL := .CurrentURL -}}
+{{- $currentPage := .CurrentPage -}}
+
+{{- $currentScratch := cond (isset . "CurrentScratch") .CurrentScratch newScratch -}}
+{{- $pages :=  (union $currentContext.Pages $currentContext.Sections) -}}
+{{- $isCurrentPage := eq (string $currentURL) $currentContext.URL -}}
+{{- $isSection := eq $currentContext.Kind "section" -}}
+{{- $isSectionWithChildren := and (eq $currentContext.Kind "section") (gt (len $pages ) 0) }}
+
+{{- $pageSlug := $currentContext.File -}}
+{{- if $isSection -}}
+    {{- $pageSlug = cond (gt (len $currentContext.Dir) 0) $currentContext.Dir .Page.Title -}}
+{{- end -}}
+
+{{- $isActivePath := in (string $currentURL) (lower $pageSlug) -}}
+
+{{- if $isActivePath -}}
+
+    {{- $hasRepositoryDefinition := isset $currentContext.Params "repository" -}}
+    {{- if $hasRepositoryDefinition -}}
+        {{- $currentScratch.Set "repositoryUrl" ($currentContext.Param "repository") -}}
+        {{- $currentScratch.Set "repositoryRootFilePath" (path.Dir $currentContext.File.Path) -}}
+    {{- end -}}
+    
+    {{- if $isSectionWithChildren -}}
+        {{- range $pages.ByWeight -}}
+            {{- partial "edit_on_github.html" (dict "ctx" . "CurrentURL" $currentURL "CurrentScratch" $currentScratch "CurrentPage" $currentPage) -}}    
+        {{- end -}}
+    {{- end -}}
+    
+    {{- if $isCurrentPage -}}
+        {{- $currentFilePath := $currentPage.File.Path -}}
+        {{- $repositoryUrl := ($currentScratch.Get "repositoryUrl") -}}
+        {{- $repositoryRootFilePath := ($currentScratch.Get "repositoryRootFilePath") -}}
+        
+        {{- $relativePath := (strings.TrimPrefix $repositoryRootFilePath $currentFilePath) -}}
+        
+        {{- $hasFoundRepositoryUrl := ne $repositoryUrl nil -}}
+        {{- $canEdit := $hasFoundRepositoryUrl -}}
+        {{- if $canEdit -}}
+            {{- $editLink := printf "%s/edit/master/Documentation%s" $repositoryUrl $relativePath }}
+            <a class="edit-link" href="{{ $editLink }}" target="_blank"><i class="ti-pencil icon"></i></a>
+        {{- end -}}
+    {{- end -}}
+{{- end -}}
+
