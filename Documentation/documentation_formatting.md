@@ -6,7 +6,7 @@ author: Dolittle
 weight: 3
 ---
 
-This docuemnt is meant to serve as a guide for formatting the documentation you are writing. It's not an exhaustive list, but serves as a starting point for conventions and best practices to follow while writing.
+This document is meant to serve as a guide for formatting the documentation you are writing. It's not an exhaustive list, but serves as a starting point for conventions and best practices to follow while writing.
 
 Documentation is combined and generated through the static site [Hugo](https://gohugo.io). Hugo has a number of features it supports, and based on the theme being used those may or may not all be available. The theme may also have custom shortcodes that can be used to build your site and pages.
 
