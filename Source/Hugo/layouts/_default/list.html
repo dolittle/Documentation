@@ -35,7 +35,9 @@
             </div>
             <div class="col-lg-9">
                 <div class="p-5 bg-white doc_content">
-                    {{- partial "edit_on_github.html" (dict "ctx" $rootSpace "CurrentURL" .URL "CurrentPage" .Page) -}}    
+                    {{- if .Content -}}
+                        {{- partial "edit_on_github.html" (dict "ctx" $rootSpace "CurrentURL" .URL "CurrentPage" .Page) -}}    
+                    {{- end -}}
                     <h1 class="page_title">{{ .Title }}</h1>
                     {{ .Content }}
                 </div>
