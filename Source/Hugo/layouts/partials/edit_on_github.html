@@ -8,15 +8,13 @@
 {{- $isSection := eq $currentContext.Kind "section" -}}
 {{- $isSectionWithChildren := and (eq $currentContext.Kind "section") (gt (len $pages ) 0) }}
 
-{{- $pageSlug := $currentContext.File -}}
+{{- $pageSlug := $currentContext.File.TranslationBaseName -}}
 {{- if $isSection -}}
-    {{- $pageSlug = cond (gt (len $currentContext.Dir) 0) $currentContext.Dir .Page.Title -}}
+    {{- $pageSlug = cond (gt (len $currentContext.File.Dir) 0) $currentContext.File.Dir .Page.Title -}}
 {{- end -}}
 
 {{- $isActivePath := in (string $currentURL) (lower $pageSlug) -}}
-
 {{- if $isActivePath -}}
-
     {{- $hasRepositoryDefinition := isset $currentContext.Params "repository" -}}
     {{- if $hasRepositoryDefinition -}}
         {{- $currentScratch.Set "repositoryUrl" ($currentContext.Param "repository") -}}
