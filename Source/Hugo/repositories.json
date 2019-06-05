@@ -90,8 +90,25 @@
     "https://github.com/dolittle-timeseries/prioritizer.git": {
         "name": "prioritizer",
         "path": "timeseries"
+    },
+    "https://github.com/dolittle-timeseries/kchief.git": {
+        "name": "kchief",
+        "path": "timeseries"
+    },
+    "https://github.com/dolittle-timeseries/terasaki.git": {
+        "name": "terasaki",
+        "path": "timeseries"
+    },
+    "https://github.com/dolittle-timeseries/mqtt.git": {
+        "name": "mqtt",
+        "path": "timeseries"
+    },
+    "https://github.com/dolittle-timeseries/modbus.git": {
+        "name": "prioritizer",
+        "path": "timeseries"
+    },
+    "https://github.com/dolittle-timeseries/studio.git": {
+        "name": "studio",
+        "path": "timeseries"
     }
-
-
-
 }
