@@ -104,7 +104,7 @@
         "path": "timeseries"
     },
     "https://github.com/dolittle-timeseries/modbus.git": {
-        "name": "prioritizer",
+        "name": "modbus",
         "path": "timeseries"
     },
     "https://github.com/dolittle-timeseries/studio.git": {
