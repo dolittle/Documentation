@@ -1,14 +1,16 @@
 ---
   kind: Deployment
-  apiVersion: extensions/v1beta1
+  apiVersion: apps/v1
   metadata:
     name: documentation
-    namespace: dolittle
+    namespace: websites
   spec:
+    selector:
+      matchLabels:
+        name: documentation
     template:
       metadata:
         labels:
-          app: documentation
           name: documentation
       spec:
         containers:
@@ -17,3 +19,8 @@
           imagePullPolicy: Always
           ports:
           - containerPort: 3000
+            name: http
+          resources:
+            limits:
+              cpu: 250m
+              memory: 100Mi

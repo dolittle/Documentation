@@ -3,16 +3,12 @@
   kind: Service
   metadata:
     name: documentation
-    namespace: dolittle
-    labels:
-      app: documentation
+    namespace: websites
   spec:
     ports:
     - port: 80
-      targetPort: 3000
-      name: documentation-port
-      protocol: TCP
+      targetPort: http
+      name: http
     selector:
-      app: documentation
       name: documentation
   

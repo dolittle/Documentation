@@ -3,7 +3,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: documentation
-  namespace: dolittle
+  namespace: websites
 spec:
   rules:
   - host: dolittle.io
