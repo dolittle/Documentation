@@ -114,5 +114,10 @@
     "https://github.com/dolittle-timeseries/studio.git": {
         "name": "studio",
         "path": "timeseries"
+    },
+    "https://github.com/dolittle-timeseries/home.git": {
+        "name": "overview",
+        "path": "timeseries"
     }
+    
 }
