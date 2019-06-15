@@ -2,6 +2,7 @@
 const helpers = require('./helpers');
 const globals = require('./globals');
 const fs = require('fs');
+const path = require('path');
 let repositoryUrl = "";
 let repositoryConfiguration = {};
 let repositoryPath = "";
@@ -21,11 +22,13 @@ function hasClone() {
 
 function clone() {
     console.log(`Cloning ${repositoryUrl} into ${repositoryConfiguration.name} in working dir repositories`);
+    let destination = path.join(repositoryConfiguration.path, repositoryConfiguration.name);
+
     helpers.run('git', [
         'clone',
         '--recurse-submodules',
         repositoryUrl,
-        repositoryConfiguration.name
+        destination
     ], 'repositories');
 }
 
@@ -89,7 +92,7 @@ if( process.argv.length == 2 ) {
         repositoryConfiguration = globals.allowedRepositories[property];
         console.log(`Handling repository : ${repositoryConfiguration.name} - ${property}`)
         repositoryUrl = property;
-        repositoryPath = `${globals.paths.repositories}/${repositoryConfiguration.name}`;
+        repositoryPath = path.join(globals.paths.repositories, repositoryConfiguration.path, repositoryConfiguration.name);
     
         handleCurrentRepository();
     }
@@ -106,7 +109,7 @@ if( process.argv.length == 2 ) {
     }
 
     repositoryConfiguration = globals.allowedRepositories[repositoryUrl];
-    repositoryPath = `${globals.paths.repositories}/${repositoryConfiguration.name}`;
+    repositoryPath = path.join(globals.paths.repositories, repositoryConfiguration.path, repositoryConfiguration.name);
 
     console.log(`Build documentation based on changes from ${repositoryUrl}`);
 
