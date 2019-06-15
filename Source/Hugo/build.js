@@ -11,9 +11,9 @@ let repositoryPath = "";
 
 function hasClone() {
     let path = repositoryPath;
-    if( fs.existsSync(path) ) {
+    if (fs.existsSync(path)) {
         let gitPath = `${path}/.git`;
-        if( fs.existsSync(gitPath)) return true;
+        if (fs.existsSync(gitPath)) return true;
         helpers.deleteFolderRecursive(path);
     }
 
@@ -38,19 +38,19 @@ function createSymbolicLink(target) {
         let linkTarget = fs.realpathSync(`${target}/Documentation`);
         let linkSource = `${globals.paths.content}/${repositoryConfiguration.path}/${repositoryConfiguration.name}`;
 
-        if( fs.existsSync(linkSource)) {
+        if (fs.existsSync(linkSource)) {
             console.log(`Unlinking symlink for ${linkSource}`);
             fs.unlinkSync(linkSource);
         }
-        if( fs.existsSync(linkTarget)) {
+        if (fs.existsSync(linkTarget)) {
             fs.symlinkSync(linkTarget, linkSource, 'dir');
-            console.log(`Created symlink for ${linkSource} to ${linkTarget}`);    
+            console.log(`Created symlink for ${linkSource} to ${linkTarget}`);
         }
         else {
             console.log(`Skipping symlink for ${linkSource}. Could not find target ${linkTarget}`);
         }
     } catch (e) {
-    console.log(`Could not create symlink for ${target}`, e);
+        console.log(`Could not create symlink for ${target}`, e);
 
     }
 }
@@ -66,34 +66,31 @@ function pullChanges() {
     ], repositoryPath);
 }
 
-function upload() {
-    // Upload to Azure Blob Storage
-}
 
 function handleCurrentRepository() {
     const isLocalRepository = fs.existsSync(repositoryUrl);
-    if(isLocalRepository){
-        createSymbolicLink(repositoryUrl);           
-    }
-    else{
+    if (isLocalRepository) {
+        console.log(`Local repository at '${repositoryUrl}'`)
+        createSymbolicLink(repositoryUrl);
+    } else {
+        console.log(`Remove repository at '${repositoryUrl}' with target path '${repositoryPath}'`);
         if (!hasClone()) {
             console.log('Clone');
             clone();
         } else {
             pullChanges();
         }
-        createSymbolicLink(repositoryPath);   
+        createSymbolicLink(repositoryPath);
     }
- 
 }
 
-if( process.argv.length == 2 ) {
-    for( var property in globals.allowedRepositories ) {
+if (process.argv.length == 2) {
+    for (var property in globals.allowedRepositories) {
         repositoryConfiguration = globals.allowedRepositories[property];
         console.log(`Handling repository : ${repositoryConfiguration.name} - ${property}`)
         repositoryUrl = property;
         repositoryPath = path.join(globals.paths.repositories, repositoryConfiguration.path, repositoryConfiguration.name);
-    
+
         handleCurrentRepository();
     }
 } else {
@@ -117,4 +114,3 @@ if( process.argv.length == 2 ) {
 }
 
 helpers.run('hugo');
-upload();
