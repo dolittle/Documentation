@@ -16,7 +16,7 @@ app.post('/updateRepository', (request, response) => {
         repository = repository.toLowerCase();
 
         if (repository == incomingRepo) {
-            let repositoryPath = path.join(process.cwd(), 'repositories', repositories[repository].name);
+            let repositoryPath = path.join(process.cwd(), 'repositories', repositories[repository].path, repositories[repository].name);
 
             console.log('Pulling latest');
             let git = simpleGit(repositoryPath);
