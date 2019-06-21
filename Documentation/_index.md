@@ -109,5 +109,5 @@ Markdown can be written using the simplest of editors (Pico, Nano, Notepad), but
 great value and guides you through giving you feedback on errors. Editors like [Visual Studio Code](http://code.visualstudio.com/)
 and [Sublime Text](http://sublimetext.com) comes highly recommended. VSCode has for instance a [markdown preview feature](https://code.visualstudio.com/Docs/languages/markdown).
 
-{{< icon name="heart" size="large" >}}
+{{ <icon name="heart" size="large"></icon> }}
 {{% alert theme="success" %}}Happy documenting{{% /alert %}}
