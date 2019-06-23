@@ -55,6 +55,10 @@
         "name": "cli",
         "path": "tooling"
     },
+    "https://github.com/dolittle-tools/common.git": {
+        "name": "tooling-platform",
+        "path": "tooling"
+    },
     "https://github.com/dolittle-boilerplates/home.git": {
         "name": "boilerplates",
         "path": "tooling"
