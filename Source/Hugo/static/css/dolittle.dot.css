@@ -181,7 +181,7 @@ h1.page_title {
 }
 
 .left_navigation h4 {
-    margin-top: 1.2rem;    
+    margin-top: 1.2rem;
 }
 .left_navigation h4 a {
     color: inherit;
@@ -196,9 +196,32 @@ h1.page_title {
 .edit-link {
     position: absolute;
     top: 50px;
-    right: 66px; 
+    right: 66px;
 }
 
 .edit-link .icon {
     font-size: 28px;
+}
+.doc_content table {
+    font-size: 0.875rem;
+}
+.doc_content table tbody tr {
+    border-top: 0.0625rem solid #e4e4e4;
+}
+.doc_content table th {
+    white-space: nowrap;
+}
+.doc_content table td {
+    padding: 0.5rem;
+    vertical-align: middle;
+}
+.doc_content table td:first-child {
+    white-space: nowrap;
+}
+.doc_content table td:first-child + td {
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    font-size: 87.5%;
+}
+.doc_content table td:last-child {
+    text-align: right;
 }
