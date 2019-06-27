@@ -84,7 +84,7 @@
         "path": "edge"
     },
     "https://github.com/dolittle-timeseries/timeseries.git": {
-        "name": "modules",
+        "name": "developing",
         "path": "timeseries"
     },
     "https://github.com/dolittle-timeseries/identitymapper.git": {
