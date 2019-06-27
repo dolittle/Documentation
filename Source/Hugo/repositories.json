@@ -83,7 +83,7 @@
         "name": "agent",
         "path": "edge"
     },
-    "https://github.com/dolittle-timeseries/modules.git": {
+    "https://github.com/dolittle-timeseries/timeseries.git": {
         "name": "modules",
         "path": "timeseries"
     },
