@@ -1,5 +1,5 @@
 {{ partial "head.html" . }}
-{{- $rootSpace := .GetPage .Section -}}
+{{- $rootSpace := .Site.GetPage .Section -}}
 {{ "<!-- navigation -->" | safeHTML }}
 <header class="shadow-bottom position-relative">
   <div class="container">
@@ -30,7 +30,6 @@
     <div class="row reverse_on_sm_and_below">
       <div class="col-lg-3">
         <div class="p-4 bg-white sticky-top">
-          {{- $rootSpace := .GetPage .Section -}}
           {{- partial "list_navigation.html" (dict "root" $rootSpace "CurrentURL" .URL) -}}
         </div>
       </div>
