@@ -11,6 +11,7 @@ resources
 !content/contributing/_index.md
 !content/fundamentals/_index.md
 !content/interaction/_index.md
+!content/interaction/aspnetcore/_index.md
 !content/interaction/aurelia/_index.md
 !content/platform/_index.md
 !content/runtime/_index.md
