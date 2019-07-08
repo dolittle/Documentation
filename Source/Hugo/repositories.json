@@ -27,6 +27,10 @@
         "name": "dotnet-sdk",
         "path": "runtime"
     },
+    "https://github.com/dolittle-interaction/aspnetcore.debugging.swagger.git": {
+        "name": "aspnetcore-debugging-swagger",
+        "path": "interaction/aspnetcore"
+    },
     "https://github.com/dolittle-interaction/javascript.client.aurelia.git": {
         "name": "aurelia-client",
         "path": "interaction/aurelia"

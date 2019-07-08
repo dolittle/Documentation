@@ -17,6 +17,12 @@ h1.page_title {
     font-weight: 200;
     border-bottom: 0.0625rem solid #ccc;
 }
+
+img {
+    width: auto;
+    max-width: 100%;
+}
+
 .list-styled {
     font-size: 0.875rem;
     line-height: 1rem;
