@@ -1,3 +1,6 @@
 [submodule "Source/themes/dot"]
 	path = Source/themes/dot
 	url = https://github.com/Gethugothemes/dot-hugo-documentation-theme.git
+[submodule "Source/repositories/learning"]
+	path = Source/repositories/learning
+	url = https://github.com/dolittle/learning.git
