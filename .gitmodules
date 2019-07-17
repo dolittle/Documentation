@@ -4,3 +4,12 @@
 [submodule "Source/repositories/learning"]
 	path = Source/repositories/learning
 	url = https://github.com/dolittle/learning.git
+[submodule "Source/repositories/fundamentals/dotnet.fundamentals"]
+	path = Source/repositories/fundamentals/dotnet.fundamentals
+	url = https://github.com/dolittle-fundamentals/dotnet.fundamentals.git
+[submodule "Source/repositories/fundamentals/home"]
+	path = Source/repositories/fundamentals/home
+	url = https://github.com/dolittle-fundamentals/home.git
+[submodule "Source/repositories/fundamentals/javascript.fundamentals"]
+	path = Source/repositories/fundamentals/javascript.fundamentals
+	url = https://github.com/dolittle-fundamentals/javascript.fundamentals.git
