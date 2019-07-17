@@ -13,3 +13,66 @@
 [submodule "Source/repositories/fundamentals/javascript.fundamentals"]
 	path = Source/repositories/fundamentals/javascript.fundamentals
 	url = https://github.com/dolittle-fundamentals/javascript.fundamentals.git
+[submodule "Source/repositories/runtime/DotNET.SDK"]
+	path = Source/repositories/runtime/DotNET.SDK
+	url = https://github.com/dolittle-runtime/DotNET.SDK.git
+[submodule "Source/repositories/runtime/Home"]
+	path = Source/repositories/runtime/Home
+	url = https://github.com/dolittle-runtime/Home.git
+[submodule "Source/repositories/runtime/Runtime"]
+	path = Source/repositories/runtime/Runtime
+	url = https://github.com/dolittle-runtime/Runtime.git
+[submodule "Source/repositories/edge/Agent"]
+	path = Source/repositories/edge/Agent
+	url = https://github.com/dolittle-edge/Agent.git
+[submodule "Source/repositories/tools/cli"]
+	path = Source/repositories/tools/cli
+	url = https://github.com/dolittle-tools/cli.git
+[submodule "Source/repositories/tools/AzureDevOps"]
+	path = Source/repositories/tools/AzureDevOps
+	url = https://github.com/dolittle-tools/AzureDevOps.git
+[submodule "Source/repositories/tools/common"]
+	path = Source/repositories/tools/common
+	url = https://github.com/dolittle-tools/common.git
+[submodule "Source/repositories/timeseries/Modbus"]
+	path = Source/repositories/timeseries/Modbus
+	url = https://github.com/dolittle-timeseries/Modbus.git
+[submodule "Source/repositories/timeseries/TimeSeries"]
+	path = Source/repositories/timeseries/TimeSeries
+	url = https://github.com/dolittle-timeseries/TimeSeries.git
+[submodule "Source/repositories/timeseries/IdentityMapper"]
+	path = Source/repositories/timeseries/IdentityMapper
+	url = https://github.com/dolittle-timeseries/IdentityMapper.git
+[submodule "Source/repositories/timeseries/Home"]
+	path = Source/repositories/timeseries/Home
+	url = https://github.com/dolittle-timeseries/Home.git
+[submodule "Source/repositories/timeseries/Prioritizer"]
+	path = Source/repositories/timeseries/Prioritizer
+	url = https://github.com/dolittle-timeseries/Prioritizer.git
+[submodule "Source/repositories/timeseries/Historian"]
+	path = Source/repositories/timeseries/Historian
+	url = https://github.com/dolittle-timeseries/Historian.git
+[submodule "Source/repositories/timeseries/MQTT"]
+	path = Source/repositories/timeseries/MQTT
+	url = https://github.com/dolittle-timeseries/MQTT.git
+[submodule "Source/repositories/timeseries/Studio"]
+	path = Source/repositories/timeseries/Studio
+	url = https://github.com/dolittle-timeseries/Studio.git
+[submodule "Source/repositories/interaction/AspNetCore.Debugging.Swagger"]
+	path = Source/repositories/interaction/AspNetCore.Debugging.Swagger
+	url = https://github.com/dolittle-interaction/AspNetCore.Debugging.Swagger.git
+[submodule "Source/repositories/interaction/JavaScript.Components.Aurelia"]
+	path = Source/repositories/interaction/JavaScript.Components.Aurelia
+	url = https://github.com/dolittle-interaction/JavaScript.Components.Aurelia.git
+[submodule "Source/repositories/interaction/JavaScript.Client.Aurelia"]
+	path = Source/repositories/interaction/JavaScript.Client.Aurelia
+	url = https://github.com/dolittle-interaction/JavaScript.Client.Aurelia.git
+[submodule "Source/repositories/interaction/Styles"]
+	path = Source/repositories/interaction/Styles
+	url = https://github.com/dolittle-interaction/Styles.git
+[submodule "Source/repositories/interaction/WebAssembly"]
+	path = Source/repositories/interaction/WebAssembly
+	url = https://github.com/dolittle-interaction/WebAssembly.git
+[submodule "Source/repositories/documentation/Documentation"]
+	path = Source/repositories/documentation/Documentation
+	url = https://github.com/dolittle/Documentation.git
