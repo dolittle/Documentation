@@ -1,8 +1,6 @@
 obj
 public
 
-content
-
 node_modules
 yarn.lock
 Source/Hugo/resources
