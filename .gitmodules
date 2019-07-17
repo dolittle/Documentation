@@ -76,3 +76,9 @@
 [submodule "Source/repositories/documentation/Documentation"]
 	path = Source/repositories/documentation/Documentation
 	url = https://github.com/dolittle/Documentation.git
+[submodule "Source/repositories/interaction/JavaScript.Client.Aurelia.Contrib"]
+	path = Source/repositories/interaction/JavaScript.Client.Aurelia.Contrib
+	url = https://github.com/dolittle-contribs/JavaScript.Client.Aurelia.Contrib.git
+[submodule "Source/repositories/guidelines/Home"]
+	path = Source/repositories/guidelines/Home
+	url = https://github.com/dolittle/Home.git
