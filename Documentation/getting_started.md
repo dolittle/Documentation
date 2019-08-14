@@ -22,13 +22,27 @@ If you've already cloned it, you can get the submodules by doing the following:
 $ git submodule update --init --recursive
 ```
 
-The system is relying on all content sitting in the `content` folder:
 
+## Creating Documentation from the working repository
+
+At the root of the working repository, create a `Documentation` folder with at least a matching `_index.md` and other
+markdown files if needed.
+
+### Adding the working repository as a submodule
+
+In the Documentation repository, navigate to the `Source/repositories/` folder and then in the corresponding Organisation folder (e.g. fundamentals, runtime, interaction etc.).
+You can here pull your working repository as a **submodule**:
+
+```shell
+$ git submodule add <repository_url> <repository_name>
 ```
-<repository root>
-└── Source
-    └── Hugo
-        └── content
+
+*Repository_name has to be in lower case only*
+
+Example:
+
+```shell
+$ git submodule add https://github.com/dolittle-fundamentals/dotnet.fundamentals.git dotnet.fundamentals
 ```
 
 ## Linking to repositories
@@ -36,57 +50,69 @@ The system is relying on all content sitting in the `content` folder:
 The `repositories.json` file configures at which path (sub-folder) under the content folder repositories will be linked to, and with which name. The content folder should contain the parent folders, with a matching `_index.md` and the contents of the `Documentation` folder from the repository directly in this.
 This is best achieved by creating a symbolic link to the repositories `Documentation` folder.
 
-Open a shell and **navigate to the correct sub-folder in the `content` folder**.
+The system is relying on all content sitting in the `content` folder:
+
+```
+<repository root>
+└── Source
+    └── content
+        └── fundamentals
+        └── runtimes
+        └── ...
+```
+
+Open a shell and **navigate to the correct sub-folder in the `content` folder** and then in the **corresponding organisation folder.**
 
 Unix:
 ```shell
-$ ln -s <repository-folder>/Documentation <folder-name>
+$ ln -s ../../repositories/<organisation-folder>/<repository>/Documentation <folder-name>
 ```
 
 Windows:
 ```shell
-c:> mklink /d <folder-name> <repository-folder>\Documentation 
+c:> mklink /d <folder-name> ../../repositories/<organisation-folder>/<repository>/Documentation
 ```
 
 Example:
 
 Unix:
 ```shell
-$ ln -s /Projects/Dolittle/Runtime/Documentation overview
+$ ln -s ../../repositories/runtime/Runtime/Documentation runtime
 ```
 
 Windows:
 ```shell
-c:> mklink /d overview c:\Projects\Dolittle\Runtime\Documentation 
+c:> mklink /d runtime c:\Projects\Dolittle\Documentation\Source\repositories\runtime\Runtime\Documentation
 ```
 
 Chances are you are contributing to the code of the repository and you can therefor leave it in place and maintain
 code and documentation side-by-side.
 
-## Automatically link to local repositories
+## Keep main Documentation syncronized with the working repository
 
-As an alternative to manually setting up the symlinks to each repository, you can add a `repositories.local.json` file, and run the `build.local.sh` command.
+An Azure pipeline has been set up to allow to keep the Documentation repository up to date automatically when a modification is made in the documentation inside the working repository.
 
-For any local repositories you want to link to, use the full path to the repository on your local machine instead of the url to the github project. You can also mix these up with public respository urls for convenience.
+To use that from a working repository, a simple pipeline is needed to call the Documentation update.
 
-```json
-  {
-    "/Users/username/code/Dolittle/DotNET.fundamentals/": {
-        "name": "dotnet-fundamentals",
-        "path": "api"
-    },
-    "https://github.com/dolittle-runtime/home.git": {
-        "name": "overview",
-        "path": "runtime"
-    }
-  }
+azure-pipeline.yml :
+
+```yml
+trigger:
+- master
+
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: dolittle-tools/AzureDevOps
+      endpoint: dolittle-tools
+
+jobs:
+- template: Source/Documentation/documentation.yml@templates
 ```
-{{% notice tip %}}
-There are some linked dependencies in certain files, so it's recommended that you copy the content from `repositories.json` into `repositories.local.json` and change the url on the local repository you are working with. As described above.
-{{% /notice %}}
+You can use another template if needed but `Source/Documentation/documentation.yml` has to be triggered.
 
-
-## Building and running
+## Building and running locally
 
 ### Install dependencies
 You need to install node dependencies in the `Source/Hugo` folder. You can do this through using npm or yarn.
