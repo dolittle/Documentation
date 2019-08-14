@@ -70,7 +70,7 @@ $ ln -s ../../repositories/<organisation-folder>/<repository>/Documentation <fol
 
 Windows:
 ```shell
-c:> mklink /d <folder-name> ../../repositories/<organisation-folder>/<repository>/Documentation
+c:> mklink /d <folder-name> ..\..\repositories\<organisation-folder>\<repository>\Documentation
 ```
 
 Example:
