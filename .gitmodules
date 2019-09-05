@@ -82,3 +82,12 @@
 [submodule "Source/repositories/guidelines/Home"]
 	path = Source/repositories/guidelines/Home
 	url = https://github.com/dolittle/Home.git
+[submodule "Source/repositories/fundamentals/DotNET.Fundamentals"]
+	path = Source/repositories/fundamentals/DotNET.Fundamentals
+	url = https://github.com/dolittle-fundamentals/DotNET.Fundamentals
+[submodule "Source/repositories/fundamentals/Home"]
+	path = Source/repositories/fundamentals/Home
+	url = https://github.com/dolittle-fundamentals/Home
+[submodule "Source/repositories/fundamentals/JavaScript.Fundamentals"]
+	path = Source/repositories/fundamentals/JavaScript.Fundamentals
+	url = https://github.com/dolittle-fundamentals/JavaScript.Fundamentals
