@@ -123,5 +123,3 @@ home = [ "HTML", "RSS", "JSON"]
     #       name = "Features"
     #       URL = "/features"
     #       weight = 4
-
-
