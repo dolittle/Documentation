@@ -63,6 +63,10 @@
         "name": "tooling-platform",
         "path": "tooling"
     },
+    "https://github.com/dolittle-tools/TypeScript.Build.git": {
+        "name": "typescript-build-pipeline",
+        "path": "tooling"
+    },
     "https://github.com/dolittle-boilerplates/home.git": {
         "name": "boilerplates",
         "path": "tooling"
