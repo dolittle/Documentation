@@ -6,4 +6,5 @@ author: einari, woksin
 weight: 30
 icon: "ti-ruler-pencil"
 type: "space"
+aliases: /tools
 ---
