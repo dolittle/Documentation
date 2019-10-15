@@ -22,7 +22,6 @@ If you've already cloned it, you can get the submodules by doing the following:
 $ git submodule update --init --recursive
 ```
 
-
 ## Creating Documentation from the working repository
 
 At the root of the working repository, create a `Documentation` folder with at least a matching `_index.md` and other
@@ -37,7 +36,7 @@ You can here pull your working repository as a **submodule**:
 $ git submodule add <repository_url> <repository_name>
 ```
 
-*Repository_name has to be in lower case only*
+_Repository_name has to be in lower case only_
 
 Example:
 
@@ -47,13 +46,13 @@ $ git submodule add https://github.com/dolittle-fundamentals/dotnet.fundamentals
 
 ## Linking to repositories
 
-The `repositories.json` file configures at which path (sub-folder) under the content folder repositories will be linked to, and with which name. The content folder should contain the parent folders, with a matching `_index.md` and the contents of the `Documentation` folder from the repository directly in this.
-This is best achieved by creating a symbolic link to the repositories `Documentation` folder.
-
 The system is relying on all content sitting in the `content` folder:
 
+The content folder should contain the parent folders, with a matching `_index.md` and the contents of the `Documentation` folder from the repository directly in this.
+This is best achieved by creating a symbolic link to the repositories `Documentation` folder.
+
 ```
-<repository root>
+<Documentation root>
 └── Source
     └── content
         └── fundamentals
@@ -64,11 +63,13 @@ The system is relying on all content sitting in the `content` folder:
 Open a shell and **navigate to the correct sub-folder in the `content` folder** and then in the **corresponding organisation folder.**
 
 Unix:
+
 ```shell
 $ ln -s ../../repositories/<organisation-folder>/<repository>/Documentation <folder-name>
 ```
 
 Windows:
+
 ```shell
 c:> mklink /d <folder-name> ..\..\repositories\<organisation-folder>\<repository>\Documentation
 ```
@@ -76,17 +77,23 @@ c:> mklink /d <folder-name> ..\..\repositories\<organisation-folder>\<repository
 Example:
 
 Unix:
+
 ```shell
 $ ln -s ../../repositories/runtime/Runtime/Documentation runtime
 ```
 
 Windows:
+
 ```shell
 c:> mklink /d runtime c:\Projects\Dolittle\Documentation\Source\repositories\runtime\Runtime\Documentation
 ```
 
 Chances are you are contributing to the code of the repository and you can therefor leave it in place and maintain
 code and documentation side-by-side.
+
+{{% notice tip %}}
+All folder names given in this process will act as URL segments, be very carefull to change these after they have been deployed.
+{{% /notice %}}
 
 ## Keep main Documentation syncronized with the working repository
 
@@ -98,50 +105,57 @@ azure-pipeline.yml :
 
 ```yml
 trigger:
-- master
+    - master
 
 resources:
-  repositories:
-    - repository: templates
-      type: github
-      name: dolittle-tools/AzureDevOps
-      endpoint: dolittle-tools
+    repositories:
+        - repository: templates
+          type: github
+          name: dolittle-tools/AzureDevOps
+          endpoint: dolittle-tools
 
 jobs:
-- template: Source/Documentation/documentation.yml@templates
+    - template: Source/Documentation/documentation.yml@templates
 ```
+
 You can use another template if needed but `Source/Documentation/documentation.yml` has to be triggered.
 
 ## Building and running locally
 
 ### Install dependencies
+
 You need to install node dependencies in the `Source/Hugo` folder. You can do this through using npm or yarn.
 
 NPM:
+
 ```shell
 $ npm install
 ```
 
 Yarn:
+
 ```shell
 $ yarn
 ```
 
-
 ### Install Hugo
+
 You will need to [install Hugo](https://gohugo.io/getting-started/installing).
 Once you have Hugo installed, you open a shell and navigate to the `Source/Hugo` folder.
 From this you simply do:
 
 Unix:
+
 ```shell
 $ hugo server
 ```
 
 Windows:
+
 ```shell
 c:> hugo server
 ```
+
 This should then yield something like the following:
 
 ```shell
@@ -175,5 +189,4 @@ Markdown can be written using the simplest of editors (Pico, Nano, Notepad), but
 great value and guides you through giving you feedback on errors. Editors like [Visual Studio Code](http://code.visualstudio.com/)
 and [Sublime Text](http://sublimetext.com) comes highly recommended. VSCode has for instance a [markdown preview feature](https://code.visualstudio.com/Docs/languages/markdown).
 
-{{< icon name="heart" size="large" >}}
-{{% alert theme="success" %}}Happy documenting{{% /alert %}}
+{{% alert "success" %}}Happy documenting{{% /alert %}}
