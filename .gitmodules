@@ -73,9 +73,6 @@
 [submodule "Source/repositories/interaction/WebAssembly"]
 	path = Source/repositories/interaction/WebAssembly
 	url = https://github.com/dolittle-interaction/WebAssembly.git
-[submodule "Source/repositories/documentation/Documentation"]
-	path = Source/repositories/documentation/Documentation
-	url = https://github.com/dolittle/Documentation.git
 [submodule "Source/repositories/interaction/JavaScript.Client.Aurelia.Contrib"]
 	path = Source/repositories/interaction/JavaScript.Client.Aurelia.Contrib
 	url = https://github.com/dolittle-contribs/JavaScript.Client.Aurelia.Contrib.git
