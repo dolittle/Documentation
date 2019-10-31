@@ -94,3 +94,6 @@
 [submodule "Source/repositories/platform/home"]
 	path = Source/repositories/platform/home
 	url = https://github.com/dolittle-platform/Home.git
+[submodule "Source/repositories/tools/typescript.build.node"]
+	path = Source/repositories/tools/typescript.build.node
+	url = https://github.com/dolittle-tools/TypeScript.Build.Node.git
