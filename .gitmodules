@@ -94,3 +94,9 @@
 [submodule "Source/repositories/platform/home"]
 	path = Source/repositories/platform/home
 	url = https://github.com/dolittle-platform/Home.git
+[submodule "Source/repositories/timeseries/Runtime"]
+	path = Source/repositories/timeseries/Runtime
+	url = https://github.com/dolittle-timeseries/Runtime.git
+[submodule "Source/repositories/timeseries/DotNET.SDK"]
+	path = Source/repositories/timeseries/DotNET.SDK
+	url = https://github.com/dolittle-timeseries/DotNET.SDK.git
