@@ -19,7 +19,7 @@ This documentation documenting the documentation process is also adhering to thi
 
 ## Theme
 
-The documentation is using a [fork](https://github.com/dolittle/hugo-theme-docdock) of a theme called [DocDock](http://docdock.netlify.com).
+The documentation is using a theme called [Dot](https://github.com/Gethugothemes/dot-hugo-documentation-theme.git).
 We're adhering to the guidelines and documentation of the theme in combination with [Hugos guidelines](https://gohugo.io/documentation/).
 Get familiar with the structure and requirements and all the [shortcodes] supported by both [Hugo](https://gohugo.io/content-management/shortcodes/) and the theme.
 
@@ -95,8 +95,6 @@ To make sure the folders aren't getting cluttered and to have some structure, pu
 {{% notice warning %}}
 The URL to the image needs to be fully qualified, typically pointing to the GitHub URL.
 This is something being worked on and registered as an issue [here](https://github.com/dolittle/Documentation/issues/13).
-
-Read more [here](http://docdock.netlify.com/create-page/page-images/)
 {{% /notice %}}
 
 Images should not have backgrounds that assume the background of the site, instead you **SHOULD** be using file formats with support for
