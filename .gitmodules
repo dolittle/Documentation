@@ -103,3 +103,6 @@
 [submodule "Source/repositories/tools/typescript.webpack"]
 	path = Source/repositories/tools/typescript.webpack
 	url = https://github.com/dolittle-tools/TypeScript.Webpack.git
+[submodule "Source/repositories/tools/DotNET.Common"]
+	path = Source/repositories/tools/DotNET.Common
+	url = https://github.com/dolittle-tools/DotNET.Common.git
