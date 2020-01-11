@@ -1,6 +1,5 @@
 #!/bin/bash
 git pull
-git submodule update --recursive --remote
-git add .
-git commit -m "Updated docs"
+git pull --recurse-submodules --jobs=10
+git commit -a -m "Updated docs"
 git push
