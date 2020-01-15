@@ -26,4 +26,5 @@ $ git submodule update --init --recursive
 - Figure out what type of API documentation to generate
   - If C# - build project, run DocFX
 - Run Hugo
+    - Get the [local dolittle documentation script](https://github.com/dolittle/Development/tree/master/Source/Documentation) and run it for easy local doc development.
 - Upload static content to Blob storage
