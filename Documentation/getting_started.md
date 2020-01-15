@@ -1,8 +1,8 @@
 ---
 title: Getting started
-description: Learn how to get started with documentation
+description: Get started writing documentation locally
 keywords: Contributing
-author: einari
+author: einari, joel
 weight: 1
 ---
 
@@ -10,7 +10,57 @@ Writing documentation can be done by just working on each repository individuall
 engine and see the end result while working. This is a good idea to get a feeling for how it will look like and verify
 that links, images and diagrams are correct.
 
-You'll have to start by cloning the Documentation repository, which has sub modules:
+## Run dolittle.io locally
+
+### Prerequisites
+[Hugo](https://gohugo.io/getting-started/installing/#binary-cross-platform)
+
+[Docker](https://www.docker.com/get-started)
+
+[Dolittle development scripts](https://github.com/dolittle/Development/) and add them to your path.
+
+### Run your local Hugo webserver
+
+Run the [dolittle-documentation-server](https://github.com/dolittle/Development/blob/master/Source/Documentation/dolittle-documentation-server) script from withing your local Dolittle git repository. The script will automatically mount the correct folders inside the docker image and start a Hugo webserver that will watch the changes.
+
+It doesn't matter which subfolder you're in as long as your in the git repository.
+
+```
+cd ~/Dolittle/Documentation
+dolittle-documentation-server
+```
+
+The output looks like this:
+```shell
+Mounting folder /home/joel/Dolittle/Documentation to /Documentation
+
+                   | EN
++------------------+-----+
+  Pages            | 383
+  Paginator pages  |   0
+  Non-page files   |  53
+  Static files     |  26
+  Processed images |   0
+  Aliases          | 107
+  Sitemaps         |   1
+  Cleaned          |   0
+
+Built in 1052 ms
+Watching for changes in /Documentation/{Documentation,Source}
+Watching for config changes in /Documentation/Source/config.toml
+Environment: "development"
+Serving pages from memory
+Running in Fast Render Mode. For full rebuilds on change: hugo server --disableFastRender
+Web Server is available at //localhost:1313/ (bind address 0.0.0.0)
+Press Ctrl+C to stop
+
+```
+
+In your browser navigate to [localhost:1313](localhost:1313) to see the documentation, the page will live reload your changes. Any errors will be displayed on the docker output.
+
+## Add a new repository to the main Documentation repository
+
+You'll have to start by cloning the [Documentation repository](https://github.com/dolittle/Documentation), which has sub modules:
 
 ```shell
 $ git clone --recursive https://github.com/dolittle/documentation
@@ -22,34 +72,38 @@ If you've already cloned it, you can get the submodules by doing the following:
 $ git submodule update --init --recursive
 ```
 
-## Creating Documentation from the working repository
+### Create documentation for the new repository
 
 At the root of the working repository, create a `Documentation` folder with at least a matching `_index.md` and other
-markdown files if needed.
+markdown files if needed. Read our guide on [creating documentation]({{< relref "/contributing/documentation/_index.md" >}}) for more information.
 
 ### Adding the working repository as a submodule
 
-In the Documentation repository, navigate to the `Source/repositories/` folder and then in the corresponding Organisation folder (e.g. fundamentals, runtime, interaction etc.).
-You can here pull your working repository as a **submodule**:
+In the Documentation repository, navigate to the `Source/repositories/` folder and then into the corresponding Organisation folder (e.g. fundamentals, runtime, interaction etc). If the organisation is "dolittle" then use the repository name eg ["learning"](https://github.com/dolittle/Learning)
+
+Pull your working repository here as a **submodule**:
 
 ```shell
 $ git submodule add <repository_url> <repository_name>
 ```
 
-_Repository_name has to be in lower case only_
+{{% notice tip %}}
+Organisation/repository name inside `Source/repositories` has to be in lower case.
+{{% /notice %}}
 
-Example:
+Example from [dolittle/Documentation](https://github.com/dolittle/Documentation) root:
 
 ```shell
+cd Source/repositories
 $ git submodule add https://github.com/dolittle-fundamentals/dotnet.fundamentals.git dotnet.fundamentals
 ```
 
 ## Linking to repositories
 
-The system is relying on all content sitting in the `content` folder:
+The system relies on all documentation content sitting in the `Source/content` folder. This includes markdown files, images and other resources you link to your documentation.
 
-The content folder should contain the parent folders, with a matching `_index.md` and the contents of the `Documentation` folder from the repository directly in this.
-This is best achieved by creating a symbolic link to the repositories `Documentation` folder.
+The `content` folder contains the parent folders, with a matching `_index.md` and the contents of the `Documentation` folder from the repository directly in this.
+This is done by creating a symbolic link to the repositories `Documentation` folder.
 
 ```
 <Documentation root>
@@ -97,7 +151,7 @@ All folder names given in this process will act as URL segments, be very careful
 
 ## Keep main Documentation syncronized with the working repository
 
-An Azure pipeline has been set up to allow to keep the Documentation repository up to date automatically when a modification is made in the documentation inside the working repository.
+An Azure pipeline keeps the main Documentation repository up-to-date automatically when modification is made in a repository.
 
 To use that from a working repository, a simple pipeline is needed to call the Documentation update.
 
@@ -120,72 +174,10 @@ jobs:
 
 You can use another template if needed but `Source/Documentation/documentation.yml` has to be triggered.
 
-## Building and running locally
-
-### Install dependencies
-
-You need to install node dependencies in the `Source/Hugo` folder. You can do this through using npm or yarn.
-
-NPM:
-
-```shell
-$ npm install
-```
-
-Yarn:
-
-```shell
-$ yarn
-```
-
-### Install Hugo
-
-You will need to [install Hugo](https://gohugo.io/getting-started/installing).
-Once you have Hugo installed, you open a shell and navigate to the `Source/Hugo` folder.
-From this you simply do:
-
-Unix:
-
-```shell
-$ hugo server
-```
-
-Windows:
-
-```shell
-c:> hugo server
-```
-
-This should then yield something like the following:
-
-```shell
-                   | EN
-+------------------+-----+
-  Pages            | 191
-  Paginator pages  |   0
-  Non-page files   |  32
-  Static files     | 209
-  Processed images |   0
-  Aliases          |   2
-  Sitemaps         |   1
-  Cleaned          |   0
-
-Total in 149 ms
-Watching for changes in /Users/einari/Projects/Dolittle/Documentation/Source/Hugo/{content,repositories,themes,..}
-Watching for config changes in /Users/einari/Projects/Dolittle/Documentation/Source/Hugo/config.toml
-Serving pages from memory
-Running in Fast Render Mode. For full rebuilds on change: hugo server --disableFastRender
-Web Server is available at //localhost:1313/ (bind address 127.0.0.1)
-Press Ctrl+C to stop
-```
-
-It is now a matter of opening up a browser to the URL `http://localhost:1313` and start writing documentation.
-With the default option, the page will live reload when saving any files.
-
 ## Writing
 
 All documentation is written in markdown following the [GitHub flavor](https://github.github.com/gfm/).
-Markdown can be written using the simplest of editors (Pico, Nano, Notepad), but there are editors out there that gives
+Markdown can be written using the simplest of editors (Pico, Nano, Notepad, Vim), but there are editors out there that give
 great value and guides you through giving you feedback on errors. Editors like [Visual Studio Code](http://code.visualstudio.com/)
 and [Sublime Text](http://sublimetext.com) comes highly recommended. VSCode has for instance a [markdown preview feature](https://code.visualstudio.com/Docs/languages/markdown).
 

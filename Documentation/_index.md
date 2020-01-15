@@ -10,22 +10,23 @@ repository: https://github.com/dolittle/Documentation
 ## Process
 
 All Dolittle documentation is generated using [Hugo](https://gohugo.io).
-It basically works with [GitHub flavored markdown](https://github.github.com/gfm/) and turns this into HTML pages that we then host.
-The documentation sits separated into the repository it belongs to and is expected to be in a folder called `Documentation`
-inside at the root of the repository. Documentation is updated whenever a [pull request](https://help.github.com/articles/about-pull-requests/)
-is approved. This will then automatically trigger Hugo to build and re-render the pages.
+All syntax is [GitHub flavored markdown](https://github.github.com/gfm/) which Hugo turns into HTML.
 
-This documentation documenting the documentation process is also adhering to this and as an example you can find it [here](https://github.com/dolittle/Documentation/tree/master/Documentation).
+The documentation sits separated into the repository it belongs to and is expected to be in a folder called `Documentation`
+inside the root of the repository. Documentation is updated whenever a [pull request](https://help.github.com/articles/about-pull-requests/)
+is approved. This will then automatically trigger the Azure Pipeline to build and re-render the pages.
+
+This [documentation documenting the documentation](https://github.com/dolittle/Documentation/tree/master/Documentation) also adheres to this.
 
 ## Theme
 
-The documentation is using a theme called [Dot](https://github.com/Gethugothemes/dot-hugo-documentation-theme.git).
+The documentation uses the [Dot](https://github.com/Gethugothemes/dot-hugo-documentation-theme.git) theme.
 We're adhering to the guidelines and documentation of the theme in combination with [Hugos guidelines](https://gohugo.io/documentation/).
 Get familiar with the structure and requirements and all the [shortcodes] supported by both [Hugo](https://gohugo.io/content-management/shortcodes/) and the theme.
 
-## Metadata
+## Metadata 
 
-All files **MUST** have a metadata header at the top of the file following the following format:
+All files **MUST** have a metadata header at the top of the file following the Hugo [Front Matter](https://gohugo.io/content-management/front-matter/) format:
 
 ```text
 ---
@@ -64,7 +65,8 @@ Linking to external resources, is done in the standard Markdown way:
 
 ### Cross Repositories
 
-In order to cross-reference content that sits in a different repository.....
+TODO: JOEL
+In order to cross-reference content that sits in a different repository....
 
 {{% notice info %}}
 More details coming soon
