@@ -9,7 +9,7 @@ repository: https://github.com/dolittle/Documentation
 
 ## Process
 
-All Dolittle documentation is generated using [Hugo](https://gohugo.io).
+All Dolittle documentation is generated using [Hugo 0.58.3](https://gohugo.io).
 All syntax is [GitHub flavored markdown](https://github.github.com/gfm/) which Hugo turns into HTML.
 
 The documentation sits separated into the repository it belongs to and is expected to be in a folder called `Documentation`
@@ -45,7 +45,9 @@ All files **MUST** be lower cased, words **MUST** be separated with underscore. 
 
 ## Links
 
-When adding links to other pages you **MUST NOT** include the file extension `.md` - otherwise the link
+### Within same repository
+
+When adding links to other pages inside the same repository **DO NOT USE** the file extension `.md` - otherwise the link
 will be broken. For instance, linking to the [API](./api) documentation is done by adding a markdown link
 as follows:
 
@@ -53,7 +55,25 @@ as follows:
 [API](./api)
 ```
 
-Even though the file is actually called `api.md`.
+Looks like this:
+
+[API](./api)
+
+
+### Cross Repositories
+
+Link to other pages using Hugos [`relref/ref` functions](https://gohugo.io/content-management/shortcodes/#ref-and-relref) inside the markdown.
+
+The root of the documentation for references is `Source/content/` folder of [Documentation](https://github.com/dolittle/Documentation) repository:
+
+```console
+Here is a [link]({{</* ref "/getting-started/quickstart.md" */>}}) to the Quickstart page.
+```
+
+Looks like this:
+
+Here is a [link]({{< ref "/getting-started/quickstart.md" >}}) to the Quickstart page.
+
 
 ### External resources
 
@@ -63,14 +83,10 @@ Linking to external resources, is done in the standard Markdown way:
 [Dolittle Home](https://github.com/dolittle/home)
 ```
 
-### Cross Repositories
+Looks like this:
 
-TODO: JOEL
-In order to cross-reference content that sits in a different repository....
+[Dolittle Home](https://github.com/dolittle/home)
 
-{{% notice info %}}
-More details coming soon
-{{% /notice %}}
 
 ## Diagrams / Figures
 
