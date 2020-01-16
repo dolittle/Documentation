@@ -3,7 +3,7 @@ title: Documentation Formatting
 description: Tips and tricks to how to format your documentation
 keywords: Contributing, documentation, writing
 author: Dolittle
-weight: 3
+weight: 5
 ---
 
 This document is meant to serve as a guide for formatting the documentation you are writing. It's not an exhaustive list, but serves as a starting point for conventions and best practices to follow while writing.
