@@ -3,7 +3,7 @@ title: Managing Sub Folders & Repositories
 description: Learn about how sub-folders can be used to structure the documentation from other repositories
 keywords: Contributing
 author: Dolittle
-weight: 2
+weight: 3
 ---
 
 The `content` folder is the base for all the content that is created for the documentation solution. The actual contents are added to `Documentation/Source/repositories/` using submodules, then added to the `content` folder using symlinks.

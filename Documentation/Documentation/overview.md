@@ -1,9 +1,9 @@
 ---
-title: Writing documentation
-description: Learn about how to contribute to documentation
+title: Overview
+description: Overview on documentation building glocks
 keywords: Contributing
-author: einari
-weight: 5
+author: einari, joel
+weight: 1
 repository: https://github.com/dolittle/Documentation
 ---
 
