@@ -1,25 +1,51 @@
 ---
-title: Overview
-description: Overview on documentation building glocks
-keywords: Contributing
+title: Writing guide
+description: A guide on how to write documentation
+keywords: Contributing, guide, writing, documentation
 author: einari, joel
-weight: 10
+weight: 2
 repository: https://github.com/dolittle/Documentation
 ---
 
-## Technology
+## Documentation overview
 
 All Dolittle documentation is generated using [Hugo 0.58.3](https://gohugo.io), a static site generator.  
-All syntax is Markdown processed by [Blackfriday](https://github.com/russross/blackfriday) engine inside Hugo.
+All syntax is [GitHub flavored markdown](https://github.github.com/gfm/) processed by [Blackfriday](https://github.com/russross/blackfriday) engine inside Hugo.
 
 Documentation is updated whenever a [pull request](https://help.github.com/articles/about-pull-requests/) is approved. This will then automatically trigger the Azure Pipeline to build and re-render the pages.
-
-
-## Theme
 
 The documentation uses the [Dot](https://github.com/Gethugothemes/dot-hugo-documentation-theme.git) theme.
 We're adhering to the guidelines and documentation of the theme in combination with [Hugos guidelines](https://gohugo.io/documentation/).
 Get familiar with the structure and requirements and all the [shortcodes](https://gohugo.io/content-management/shortcodes/)] supported by both Hugo and the theme.
+
+## Structure
+All documentation is inside Dolittles [Documentation](https://github.com/dolittle/Documentation) repositorys `Source` folder. The 2 main pieces of this folder are `content` and `repositories`:
+
+* `Source/repositories` contain submodules to Dolittle repositories.
+
+* `Source/content` is the folder that Hugo uses to render dolittle.io, making it the root of the pages. It contains symlinks to each `Source/repositories` submodules Documentation folder where the real content is.
+
+
+[A link to the md that works](../images/lol/)
+
+
+![example of the internal structure](../images/pic.jpg)
+
+![example of the internal structure](../../images/pic.jpg)
+
+![example of the internal structure](../../../images/pic.jpg)
+
+![example of the internal structure](./images/pic.jpg)
+
+![example of the internal structure](images/pic.jpg)
+
+![this one works](../pic.jpg)
+
+![example of the internal structure](pic.jpg)
+
+## Writing documentation
+
+
 
 ## Metadata
 

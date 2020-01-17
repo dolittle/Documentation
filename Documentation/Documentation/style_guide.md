@@ -12,7 +12,7 @@ This document is meant to serve as a guide for writing documentation. It's not a
 **Cover concepts in-full, or not at all.** Describe all of the functionality of a product. Do not omit functionality that you regard as irrelevant for the user. Do not write about what is not there yet. Stay in the current.
 
 ## Conformant
-**Describe what you see.** Use explicit examples to demostrate how a feature works. Provide instructions rather than descriptions. Present your information in the order that users experience the subject matter.
+**Describe what you see.** Use explicit examples to demonstrate how a feature works. Provide instructions rather than descriptions. Present your information in the order that users experience the subject matter.
 
 **Avoid future tense** (or using the term "will") whenever possible. For example, future tense ("The screen will display...") does not read as well as the present tense ("The screen displays..."). Remember, the users you are writing for most often refer to the documentation while they are using the system, not after or in advance of using the system.  
 Use simple present tense as much as possible. It avoids problems with consequences and time related communications, and is the easiest tense for translation.

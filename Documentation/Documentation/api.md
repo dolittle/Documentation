@@ -3,7 +3,7 @@ title: API documentation
 description: Learn about how to make sure APIs are documented
 keywords: Contributing
 author: einari
-weight: 4
+weight: 10
 ---
 
 All public APIs **MUST** be documented regardless of what language and use-case.
@@ -17,3 +17,4 @@ For inheritance in documentation, you can use the [`<inheritdoc/>`](https://ewso
 ## JavaScript
 
 All JavaScript files **MUST** be documented using [JSDoc](http://usejsdoc.org).
+

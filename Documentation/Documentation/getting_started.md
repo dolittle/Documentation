@@ -1,16 +1,24 @@
 ---
-title: Getting started
+title: Get started
 description: Get started writing documentation locally
 keywords: Contributing
 author: einari, joel
 weight: 1
+alias: getting_started
 ---
 
-Writing documentation can be done by just working on each repository individually or you can work with the documentation
-engine and see the end result while working. This is a good idea to get a feeling for how it will look like and verify
-that links, images and diagrams are correct.
+All of Dolittles documentation is open-source and hosted on GitHub.
 
-## Run dolittle.io locally
+## Quick edits online
+You can edit and create pull request for documentation online straight from [dolittle.io](https://dolittle.io/).
+
+1. Click the **pencil** icon next to the document title at the top of the page you want to edit. This takes you to the pages GitHub source file.
+2. Make your changes in the web editor.
+3. Once you have made your changes click **Propose file change** at the end of the page.
+4. On the next page click **Create pull request** and add a title for the pull request.
+
+## Editing dolittle.io locally
+You can run your own copy of dolittle.io on your local machine. This way you get a feeling for how it will look like and verify that links, images and diagrams are correct.
 
 ### Prerequisites
 [Hugo](https://gohugo.io/getting-started/installing/#binary-cross-platform)
@@ -58,6 +66,8 @@ Press Ctrl+C to stop
 
 In your browser navigate to [localhost:1313](localhost:1313) to see the documentation, the page will live reload your changes. Any errors will be displayed on the docker output.
 
+You are now ready to write documentation in your local repository. Read the [overview](./overview.md) and [style guide](./style_guide) for more information on how you should be writing documentation.
+
 ## Add a new repository to the main Documentation repository
 
 You'll have to start by cloning the [Documentation repository](https://github.com/dolittle/Documentation), which has sub modules:
@@ -98,11 +108,12 @@ cd Source/repositories
 $ git submodule add https://github.com/dolittle-fundamentals/dotnet.fundamentals.git dotnet.fundamentals
 ```
 
-## Linking to repositories
+## Linking submodules to `content`
 
 The system relies on all documentation content sitting in the `Source/content` folder. This includes markdown files, images and other resources you link to your documentation.
 
 The `content` folder contains the parent folders, with a matching `_index.md` and the contents of the `Documentation` folder from the repository directly in this.
+
 This is done by creating a symbolic link to the repositories `Documentation` folder.
 
 ```
@@ -176,9 +187,10 @@ You can use another template if needed but `Source/Documentation/documentation.y
 
 ## Writing
 
-All documentation is written in markdown following the [GitHub flavor](https://github.github.com/gfm/).
-Markdown can be written using the simplest of editors (Pico, Nano, Notepad, Vim), but there are editors out there that give
-great value and guides you through giving you feedback on errors. Editors like [Visual Studio Code](http://code.visualstudio.com/)
-and [Sublime Text](http://sublimetext.com) comes highly recommended. VSCode has for instance a [markdown preview feature](https://code.visualstudio.com/Docs/languages/markdown).
+All documentation is written in markdown following the [GitHub flavor](https://github.github.com/gfm/). 
+
+Markdown can be written using simple text editors (Pico, Nano, Notepad), but more thorough editors like [Visual Studio Code](http://code.visualstudio.com/) or [Sublime Text](http://sublimetext.com) are highly recommended. VSCode also has a [markdown preview feature](https://code.visualstudio.com/Docs/languages/markdown).
+
+Read the [overview](./overview.md) and [style guide](./style_guide) for more information.
 
 {{% alert "success" %}}Happy documenting{{% /alert %}}
