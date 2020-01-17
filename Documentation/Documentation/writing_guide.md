@@ -7,6 +7,8 @@ weight: 2
 repository: https://github.com/dolittle/Documentation
 ---
 
+This document is meant to be read alongside the [style guide](./style_guide) to provide concrete examples on formatting the document and syntax of different Hugo shortcodes.
+
 ## Documentation overview
 
 All Dolittle documentation is generated using [Hugo 0.58.3](https://gohugo.io), a static site generator.  
@@ -16,7 +18,7 @@ Documentation is updated whenever a [pull request](https://help.github.com/artic
 
 The documentation uses the [Dot](https://github.com/Gethugothemes/dot-hugo-documentation-theme.git) theme.
 We're adhering to the guidelines and documentation of the theme in combination with [Hugos guidelines](https://gohugo.io/documentation/).
-Get familiar with the structure and requirements and all the [shortcodes](https://gohugo.io/content-management/shortcodes/)] supported by both Hugo and the theme.
+Get familiar with the structure and requirements and all the [shortcodes](https://gohugo.io/content-management/shortcodes/) supported by both Hugo and the theme.
 
 ## Structure
 All documentation is inside Dolittles [Documentation](https://github.com/dolittle/Documentation) repositorys `Source` folder. The 2 main pieces of this folder are `content` and `repositories`:
@@ -25,9 +27,9 @@ All documentation is inside Dolittles [Documentation](https://github.com/dolittl
 
 * `Source/content` is the folder that Hugo uses to render dolittle.io, making it the root of the pages. It contains symlinks to each `Source/repositories` submodules Documentation folder where the real content is.
 
+Example of how [dolittle-fundamentals](https://github.com/dolittle-fundamentals) is structured within the Documentation repository:
 
 [A link to the md that works](../images/lol/)
-
 
 ![example of the internal structure](../images/pic.jpg)
 
@@ -45,8 +47,6 @@ All documentation is inside Dolittles [Documentation](https://github.com/dolittl
 
 ## Writing documentation
 
-
-
 ## Metadata
 
 All files **MUST** have a metadata header at the top of the file following the Hugo [Front Matter](https://gohugo.io/content-management/front-matter/) format. Some of this metadata gets put into the generated HTML file and some of it is used for indexing, categorizing, search and more:
@@ -62,11 +62,6 @@ keywords: Contributing
 ## Documentation filenames
 
 All files **MUST** be lower cased, words **MUST** be separated with underscore. Example: **`csharp_coding_styles.md`**.
-
-## Structure
-JOEL TODO!!!!
-
-The documentation sits separated into the repository it belongs to and is expected to be in a folder called `Documentation` inside the root of the repository. 
 
 ## Links
 
@@ -86,8 +81,7 @@ Renders to:
 
 
 ### Cross Repositories
-
-Link to other pages using Hugos [`relref/ref` functions](https://gohugo.io/content-management/shortcodes/#ref-and-relref) inside the markdown.
+Link pages from other repositories using Hugos [`relref/ref` functions](https://gohugo.io/content-management/shortcodes/#ref-and-relref) inside the markdown.
 
 The root of the documentation for references is `Source/content/` folder of [Documentation](https://github.com/dolittle/Documentation) repository:
 
@@ -116,7 +110,7 @@ Be aware that this matches the filename with or without the `.md` suffix. If the
 
 ### External resources
 
-Linking to external resources, is done in the standard Markdown way:
+Linking to external resources is done in the standard Markdown way:
 
 ```markdown
 [Dolittle Home](https://github.com/dolittle/home)
@@ -128,17 +122,16 @@ Looks like this:
 
 
 ## Diagrams / Figures
+Hugo supports [Mermaid](https://mermaidjs.github.io) shortcodes to write diagrams. Mermaid **SHOULD** be favored over using images when possible. [Examples of Mermaid](https://docdock.netlify.com/shortcodes/mermaid/)
 
-All diagrams and figures **SHOULD** be done using the [Mermaid](https://docdock.netlify.com/shortcodes/mermaid/) shortcode.
-Mermaid has more features and is well documented [here](https://mermaidjs.github.io).
-
-Some diagrams/figures might not be possible to do using Mermaid, these can then be images. Beware however how you create these
-images and make sure they comply with the look and feel.
+Some diagrams/figures might not be possible to do using Mermaid, these can then be images. Beware however how you create these images and make sure they comply with the look and feel.
 
 ## Images
 
 All images should be kept close to the markdown file using it.
 To make sure the folders aren't getting cluttered and to have some structure, put images in a `images` folder.
+
+Images should not have backgrounds that assume the background of the site, instead you **SHOULD** be using file formats with support for transparency such as [png](https://en.wikipedia.org/wiki/Portable_Network_Graphics).
 
 ```
 <repository root>
@@ -149,19 +142,60 @@ To make sure the folders aren't getting cluttered and to have some structure, pu
                 [image files]
 ```
 
+To display images use the standard markdown format:
+```
+![alt-text](../images/dolittle.png)
+```
+Renders to:
+
+![alt-text](../dolittle.png)
+
 {{% notice warning %}}
 The URL to the image needs to be fully qualified, typically pointing to the GitHub URL.
 This is something being worked on and registered as an issue [here](https://github.com/dolittle/Documentation/issues/13).
 {{% /notice %}}
 
-Images should not have backgrounds that assume the background of the site, instead you **SHOULD** be using file formats with support for
-transparency such as [png](https://en.wikipedia.org/wiki/Portable_Network_Graphics).
+{{% notice note %}}
+The path is relative to the document where you declare the link from.
+{{% /notice %}}
 
-## Writing
 
-All documentation is written in markdown following the [GitHub flavor](https://github.github.com/gfm/).
-Markdown can be written using the simplest of editors (Pico, Nano, Notepad), but there are editors out there that gives
-great value and guides you through giving you feedback on errors. Editors like [Visual Studio Code](http://code.visualstudio.com/)
-and [Sublime Text](http://sublimetext.com) comes highly recommended. VSCode has for instance a [markdown preview feature](https://code.visualstudio.com/Docs/languages/markdown).
+## Notices
+Hugo supports different levels of notices:
 
-{{% alert theme="success" %}}Happy documenting{{% /alert %}}
+### Tip
+Use **tips** for practical, non-essential information.
+```
+{{%/* notice tip */%}}
+You can also create ReadModels with the CLI tool.
+{{%/* /notice */%}}
+```
+Renders to:
+{{% notice tip %}}
+You can also create ReadModels with the CLI tool.
+{{% /notice %}}
+
+### Note
+Use **notes** for important information.
+```
+{{%/* notice note */%}}
+You can only run one `dolittle-documentation-server` command at a time.
+{{%/* /notice */%}}
+```
+Renders to:
+{{% notice note %}}
+You can only run one `dolittle-documentation-server` command at a time.
+{{% /notice %}}
+
+### Warning
+Use **warnings** for mandatory information that the user needs to know to protect the user from personal and/or data injury.
+```
+{{%/* notice warning */%}}
+Do not remove `artifacts.json` if you do not know what you're doing.
+{{%/* /notice */%}}
+```
+Renders to:
+{{% notice warning %}}
+Do not remove `artifacts.json` if you do not know what you're doing.
+{{% /notice %}}
+
