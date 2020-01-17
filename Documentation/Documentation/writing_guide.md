@@ -29,21 +29,7 @@ All documentation is inside Dolittles [Documentation](https://github.com/dolittl
 
 Example of how [dolittle-fundamentals](https://github.com/dolittle-fundamentals) is structured within the Documentation repository:
 
-[A link to the md that works](../images/lol/)
-
-![example of the internal structure](../images/pic.jpg)
-
-![example of the internal structure](../../images/pic.jpg)
-
-![example of the internal structure](../../../images/pic.jpg)
-
-![example of the internal structure](./images/pic.jpg)
-
-![example of the internal structure](images/pic.jpg)
-
-![this one works](../pic.jpg)
-
-![example of the internal structure](pic.jpg)
+![example of the internal structure](../pic.jpg)
 
 ## Writing documentation
 
