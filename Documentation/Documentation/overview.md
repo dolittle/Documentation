@@ -3,30 +3,27 @@ title: Overview
 description: Overview on documentation building glocks
 keywords: Contributing
 author: einari, joel
-weight: 1
+weight: 10
 repository: https://github.com/dolittle/Documentation
 ---
 
-## Process
+## Technology
 
-All Dolittle documentation is generated using [Hugo 0.58.3](https://gohugo.io).
-All syntax is [GitHub flavored markdown](https://github.github.com/gfm/) which Hugo turns into HTML.
+All Dolittle documentation is generated using [Hugo 0.58.3](https://gohugo.io), a static site generator.  
+All syntax is Markdown processed by [Blackfriday](https://github.com/russross/blackfriday) engine inside Hugo.
 
-The documentation sits separated into the repository it belongs to and is expected to be in a folder called `Documentation`
-inside the root of the repository. Documentation is updated whenever a [pull request](https://help.github.com/articles/about-pull-requests/)
-is approved. This will then automatically trigger the Azure Pipeline to build and re-render the pages.
+Documentation is updated whenever a [pull request](https://help.github.com/articles/about-pull-requests/) is approved. This will then automatically trigger the Azure Pipeline to build and re-render the pages.
 
-This [documentation documenting the documentation](https://github.com/dolittle/Documentation/tree/master/Documentation) also adheres to this.
 
 ## Theme
 
 The documentation uses the [Dot](https://github.com/Gethugothemes/dot-hugo-documentation-theme.git) theme.
 We're adhering to the guidelines and documentation of the theme in combination with [Hugos guidelines](https://gohugo.io/documentation/).
-Get familiar with the structure and requirements and all the [shortcodes] supported by both [Hugo](https://gohugo.io/content-management/shortcodes/) and the theme.
+Get familiar with the structure and requirements and all the [shortcodes](https://gohugo.io/content-management/shortcodes/)] supported by both Hugo and the theme.
 
-## Metadata 
+## Metadata
 
-All files **MUST** have a metadata header at the top of the file following the Hugo [Front Matter](https://gohugo.io/content-management/front-matter/) format:
+All files **MUST** have a metadata header at the top of the file following the Hugo [Front Matter](https://gohugo.io/content-management/front-matter/) format. Some of this metadata gets put into the generated HTML file and some of it is used for indexing, categorizing, search and more:
 
 ```text
 ---
@@ -36,12 +33,14 @@ keywords: Contributing
 ---
 ```
 
-Some of this metadata gets put into the generated HTML file and some of it is used for indexing and
-other purposes and for future expansion.
-
 ## Documentation filenames
 
 All files **MUST** be lower cased, words **MUST** be separated with underscore. Example: **`csharp_coding_styles.md`**.
+
+## Structure
+JOEL TODO!!!!
+
+The documentation sits separated into the repository it belongs to and is expected to be in a folder called `Documentation` inside the root of the repository. 
 
 ## Links
 
@@ -55,7 +54,7 @@ as follows:
 [API](./api)
 ```
 
-Looks like this:
+Renders to:
 
 [API](./api)
 
@@ -70,9 +69,23 @@ The root of the documentation for references is `Source/content/` folder of [Doc
 Here is a [link]({{</* ref "/getting-started/quickstart.md" */>}}) to the Quickstart page.
 ```
 
-Looks like this:
-
+Renders to:
+```
 Here is a [link]({{< ref "/getting-started/quickstart.md" >}}) to the Quickstart page.
+```
+
+You can also let Hugo figure out the correct path:
+
+```markdown
+Some text [with a link]({{</* relref style_guide */>}})
+```
+
+Renders to:
+```
+Some text [with a link]({{< relref style_guide >}})
+```
+
+Be aware that this matches the filename with or without the `.md` suffix. If there are other documents with the same name, you'll need to either rename those or include the entire path to the file.
 
 
 ### External resources
