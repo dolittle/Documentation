@@ -12,7 +12,6 @@ RUN apt-get update && \
 RUN wget https://github.com/gohugoio/hugo/releases/download/v0.58.3/hugo_extended_0.58.3_Linux-64bit.deb
 RUN dpkg -i hugo_*
 
-# RUN git clone --recursive git@github.com:dolittle/Documentation.git
 COPY . /Documentation
 
 WORKDIR /Documentation/Source
