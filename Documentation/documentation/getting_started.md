@@ -17,6 +17,8 @@ You can edit and create pull request for documentation online straight from [dol
 3. Once you have made your changes click **Propose file change** at the end of the page.
 4. On the next page click **Create pull request** and add a title for the pull request.
 
+Read the [style guide](./style_guide) for more information how to style your documentation.
+
 ## Editing dolittle.io locally
 You can run your own copy of dolittle.io on your local machine. This way you get a feeling for how it will look like and verify that links, images and diagrams are correct.
 
@@ -70,7 +72,9 @@ You are now ready to write documentation in your local repository. Read the [ove
 
 ## Add a new repository to the main Documentation repository
 
-You'll have to start by cloning the [Documentation repository](https://github.com/dolittle/Documentation), which has sub modules:
+This guide teaches you how to add a new repository to the Dolittle documentation [structure](./structure) and how to keep dolittle.io synchronized with the changes.
+
+Start by cloning the [Documentation repository](https://github.com/dolittle/Documentation) and its submodules:
 
 ```shell
 $ git clone --recursive https://github.com/dolittle/documentation
@@ -82,14 +86,14 @@ If you've already cloned it, you can get the submodules by doing the following:
 $ git submodule update --init --recursive
 ```
 
-### Create documentation for the new repository
+### 1. Create documentation for the new repository
 
 At the root of the working repository, create a `Documentation` folder with at least a matching `_index.md` and other
-markdown files if needed. Read our guide on [creating documentation]({{< relref "/contributing/documentation/_index.md" >}}) for more information.
+markdown files if needed. Read our guide on [structure](./structure) for more information.
 
-### Adding the working repository as a submodule
+### 2. Adding the working repository as a submodule
 
-In the Documentation repository, navigate to the `Source/repositories/` folder and then into the corresponding Organisation folder (e.g. fundamentals, runtime, interaction etc). If the organisation is "dolittle" then use the repository name eg ["learning"](https://github.com/dolittle/Learning)
+In the Documentation repository, navigate to the `Source/repositories/` folder and then into the corresponding organisation folder (e.g. fundamentals, runtime, interaction etc). If the organisation is "dolittle" then use the repository name eg. [learning](https://github.com/dolittle/Learning).
 
 Pull your working repository here as a **submodule**:
 
@@ -108,13 +112,14 @@ cd Source/repositories
 $ git submodule add https://github.com/dolittle-fundamentals/dotnet.fundamentals.git dotnet.fundamentals
 ```
 
-## Linking submodules to `content`
+### 3. Linking submodules to `content`
 
-The system relies on all documentation content sitting in the `Source/content` folder. This includes markdown files, images and other resources you link to your documentation.
+The [system](./structure) relies on all documentation content sitting in the `Source/content` folder. This includes markdown files, images and other resources you link to your documentation.
 
 The `content` folder contains the parent folders, with a matching `_index.md` and the contents of the `Documentation` folder from the repository directly in this.
 
 This is done by creating a symbolic link to the repositories `Documentation` folder.
+
 
 ```
 <Documentation root>
@@ -160,7 +165,7 @@ code and documentation side-by-side.
 All folder names given in this process will act as URL segments, be very carefull to change these after they have been deployed.
 {{% /notice %}}
 
-## Keep main Documentation syncronized with the working repository
+### 4. Keep main Documentation syncronized with the working repository
 
 An Azure pipeline keeps the main Documentation repository up-to-date automatically when modification is made in a repository.
 
@@ -191,6 +196,6 @@ All documentation is written in markdown following the [GitHub flavor](https://g
 
 Markdown can be written using simple text editors (Pico, Nano, Notepad), but more thorough editors like [Visual Studio Code](http://code.visualstudio.com/) or [Sublime Text](http://sublimetext.com) are highly recommended. VSCode also has a [markdown preview feature](https://code.visualstudio.com/Docs/languages/markdown).
 
-Read the [overview](./overview.md) and [style guide](./style_guide) for more information.
+Read the [writing guiden](./writing_guide) and [style guide](./style_guide) for more information.
 
 {{% alert "success" %}}Happy documenting{{% /alert %}}
