@@ -10,8 +10,14 @@ icon: "ti-github"
 
 Dolittle is an open-source framework that is open for contributions.
 
-These pages serve you as a guide of our [documentation]({{< relref "/contributing/documentation/documentation/getting_started.md" >}}), contribution and development [guidelines]({{< ref "guidelines/_index.md" >}}).
+This project has adopted the code of conduct defined by the [Contributor Covenant](http://contributor-covenant.org/) to clarify expected behavior in our community. Read our [Code of Conduct]({{< relref code_of_conduct >}}) for more information.
 
-## Issues
-Try to find the correct repository to report your issues to from our [repository list](https://github.com/dolittle/Home).
+### Code
+If you want to contribute with code, you can submit a pull request with your changes.  It is highly recommended to read through all of our [coding guideling]({{< ref "guidelines/csharp_coding_styles" >}}) to see what we're expecting from you as a contributor.
+
+### Documentation
+Contributions can also be done through [documentation]({{< ref "/contributing/documentation/documentation/getting_started" >}}), all of our repositories have a `Documentation` folder. It is higly recommended you read through our [style guide]({{< ref "/contributing/documentation/documentation/style_guide" >}}) and [writing guide]({{< ref "/contributing/documentation/documentation/writing_guide" >}}) on documentation.
+
+### Issues
+You can contribute by filing issues on any of the repositories listed in our [GitHub organizations](https://github.com/dolittle/home).
 
