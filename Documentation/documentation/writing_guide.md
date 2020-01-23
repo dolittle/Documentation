@@ -9,7 +9,7 @@ repository: https://github.com/dolittle/Documentation
 
 This document is meant to be read alongside the [style guide](./style_guide) to provide concrete examples on formatting the document and syntax of different Hugo shortcodes.
 
-## Documentation overview
+# Documentation overview
 
 All Dolittle documentation is generated using [Hugo 0.58.3](https://gohugo.io), a static site generator.  
 All syntax is [GitHub flavored markdown](https://github.github.com/gfm/) processed by [Blackfriday](https://github.com/russross/blackfriday) engine inside Hugo.
@@ -20,18 +20,8 @@ The documentation uses the [Dot](https://github.com/Gethugothemes/dot-hugo-docum
 We're adhering to the guidelines and documentation of the theme in combination with [Hugos guidelines](https://gohugo.io/documentation/).
 Get familiar with the structure and requirements and all the [shortcodes](https://gohugo.io/content-management/shortcodes/) supported by both Hugo and the theme.
 
-## Structure
-All documentation is inside Dolittles [Documentation](https://github.com/dolittle/Documentation) repositorys `Source` folder. The 2 main pieces of this folder are `content` and `repositories`:
 
-* `Source/repositories` contain submodules to Dolittle repositories.
-
-* `Source/content` is the folder that Hugo uses to render dolittle.io, making it the root of the pages. It contains symlinks to each `Source/repositories` submodules Documentation folder where the real content is.
-
-Example of how [dolittle-fundamentals](https://github.com/dolittle-fundamentals) is structured within the Documentation repository:
-
-![example of the internal structure](../pic.jpg)
-
-## Writing documentation
+# Writing documentation
 
 ## Metadata
 
@@ -42,8 +32,33 @@ All files **MUST** have a metadata header at the top of the file following the H
 title: About contributing to documentation
 description: Learn about how to contribute to documentation
 keywords: Contributing
+author: dolittle
+repository: https://github.com/dolittle/Documentation
+weight: 2
 ---
 ```
+
+### Enable "Edit on Github" for your repository
+
+Enable support for "Edit on Github" pencil icon on a page by adding a reference to the repository on the `_index.md` Front Matter:
+
+
+An example of front-matter with repository set:
+```markdown
+---
+title: About contributing to documentation
+description: Learn about how to contribute to documentation
+keywords: Contributing
+author: dolittle
+repository: https://github.com/dolittle/Documentation
+---
+```
+
+{{% notice note %}}
+Do not include a trailing slash at the end of the repository URL.
+{{% /notice %}}
+
+All sub-articles will use this repository as the base for the links generated to edit files on GitHub.
 
 ## Documentation filenames
 
@@ -134,7 +149,7 @@ To display images use the standard markdown format:
 ```
 Renders to:
 
-![alt-text](../dolittle.png)
+![alt-text](../images/dolittle.png)
 
 {{% notice warning %}}
 The URL to the image needs to be fully qualified, typically pointing to the GitHub URL.
