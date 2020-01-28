@@ -89,7 +89,7 @@
 	path = Source/repositories/fundamentals/JavaScript.Fundamentals
 	url = https://github.com/dolittle-fundamentals/JavaScript.Fundamentals
 [submodule "Source/repositories/tools/Typescript.Build"]
-	path = Source/repositories/tools/Typescript.Build
+	path = Source/repositories/tools/TypeScript.Build
 	url = https://github.com/dolittle-tools/TypeScript.Build.git
 [submodule "Source/repositories/platform/home"]
 	path = Source/repositories/platform/home
@@ -101,7 +101,7 @@
 	path = Source/repositories/timeseries/DotNET.SDK
 	url = https://github.com/dolittle-timeseries/DotNET.SDK.git
 [submodule "Source/repositories/tools/typescript.webpack"]
-	path = Source/repositories/tools/typescript.webpack
+	path = Source/repositories/tools/TypeScript.Webpack
 	url = https://github.com/dolittle-tools/TypeScript.Webpack.git
 [submodule "Source/repositories/tools/DotNET.Common"]
 	path = Source/repositories/tools/DotNET.Common
