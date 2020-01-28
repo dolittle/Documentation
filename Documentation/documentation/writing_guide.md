@@ -60,9 +60,15 @@ Do not include a trailing slash at the end of the repository URL.
 
 All sub-articles will use this repository as the base for the links generated to edit files on GitHub.
 
+### _index.md files
+The `_index.md` files within subfolders should only contain the Front Matter and nothing else. This makes the subfolder links on the sidebar work as only dropdowns without linking to the content of the `_index.md`. We prefer this as it makes for a more smooth experience on the site.
+
+You should only have an `_index.md` file for the uppermost landing page of dolittle.io like [Getting started]({{< ref "/getting-started" >}}), [Contributing]({{< ref "/contributing" >}}) etc.
+
 ## Documentation filenames
 
 All files **MUST** be lower cased, words **MUST** be separated with underscore. Example: **`csharp_coding_styles.md`**.
+
 
 ## Links
 
