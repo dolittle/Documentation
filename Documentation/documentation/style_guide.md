@@ -91,6 +91,8 @@ Review your work frequently as you write your document. Ask yourself which words
 
 **Move from the known to the unknown,** the old to the new, or the familiar to the unexpected. Structure content to help readers identify and skip over concepts which they already understand or see are not relevant to their immediate questions.
 
+**Avoid unnecessary subfolder**. Don't create subfolders that only contain a single page. Make the user have access to the pages with as little clicks as possible.
+
 ### Headings and lists
 **Headings should be descriptive and concise.** Use a level-one heading to start a broad subject area. Level-one headings are typically generic titles, such as Basic Skills, Getting Started, and so on.  Use level-two, level-three, and level-four headings to chunk information into easy-to-identify sections. Do not use more than four heading levels.
 
