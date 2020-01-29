@@ -22,9 +22,6 @@
 [submodule "Source/repositories/runtime/Runtime"]
 	path = Source/repositories/runtime/Runtime
 	url = https://github.com/dolittle-runtime/Runtime.git
-[submodule "Source/repositories/edge/Agent"]
-	path = Source/repositories/edge/Agent
-	url = https://github.com/dolittle-edge/Agent.git
 [submodule "Source/repositories/tools/cli"]
 	path = Source/repositories/tools/cli
 	url = https://github.com/dolittle-tools/cli.git
@@ -34,30 +31,6 @@
 [submodule "Source/repositories/tools/common"]
 	path = Source/repositories/tools/common
 	url = https://github.com/dolittle-tools/common.git
-[submodule "Source/repositories/timeseries/Modbus"]
-	path = Source/repositories/timeseries/Modbus
-	url = https://github.com/dolittle-timeseries/Modbus.git
-[submodule "Source/repositories/timeseries/TimeSeries"]
-	path = Source/repositories/timeseries/TimeSeries
-	url = https://github.com/dolittle-timeseries/TimeSeries.git
-[submodule "Source/repositories/timeseries/IdentityMapper"]
-	path = Source/repositories/timeseries/IdentityMapper
-	url = https://github.com/dolittle-timeseries/IdentityMapper.git
-[submodule "Source/repositories/timeseries/Home"]
-	path = Source/repositories/timeseries/Home
-	url = https://github.com/dolittle-timeseries/Home.git
-[submodule "Source/repositories/timeseries/Prioritizer"]
-	path = Source/repositories/timeseries/Prioritizer
-	url = https://github.com/dolittle-timeseries/Prioritizer.git
-[submodule "Source/repositories/timeseries/Historian"]
-	path = Source/repositories/timeseries/Historian
-	url = https://github.com/dolittle-timeseries/Historian.git
-[submodule "Source/repositories/timeseries/MQTT"]
-	path = Source/repositories/timeseries/MQTT
-	url = https://github.com/dolittle-timeseries/MQTT.git
-[submodule "Source/repositories/timeseries/Studio"]
-	path = Source/repositories/timeseries/Studio
-	url = https://github.com/dolittle-timeseries/Studio.git
 [submodule "Source/repositories/interaction/AspNetCore.Debugging.Swagger"]
 	path = Source/repositories/interaction/AspNetCore.Debugging.Swagger
 	url = https://github.com/dolittle-interaction/AspNetCore.Debugging.Swagger.git
@@ -89,19 +62,13 @@
 	path = Source/repositories/fundamentals/JavaScript.Fundamentals
 	url = https://github.com/dolittle-fundamentals/JavaScript.Fundamentals
 [submodule "Source/repositories/tools/Typescript.Build"]
-	path = Source/repositories/tools/Typescript.Build
+	path = Source/repositories/tools/TypeScript.Build
 	url = https://github.com/dolittle-tools/TypeScript.Build.git
 [submodule "Source/repositories/platform/home"]
 	path = Source/repositories/platform/home
 	url = https://github.com/dolittle-platform/Home.git
-[submodule "Source/repositories/timeseries/Runtime"]
-	path = Source/repositories/timeseries/Runtime
-	url = https://github.com/dolittle-timeseries/Runtime.git
-[submodule "Source/repositories/timeseries/DotNET.SDK"]
-	path = Source/repositories/timeseries/DotNET.SDK
-	url = https://github.com/dolittle-timeseries/DotNET.SDK.git
 [submodule "Source/repositories/tools/typescript.webpack"]
-	path = Source/repositories/tools/typescript.webpack
+	path = Source/repositories/tools/TypeScript.Webpack
 	url = https://github.com/dolittle-tools/TypeScript.Webpack.git
 [submodule "Source/repositories/tools/DotNET.Common"]
 	path = Source/repositories/tools/DotNET.Common

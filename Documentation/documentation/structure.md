@@ -39,3 +39,7 @@ weight: 2
 You should only have an \_index.md file for the uppermost landing page of dolittle.io like [Getting started]({{< ref "/getting-started" >}}), [Contributing]({{< ref "/contributing" >}}) etc.
 {{% /notice %}}
 
+{{% notice note %}}
+Only create subfolders if you have more than 1 file to be put inside. Aim for a flat structure.
+{{% /notice %}}
+
