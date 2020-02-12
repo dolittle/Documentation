@@ -67,7 +67,7 @@ You should only have an `_index.md` file for the uppermost landing page of dolit
 
 ## Documentation filenames
 
-All files **MUST** be lower cased, words **MUST** be separated with underscore. Example: **`csharp_coding_styles.md`**.
+All files **MUST** be lower cased, words **MUST** be separated with a dash. Example: **`csharp-coding-styles.md`**. Hugo also takes care of converting between dashes and underscores as well as lower- and uppercase.
 
 
 ## Links
