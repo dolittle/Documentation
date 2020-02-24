@@ -19,5 +19,5 @@ If you want to contribute with code, you can submit a pull request with your cha
 Contributions can also be done through [documentation]({{< ref "/contributing/documentation/documentation/getting_started" >}}), all of our repositories have a `Documentation` folder. It is higly recommended you read through our [style guide]({{< ref "/contributing/documentation/documentation/style_guide" >}}) and [writing guide]({{< ref "/contributing/documentation/documentation/writing_guide" >}}) on documentation.
 
 ### Issues
-You can contribute by filing all of your issues to our [Home](https://github.com/dolittle/home/issues) repository.
+You can contribute by filing all of your issues under our [Home](https://github.com/dolittle/home/issues) repository.
 
