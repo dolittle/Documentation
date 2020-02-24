@@ -28,3 +28,9 @@ $ git submodule update --init --recursive
 - Run Hugo
     - Get the [local dolittle documentation script](https://github.com/dolittle/Development/tree/master/Source/Documentation) and run it for easy local doc development.
 - Upload static content to Blob storage
+
+## Issues and Contributing
+To learn how to contribute please read our [contributing](https://dolittle.io/contributing/) guide.
+
+File issues to our [Home](https://github.com/dolittle/Home/issues) repository.
+
