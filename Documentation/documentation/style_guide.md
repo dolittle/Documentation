@@ -84,14 +84,21 @@ Review your work frequently as you write your document. Ask yourself which words
 
 3. **Aim for economical expression.**  
     Omit weak modifiers such as "quite," "very," and "extremely." Avoid weak verbs such as "is," "are," "has," "have," "do," "does," "provide," and "support." (Weak modifiers have a diluting effect, and weak verbs require more wordy constructions.) A particularly weak verb construction to avoid is starting a sentence with "There is ..." or "There are...")
+
 4. **Prefer shorter words over longer alternatives.**  
     **Example**: "helps" rather than "facilitates" and "uses" rather than "utilizes."
+
+5. **Use abbreviations as needed.**  
+    Spell out acronyms on first use. Avoid creating new abbreviation as they can confuse rathen than clarify concepts. Do not explain familiar abbreviations.  
+    **Example**:  
+    _Dolittle uses Event Driven Architecture (EDA) and Command Query Responsibility Segregation (CQRS) patterns._  
+    _HTML and CSS are not programming languages._
 
 ## Structure
 
 **Move from the known to the unknown,** the old to the new, or the familiar to the unexpected. Structure content to help readers identify and skip over concepts which they already understand or see are not relevant to their immediate questions.
 
-**Avoid unnecessary subfolder**. Don't create subfolders that only contain a single page. Make the user have access to the pages with as little clicks as possible.
+**Avoid unnecessary subfolders**. Don't create subfolders that only contain a single page. Make the user have access to the pages with as few clicks as possible.
 
 ### Headings and lists
 **Headings should be descriptive and concise.** Use a level-one heading to start a broad subject area. Level-one headings are typically generic titles, such as Basic Skills, Getting Started, and so on.  Use level-two, level-three, and level-four headings to chunk information into easy-to-identify sections. Do not use more than four heading levels.
