@@ -15,7 +15,6 @@
        {{ with .Site.Params.banner.description }} <p class="text-white mb-4">{{ . }}</p> {{ end }}
         <div class="position-relative">
           {{ with .Site.Params.banner.placeholder }} <input id="search" class="form-control" placeholder="{{ . }}"> {{ end }}
-         {{ partial "global_search_script.html" . }}
         </div>
       </div>
     </div>

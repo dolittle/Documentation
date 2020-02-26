@@ -20,12 +20,16 @@ The documentation uses the [Dot](https://github.com/Gethugothemes/dot-hugo-docum
 We're adhering to the guidelines and documentation of the theme in combination with [Hugos guidelines](https://gohugo.io/documentation/).
 Get familiar with the structure and requirements and all the [shortcodes](https://gohugo.io/content-management/shortcodes/) supported by both Hugo and the theme.
 
+We override some of the Dot themes styling and functionality in the `layouts` and `static` [folders within the Documentation repository](https://github.com/dolittle/Documentation/tree/master/Source).
+
 
 # Writing documentation
 
 ## Metadata
 
-All files **MUST** have a metadata header at the top of the file following the Hugo [Front Matter](https://gohugo.io/content-management/front-matter/) format. Some of this metadata gets put into the generated HTML file and some of it is used for indexing, categorizing, search and more:
+All files **MUST** have a metadata header at the top of the file following the Hugo [Front Matter](https://gohugo.io/content-management/front-matter/) format. Some of this metadata gets put into the generated HTML file.
+
+The `keywords` and `title` properties are used for searching while the `description` shows up in the search results.
 
 ```text
 ---

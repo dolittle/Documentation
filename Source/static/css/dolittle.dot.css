@@ -233,3 +233,22 @@ img {
 .doc_content table td:last-child {
     text-align: right;
 }
+/* colors the selected search results */
+.ui-state-focus:hover,
+.ui-state-focus 
+{
+    color:White;
+    background: var(--primary-color);
+    outline:none;
+}
+/*
+causes a weird effect on the autocomplete search results where the 
+4th result has this overlayed on top of it so make it just nonexistant
+*/
+.ui-menu::before {
+    height: 0px;
+}
+/* makes search result box as round as search form */
+.ui-menu {
+  border-radius: 30px;
+}
