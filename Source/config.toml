@@ -22,10 +22,10 @@ whiteColor = "#ffffff"
 
     # banner
     [params.banner]
-      title = "Support Center & Knowledge base"
-      description = "Find advice and answers from our support team fast or get in touch"
+      title = "Dolittle Documentation"
+      description = "Find documentation about the framework, platform and tools"
       image = "images/banner.jpg"
-      placeholder = "Have a question? Just ask here or enter terms"
+      placeholder = "Search"
 
     # Topics
     [params.topics]
