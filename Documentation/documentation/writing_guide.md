@@ -1,7 +1,7 @@
 ---
 title: Writing guide
 description: A guide on how to write documentation
-keywords: Contributing, guide, writing, documentation
+keywords: Contributing, guide, writing, documentation, icon, links, metadata, hugo, dot, markdown
 author: einari, joel
 weight: 2
 repository: https://github.com/dolittle/Documentation
@@ -68,6 +68,8 @@ All sub-articles will use this repository as the base for the links generated to
 The `_index.md` files within subfolders should only contain the Front Matter and nothing else. This makes the subfolder links on the sidebar work as only dropdowns without linking to the content of the `_index.md`. We prefer this as it makes for a more smooth experience on the site.
 
 You should only have an `_index.md` file for the uppermost landing page of dolittle.io like [Getting started]({{< ref "/getting-started" >}}), [Contributing]({{< ref "/contributing" >}}) etc.
+
+These landing pages also have an `icon` attribute in the Front-Matter. These icons are from the [Themify](https://themify.me/themify-icons) icon pack.
 
 ## Documentation filenames
 
