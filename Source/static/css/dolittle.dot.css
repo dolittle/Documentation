@@ -93,6 +93,13 @@ img {
     display: block;
 }
 
+/* adds bullet points to unordered lists inside the content and fixes it's bottom */
+.doc_content ul {
+  list-style-type: disc;
+  margin-left: 20px;
+  margin-bottom: 1rem;
+}
+
 .spaces .space_link {
     height: 100%;
 }
