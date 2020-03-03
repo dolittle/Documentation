@@ -1,8 +1,8 @@
 ---
 title: Contributing
-description: Contribute to the Dolittle platform
+description: Contribute to the Dolittle framework and platform
 author: Dolittle
-keywords: contribute, guidelines
+keywords: contribute, guidelines, github, git, how to contribute
 weight: 90
 type: "space"
 icon: "ti-github"
