@@ -23,15 +23,12 @@ Read the [style guide](./style_guide) for more information how to style your doc
 You can run your own copy of dolittle.io on your local machine. This way you get a feeling for how it will look like and verify that links, images and diagrams are correct.
 
 ### Prerequisites
-[Hugo](https://gohugo.io/getting-started/installing/#binary-cross-platform)
+* [Docker](https://www.docker.com/get-started)
+* Download [dolittle-documentation-server](https://github.com/dolittle/Development/blob/master/Source/Documentation/dolittle-documentation-server) script and add add it to your path
 
-[Docker](https://www.docker.com/get-started)
+### Run the documentation locally
 
-[Dolittle development scripts](https://github.com/dolittle/Development/) and add them to your path.
-
-### Run your local Hugo webserver
-
-Run the [dolittle-documentation-server](https://github.com/dolittle/Development/blob/master/Source/Documentation/dolittle-documentation-server) script from withing your local Dolittle git repository. The script will automatically mount the correct folders inside the docker image and start a Hugo webserver that will watch the changes.
+Run the [dolittle-documentation-server](https://github.com/dolittle/Development/blob/master/Source/Documentation/dolittle-documentation-server) script from withing your local Dolittle git repository. The script will automatically mount the correct folders inside the docker image and start a Hugo webserver that will watch for changes.
 
 It doesn't matter which subfolder you're in as long as your in the git repository.
 
