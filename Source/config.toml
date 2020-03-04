@@ -81,45 +81,35 @@ home = [ "HTML", "RSS", "JSON"]
   logo = "Dolittle"
   copyright = "The Hugo Documents are copyright © gethugothemes 2018."
 
-    # # navigation
-    # [menu]
+    # navigation
+    [menu]
     
-    #   [[menu.main]]
-    #     weight = 2
-    #     name = "Faq"
-    #     url = "/faq"
+      [[menu.main]]
+        weight = 1
+        name = "Get started"
+        url = "/getting-started/tutorial/setup/"
         
-      # [[menu.main]]
-      #   weight = 2
-      #   name = "contact"
-      #   url = "/contact"
+      [[menu.main]]
+        weight = 2
+        name = "Overview"
+        url = "/getting-started/overview/"
+
+      [[menu.main]]
+        weight = 3
+        name = "Building blocks"
+        url = "/building-blocks/"
+
+      [[menu.main]]
+        weight = 4
+        name = "Platform"
+        url = "/platform/"
+
+      [[menu.main]]
+        weight = 5
+        name = "Build tools"
+        url = "/tooling/"
         
-    #   [[menu.main]]
-    #     weight = 2
-    #     name = "pages"
-    #     url = "/pages"
-    #     hasChildren = true
-
-    #       [[menu.main]]
-    #       parent = "pages"
-    #       name = "Elements"
-    #       URL = "/elements"
-    #       weight = 1
-
-    #       [[menu.main]]
-    #       parent = "pages"
-    #       name = "Installation"
-    #       URL = "/installation"
-    #       weight = 2
-
-    #       [[menu.main]]
-    #       parent = "pages"
-    #       name = "Billing and Pricing"
-    #       URL = "/billing-pricing"
-    #       weight = 3
-
-    #       [[menu.main]]
-    #       parent = "pages"
-    #       name = "Features"
-    #       URL = "/features"
-    #       weight = 4
+      [[menu.main]]
+        weight = 6
+        name = "Contribute"
+        url = "/contributing/"
