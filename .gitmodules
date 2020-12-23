@@ -1,3 +1,3 @@
-[submodule "Source/themes/dot"]
-	path = Source/themes/dot
-	url = https://github.com/Gethugothemes/dot-hugo-documentation-theme.git
+[submodule "Source/themes/docsy"]
+	path = Source/themes/docsy
+	url = https://github.com/google/docsy.git

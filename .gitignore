@@ -5,3 +5,8 @@ node_modules
 yarn.lock
 Source/Hugo/resources
 Source/Hugo/repositories.local.json
+
+Source/public/
+Source/resources/
+Source/node_modules/
+Source/tech-doc-hugo
