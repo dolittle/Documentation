@@ -1,3 +1,6 @@
 [submodule "Source/themes/docsy"]
 	path = Source/themes/docsy
 	url = https://github.com/google/docsy.git
+[submodule "Source/repositories/Runtime"]
+	path = Source/repositories/Runtime
+	url = https://github.com/dolittle/Runtime.git
