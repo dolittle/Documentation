@@ -5,7 +5,9 @@
 [build]
 base = "Source/"
 publish = "Source/public"
-command = "cd themes/docsy && git submodule update -f --init && cd ../.. && hugo"
+# we only want GitInfo in production as otherwise the docker image freaks out as it's not in a git repo
+# see: https://github.com/gohugoio/hugo/issues/6035
+command = "cd themes/docsy && git submodule update -f --init && cd ../.. && hugo --enableGitInfo"
 
 [context.production.environment]
 HUGO_VERSION = "0.79.1"

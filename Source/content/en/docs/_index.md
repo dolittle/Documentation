@@ -7,6 +7,7 @@ menu:
   main:
     weight: 20
 ---
+
 Dolittle is an open-source, decentralized, distributed and event-driven microservice library. The library has been designed to build Line of Business applications without sacrificing architectural quality, code quality, maintainability or scalability.
 
 ### Dedicated Runtime
