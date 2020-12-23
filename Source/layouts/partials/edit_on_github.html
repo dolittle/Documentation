@@ -35,11 +35,20 @@
         {{- $relativePath := (strings.TrimPrefix $repositoryRootFilePath $currentFilePath) -}}
         
         {{- $hasFoundRepositoryUrl := ne $repositoryUrl nil -}}
+
+        {{/* Define earlier so that we can modify inside the if-else */}}
+        {{ $editLink := "" }}
+        {{- if in $repositoryUrl "github.com/dolittle/Documentation" -}}
+            {{/* Path to docs inside the documentation repo */}}
+            {{- $editLink = printf "%s/edit/master/Source/content/%s" $repositoryUrl $currentFilePath -}}
+        {{ else }}
+            {{/* If the docs are under Documentation like in other repos */}}
+            {{- $editLink = printf "%s/edit/master/Documentation%s" $repositoryUrl $relativePath -}}
+        {{ end }}
+
         {{- $canEdit := $hasFoundRepositoryUrl -}}
         {{- if $canEdit -}}
-            {{- $editLink := printf "%s/edit/master/Documentation%s" $repositoryUrl $relativePath }}
             <a class="edit-link" href="{{ $editLink }}" target="_blank"><i class="ti-pencil icon"></i></a>
         {{- end -}}
     {{- end -}}
 {{- end -}}
-

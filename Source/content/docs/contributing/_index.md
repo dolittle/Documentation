@@ -6,6 +6,10 @@ keywords: contribute, guidelines
 weight: 90
 type: "space"
 icon: "ti-github"
+repository: https://github.com/dolittle/Documentation
+alias:
+- /contributing/
+- /contributing
 ---
 
 Dolittle is an open-source framework that is open for contributions.
@@ -20,4 +24,3 @@ Contributions can also be done through [documentation]({{< ref "/contributing/do
 
 ### Issues
 You can contribute by filing all of your issues under our [Home](https://github.com/dolittle/home/issues) repository.
-

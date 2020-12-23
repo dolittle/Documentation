@@ -5,7 +5,6 @@ title = "Dolittle Documentation"
 theme = "dot"
 home = "Home"
 
-
 pygmentsCodeFences = true
 pygmentsUseClasses = true
 
@@ -19,17 +18,15 @@ textColorDark = "#333"
 whiteColor = "#ffffff"
 
 
-
     # banner
     [params.banner]
       title = "Dolittle Documentation"
-      description = "Find documentation about the framework, platform and tools"
+      description = "Find documentation about the Dolittle SDK's, Runtime and platform"
       image = "images/banner.jpg"
       placeholder = "Search"
 
     # Topics
     [params.topics]
-      title = "Find your answer by subject"
     
     # call to action
     [params.cta]
@@ -81,45 +78,39 @@ home = [ "HTML", "RSS", "JSON"]
   logo = "Dolittle"
   copyright = "The Hugo Documents are copyright © gethugothemes 2018."
 
-    # # navigation
-    # [menu]
-    
-    #   [[menu.main]]
-    #     weight = 2
-    #     name = "Faq"
-    #     url = "/faq"
-        
-      # [[menu.main]]
-      #   weight = 2
-      #   name = "contact"
-      #   url = "/contact"
-        
-    #   [[menu.main]]
-    #     weight = 2
-    #     name = "pages"
-    #     url = "/pages"
-    #     hasChildren = true
+    # navigation
+    [menu]
 
-    #       [[menu.main]]
-    #       parent = "pages"
-    #       name = "Elements"
-    #       URL = "/elements"
-    #       weight = 1
+      [[menu.main]]
+        weight = 80
+        name = "GitHub"
+        hasChildren = true
 
-    #       [[menu.main]]
-    #       parent = "pages"
-    #       name = "Installation"
-    #       URL = "/installation"
-    #       weight = 2
+        [[menu.main]]
+          parent = "GitHub"
+          weight = 10
+          name = "Runtime"
+          url = "https://github.com/dolittle/Runtime"
 
-    #       [[menu.main]]
-    #       parent = "pages"
-    #       name = "Billing and Pricing"
-    #       URL = "/billing-pricing"
-    #       weight = 3
+        [[menu.main]]
+          parent = "GitHub"
+          weight = 15
+          name = "C# SDK"
+          url = "https://github.com/dolittle/DotNET.SDK"
 
-    #       [[menu.main]]
-    #       parent = "pages"
-    #       name = "Features"
-    #       URL = "/features"
-    #       weight = 4
+        [[menu.main]]
+          parent = "GitHub"
+          weight = 20
+          name = "JS SDK"
+          url = "https://github.com/dolittle/JavaScript.SDK"
+
+        [[menu.main]]
+          parent = "GitHub"
+          weight = 30
+          name = "Docs"
+          url = "https://github.com/dolittle/Documentation"
+
+      [[menu.main]]
+        weight = 90
+        name = "Contact us"
+        url = "https://dolittle.com/contact-us"

@@ -4,24 +4,13 @@ description: A guide on how to write documentation
 keywords: Contributing, guide, writing, documentation, icon, links, metadata, hugo, dot, markdown
 author: einari, joel
 weight: 2
-repository: https://github.com/dolittle/Documentation
 ---
 
 This document is meant to be read alongside the [style guide](./style_guide) to provide concrete examples on formatting the document and syntax of different Hugo shortcodes.
 
 # Documentation overview
 
-All Dolittle documentation is generated using [Hugo 0.58.3](https://gohugo.io), a static site generator.  
-All syntax is [GitHub flavored markdown](https://github.github.com/gfm/) processed by [Blackfriday](https://github.com/russross/blackfriday) engine inside Hugo.
-
-Documentation is updated whenever a [pull request](https://help.github.com/articles/about-pull-requests/) is approved. This will then automatically trigger the Azure Pipeline to build and re-render the pages.
-
-The documentation uses the [Dot](https://github.com/Gethugothemes/dot-hugo-documentation-theme.git) theme.
-We're adhering to the guidelines and documentation of the theme in combination with [Hugos guidelines](https://gohugo.io/documentation/).
-Get familiar with the structure and requirements and all the [shortcodes](https://gohugo.io/content-management/shortcodes/) supported by both Hugo and the theme.
-
-We override some of the Dot themes styling and functionality in the `layouts` and `static` [folders within the Documentation repository](https://github.com/dolittle/Documentation/tree/master/Source).
-
+All Dolittle documentation is generated using [Hugo 0.58.3](https://gohugo.io), with the [Dot](https://github.com/Gethugothemes/dot-hugo-documentation-theme.git) theme.
 
 # Writing documentation
 
@@ -37,44 +26,17 @@ title: About contributing to documentation
 description: Learn about how to contribute to documentation
 keywords: Contributing
 author: dolittle
+// for topmost _index.md files add the correct repository property
 repository: https://github.com/dolittle/Documentation
 weight: 2
 ---
 ```
 
-### Enable "Edit on Github" for your repository
-
-Enable support for "Edit on Github" pencil icon on a page by adding a reference to the repository on the `_index.md` Front Matter:
-
-
-An example of front-matter with repository set:
-```markdown
----
-title: About contributing to documentation
-description: Learn about how to contribute to documentation
-keywords: Contributing
-author: dolittle
-repository: https://github.com/dolittle/Documentation
----
-```
-
-{{% notice note %}}
-Do not include a trailing slash at the end of the repository URL.
-{{% /notice %}}
-
-All sub-articles will use this repository as the base for the links generated to edit files on GitHub.
-
-### _index.md files
-The `_index.md` files within subfolders should only contain the Front Matter and nothing else. This makes the subfolder links on the sidebar work as only dropdowns without linking to the content of the `_index.md`. We prefer this as it makes for a more smooth experience on the site.
-
-You should only have an `_index.md` file for the uppermost landing page of dolittle.io like [Getting started]({{< ref "/getting-started" >}}), [Contributing]({{< ref "/contributing" >}}) etc.
-
-These landing pages also have an `icon` attribute in the Front-Matter. These icons are from the [Themify](https://themify.me/themify-icons) icon pack.
+The main landing pages also have an `icon` attribute in the Front-Matter. These icons are from the [Themify](https://themify.me/themify-icons) icon pack.
 
 ## Documentation filenames
 
 All files **MUST** be lower cased, words **MUST** be separated with a dash. Example: **`csharp-coding-styles.md`**. Hugo also takes care of converting between dashes and underscores as well as lower- and uppercase.
-
 
 ## Links
 
@@ -99,12 +61,12 @@ Link pages from other repositories using Hugos [`relref/ref` functions](https://
 The root of the documentation for references is `Source/content/` folder of [Documentation](https://github.com/dolittle/Documentation) repository:
 
 ```console
-Here is a [link]({{</* ref "/getting-started/tutorial/setup.md" */>}}) to the Quickstart page.
+Here is a [link]({{</* ref "/docs/tutorial/csharp.md" */>}}) to the Quickstart page.
 ```
 
 Renders to:
 ```
-Here is a [link]({{< ref "/getting-started/tutorial/setup.md" >}}) to the Quickstart page.
+Here is a [link]({{< ref "/docs/tutorial/csharp.md" >}}) to the Quickstart page.
 ```
 
 You can also let Hugo figure out the correct path:
@@ -211,4 +173,3 @@ Renders to:
 {{% notice warning %}}
 Do not remove `artifacts.json` if you do not know what you're doing.
 {{% /notice %}}
-

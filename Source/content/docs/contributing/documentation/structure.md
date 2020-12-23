@@ -11,11 +11,7 @@ All documentation is inside Dolittles [Documentation](https://github.com/dolittl
 
 * `Source/repositories` contain submodules to Dolittle repositories.
 
-* `Source/content` is the folder that Hugo uses to render dolittle.io, making it the root of the pages. It contains symlinks to each `Source/repositories` submodules Documentation folder where the real content is.
-
-Example of how [dolittle-fundamentals](https://github.com/dolittle-fundamentals) is structured within the Documentation repository:
-
-![example of the internal structure](../images/structure.jpg)
+* `Source/content` is the folder that Hugo uses to render dolittle.io, making it the root of the pages. It contains documentation and symlinks to each `Source/repositories` submodules Documentation folder.
 
 ### Defining folder hierarchy on dolittle.io
 
@@ -32,7 +28,7 @@ weight: 2
 ```
 
 {{% notice note %}}
-\_index.md files within subfolders should only contain the Front Matter and nothing else. This makes the subfolder links on the sidebar work as only dropdowns without linking to the content of the \_index.md. We prefer this as it makes for a more smooth experience on the site.
+\_index.md files within subfolders should only contain the Front Matter and nothing else unless needed. This makes the subfolder links on the sidebar work as only dropdowns without linking to the content of the \_index.md. We prefer this as it makes for a more smooth experience on the site.
 {{% /notice %}}
 
 {{% notice note %}}
@@ -40,6 +36,5 @@ You should only have an \_index.md file for the uppermost landing page of dolitt
 {{% /notice %}}
 
 {{% notice note %}}
-Only create subfolders if you have more than 1 file to be put inside. Aim for a flat structure.
+Only create subfolders when needed. Aim for a flat structure.
 {{% /notice %}}
-
