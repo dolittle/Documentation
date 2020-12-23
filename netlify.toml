@@ -1,6 +1,15 @@
+# https://docs.netlify.com/configure-builds/file-based-configuration/
+# docsy build command:
+# https://docs.netlify.com/configure-builds/file-based-configuration/
+
+[build]
+base = "Source/"
+publish = "Source/public"
+command = "cd themes/docsy && git submodule update -f --init && cd ../.. && hugo"
+
 [context.production.environment]
-HUGO_VERSION = "0.58.3"
+HUGO_VERSION = "0.79.1"
+HUGO_ENV = "production"
 
 [context.deploy-preview.environment]
-HUGO_VERSION = "0.58.3"
-
+HUGO_VERSION = "0.79.1"
