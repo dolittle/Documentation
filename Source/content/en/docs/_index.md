@@ -1,4 +1,3 @@
-
 ---
 title: "Documentation"
 linkTitle: "Documentation"
@@ -11,7 +10,7 @@ menu:
 Dolittle is an open-source, decentralized, distributed and event-driven microservice library. The library has been designed to build Line of Business applications without sacrificing architectural quality, code quality, maintainability or scalability.
 
 ### Dedicated Runtime
-Dolittle uses it's own dedicated [Runtime](https://github.com/dolittle/Runtime) for managing connections to the event logs and other Runtimes. This allows for easier decoupling of event producers and consumers and frees the pieces to be scaled independently.
+Dolittle uses it's own dedicated [Runtime]({{< ref "concepts/overview" >}}) for managing connections to the event logs and other runtimes. This allows for easier decoupling of event producers and consumers and frees the pieces to be scaled independently.
 
 ### Microservice First
 At the heart of Dolittle sits the notion of decoupling. This makes it possible to take a system and break it into small focused components
@@ -20,8 +19,8 @@ equally across a number of machines. This gives a higher density, better resourc
 control.
 
 ### Event-Driven
-Dolittle is based on Event Sourcing, which means that the systems state is based on the events.
+Dolittle is based on Event Sourcing, which means that the systems state is based on events. 
 EDA promotes loose coupling because the producers of events do not know about subscribers that are listening to this event. This makes an Event-Driven Architecture more suited to today’s distributed applications than the traditional request-response model.
 
 ### PaaS Ready
-Dolittle has it's own PaaS, get in [contact with us](https://dolittle.com/contact-us) to learn more!
+Dolittle has it's own PaaS (Platform as a Service) for hosting your Dolittle code, get in [contact with us](https://dolittle.com/contact-us) to learn more!
