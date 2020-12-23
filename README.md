@@ -8,7 +8,7 @@ Built with the [docsy](https://github.com/google/docsy) Hugo template.
 ## Cloning
 This repository has a sub module, clone it with:
 ```shell
-$ git clone --recursive <repository url>
+$ git clone --recursive https://github.com/dolittle/Documentation.git
 ```
 
 If you've already cloned it, you can get the submodule by doing the following:
@@ -16,16 +16,19 @@ If you've already cloned it, you can get the submodule by doing the following:
 $ git submodule update --init --recursive
 ```
 
+This might take a while.
+
 ## Developing
 Check docsy [documentation](https://www.docsy.dev/docs/) for how to build and customize stuff.
 
-Latest version of Hugo is recommended.
+You'll need Hugo `v0.71` or higher.
 
 Markdown files are either in  `Source/content` or symlinks to their respective submodules from `Repositories/`.
 
 If you want to do SCSS edits and want to publish these, you need to install `PostCSS` (not needed for `hugo server`):
 
 ```bash
+cd Source/
 npm install
 ```
 
@@ -37,7 +40,7 @@ Once you've cloned the site repo, from the repo root folder, run:
 hugo server
 ```
 
-### Build your local Dolittle repository documentation (WIP)
+### Build your local Dolittle repository documentation
 * [Docker](https://www.docker.com/get-started)
 * Download [dolittle-documentation-server](https://github.com/dolittle/Development/blob/master/Source/Documentation/dolittle-documentation-server) script and add add it to your path
 
@@ -45,7 +48,6 @@ Run the [dolittle-documentation-server](https://github.com/dolittle/Development/
 
 It doesn't matter which subfolder you're in as long as your in the git repository.
 ```
-cd ~/Dolittle/Documentation
 dolittle-documentation-server
 ```
 
@@ -61,13 +63,13 @@ than Docker.
 1. Build the docker image 
 
 ```bash
-docker build -f dev.Dockerfile -t docsy-example-dev:latest .
+./dockerize.sh
 ```
 
 1. Run the built image
 
 ```bash
-docker run --publish 1313:1313 --detach --mount src="$(pwd)",target=/home/docsy/app,type=bind docsy-example-dev:latest
+docker run --publish 1313:1313 --detach --mount src="$(pwd)",target=/home/docsy/app,type=bind dolittle/documentation:latest
 ```
 
 Open your web browser and type `http://localhost:1313` in your navigation bar,
