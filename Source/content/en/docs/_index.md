@@ -7,7 +7,7 @@ menu:
     weight: 20
 ---
 
-Dolittle is an open-source, decentralized, distributed and event-driven microservice platform. The library has been designed to build Line of Business applications without sacrificing architectural quality, code quality, maintainability or scalability.
+Dolittle is an open-source, decentralized, distributed and event-driven microservice platform. The platform has been designed to build Line of Business applications without sacrificing architectural quality, code quality, maintainability or scalability.
 
 ### Dedicated Runtime
 Dolittle uses it's own dedicated [Runtime]({{< ref "concepts/overview" >}}) for managing connections to the event logs and other runtimes. This allows for easier decoupling of event producers and consumers and frees the pieces to be scaled independently.
