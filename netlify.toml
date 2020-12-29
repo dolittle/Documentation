@@ -15,8 +15,3 @@ HUGO_ENV = "production"
 
 [context.deploy-preview.environment]
 HUGO_VERSION = "0.79.1"
-
-[[redirects]]
-from = "/*"
-to = "/404.html
-status = 404
