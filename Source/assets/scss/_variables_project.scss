@@ -6,13 +6,21 @@ Add/override variables from the theme here.
 
 $primary: #ff4b00;
 $secondary: #f4f4f4;
+$tertiary: #0272ae;
+$pentiary: #024668;
+
+// text too heavy by default
+$display1-weight: 500 !default;
+$display2-weight: 100 !default;
 
 // define alert box color
 $info: #525a63;
 
+/*
 $textColor: #525a63;
-$textColorDar: #333;
+$textColorDark: #333;
 $whiteColor: #ffffff;
+*/
 
 $enable-gradients: false;
 $enable-rounded: true;
