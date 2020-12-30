@@ -40,3 +40,60 @@ div.td-content > .lead {
   transform: translateY(0rem);
 }
 */
+
+// change front page button colors
+.btn-secondary {
+  color: white;
+  background-color: $tertiary;
+  border-color: $tertiary;
+}
+
+.btn-secondary:hover {
+  color: #222;
+  background-color: white;
+  border-color: white;
+}
+
+// for changin the navbar when we scroll the frontpage
+.flip-nav .td-navbar {
+  background: $white !important;
+  border-bottom: 1px solid $primary;
+}
+
+.td-navbar {
+  // annoying shadow on cover page
+  .nav-link {
+    text-shadow: none;
+  }
+
+  .navbar-logo {
+    svg {
+      display: inline-block;
+      height: 50px;
+      width: auto;
+      margin-right: 10px;
+    }
+  }
+
+  .td-search-input {
+    border: none;
+    background: rgba(black, 0.1);
+    color: white;
+  }
+}
+
+.td-navbar-cover {
+  .td-search-input {
+    color: black;
+
+    @include placeholder {
+        color:  #9B9595 !important;
+    }
+  }
+}
+
+// scales diagrams more nicely
+.td-content img {
+  max-width: 100%;
+  height: auto;
+}
