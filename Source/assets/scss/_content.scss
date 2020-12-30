@@ -97,3 +97,15 @@ div.td-content > .lead {
   max-width: 100%;
   height: auto;
 }
+
+// fix sccs for that one blue box on front page
+.td-box--pentiary {
+  background: $pentiary;
+  color: white;
+  a {
+    color: rgba(#53d3fd, 1);
+  }
+  a:hover {
+    color: rgba(#53d3fd, 0.5);
+  }
+}
