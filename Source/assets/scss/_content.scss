@@ -1,0 +1,42 @@
+/*
+
+Add styles here.
+
+*/
+
+// for using `monospace` in headings
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+    color: inherit;
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 0.1em 0.15em;
+}
+
+// for giving some space for the subtitle on pages
+div.td-content > .lead {
+    margin-bottom: 0.75em;
+}
+
+.tab-pane.active {
+    animation: fade-in 0.5s ease-out;
+}
+
+@keyframes fade-in {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/*
+.tab-pane {
+  transition: all 0.2s;
+  transform: translateY(1rem);
+}
+
+.tab-pane.active.show {
+  transform: translateY(0rem);
+}
+*/

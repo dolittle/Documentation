@@ -1,9 +1,9 @@
 ---
 title: Tutorials
-description: Get started with Dolittle
+description: Get started with the Dolittle platform
 keywords: overview, dolittle, why dolittle, what is dolittle, 
 author: Dolittle
-weight: 10
+weight: 5
 type: "space"
 icon: "ti-direction"
 repository: https://github.com/dolittle/Documentation
@@ -15,7 +15,3 @@ aliases:
     - /getting-started/tutorial/setup/
     - /getting-started/gettingstarted/
 ---
-This page lists the tutorials available for our SDKs.
-
-- [Getting started with C#]({{< ref csharp >}})
-- [Getting started with TypeScript]({{< ref typescript >}})
