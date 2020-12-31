@@ -83,7 +83,7 @@ copyright = "The Docsy Authors"
 privacy_policy = "https://policies.google.com/privacy"
 
 # First one is picked as the Twitter card image if not set on page.
-images = ["images/dolittle_symbol_orange.svg"]
+images = ["images/dolittle_symbol_orange@4x.png"]
 
 # Menu title if your navbar has a versions selector to access old versions of your site.
 # This menu appears only if you have at least one [params.versions] set.
