@@ -1,8 +1,82 @@
-/*
+// copied from docsys _content.scss
+.td-content {
+    order: 1;
 
-Add styles here.
+    p, li, td {
+        font-weight: $font-weight-body-text;
+    }
 
-*/
+    > h1 {
+        font-weight: $font-weight-bold;
+        margin-bottom: 1rem;
+    }
+
+    > h2 {
+        margin-bottom: 1rem;
+    }
+
+    > h2:not(:first-child) {
+        margin-top: 3rem;
+    }
+
+    > h2 + h3 {
+         margin-top: 1rem;
+    }
+
+    > h3, > h4, > h5, > h6 {
+        margin-bottom: 1rem;
+        margin-top: 2rem;
+    }
+
+    img {
+        @extend .img-fluid;
+    }
+
+    > table {
+        @extend .table-striped;
+
+        @extend .table-responsive;
+
+        @extend .table;
+    }
+
+    > blockquote {
+        padding: 0 0 0 1rem;
+        margin-bottom: $spacer;
+        color: $gray-600;
+        border-left: 6px solid $secondary;
+    }
+
+    > ul li, > ol li {
+        margin-bottom: .25rem;
+    }
+
+    strong {
+        font-weight: $font-weight-bold;
+    }
+
+    > pre, > .highlight, > .lead, > h1, > h2, > ul, > ol, > p, > blockquote, > dl dd, .footnotes, > .alert {
+        @extend .td-max-width-on-larger-screens;
+    }
+
+    .alert:not(:first-child) {
+        margin-top: 2 * $spacer;
+        margin-bottom: 2 * $spacer;
+    }
+
+    .lead {
+        margin-bottom: 1.5rem;
+    }
+}
+
+.td-title {
+    margin-top: 1rem;
+    margin-bottom: .5rem;
+
+    @include media-breakpoint-up(sm) {
+        font-size: 3rem;
+    }
+}
 
 // for using `monospace` in headings
 h1 code,
@@ -31,28 +105,8 @@ div.td-content > .lead {
 }
 
 /*
-.tab-pane {
-  transition: all 0.2s;
-  transform: translateY(1rem);
-}
-
-.tab-pane.active.show {
-  transform: translateY(0rem);
-}
+For changing the navbar etc. Should probably live in a different file.
 */
-
-// change front page button colors
-.btn-secondary {
-  color: white;
-  background-color: $tertiary;
-  border-color: $tertiary;
-}
-
-.btn-secondary:hover {
-  color: #222;
-  background-color: white;
-  border-color: white;
-}
 
 // for changin the navbar when we scroll the frontpage
 .flip-nav .td-navbar-cover {
@@ -92,10 +146,18 @@ div.td-content > .lead {
   }
 }
 
-// scales diagrams more nicely
-.td-content img {
-  max-width: 100%;
-  height: auto;
+
+// change front page button colors
+.btn-secondary {
+  color: white;
+  background-color: $tertiary;
+  border-color: $tertiary;
+}
+
+.btn-secondary:hover {
+  color: #222;
+  background-color: white;
+  border-color: white;
 }
 
 // fix sccs for that one blue box on front page
