@@ -5,8 +5,9 @@ keywords: Learning, Quickstart, setup, prerequisites, how to, guide, walkthrough
 author: joel, jakob, sindre
 weight: 1
 aliases:
-- /docs/tutorials/csharp/
+- /docs/tutorials/csharp
 - /docs/tutorials/typescript
+- /docs/tutorials/getting-started
 ---
 
 Welcome to the tutorial to the Dolittle platform, where you learn how to write a [Microservice]({{< ref "docs/concepts/overview#microservice" >}}) that keeps track of foods prepared by the chefs.
