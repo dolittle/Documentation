@@ -83,7 +83,7 @@ namespace Kitchen
     }
 }
 ```
-The GUID given in the `[EventType()]` attribute is the [`EventTypeId`]({{< ref "docs/concepts/#eventtype" >}}), which is used to identify this `EventType` type in the Runtime.
+The GUID given in the `[EventType()]` attribute is the [`EventTypeId`]({{< ref "docs/concepts/events#eventtype" >}}), which is used to identify this `EventType` type in the Runtime.
 {{% /tab %}}
 
 {{% tab name="TypeScript" %}}
@@ -96,7 +96,7 @@ export class DishPrepared {
     constructor(readonly Dish: string, readonly Chef: string) {}
 }
 ```
-The GUID given in the `@eventType()` decorator is the [`EventTypeId`]({{< ref "docs/concepts/#eventtype" >}}), which is used to identify this `EventType` in the Runtime.
+The GUID given in the `@eventType()` decorator is the [`EventTypeId`]({{< ref "docs/concepts/events#eventtype" >}}), which is used to identify this `EventType` in the Runtime.
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -153,7 +153,7 @@ The `@eventHandler()` decorator identifies this event handler in the Runtime, an
 ### Connect the client and commit an event
 Let's build a client that connects to the Runtime for a [Microservice]({{< ref "docs/concepts/overview#microservice" >}}) with the id `"f39b1f61-d360-4675-b859-53c05c87c0e6"`. This sample Microservice is pre-configured in the `development` Docker image.
 
-While configuring the client we register the `EventTypes` and `EventHandlers` so that the Runtime knows about them. Then we can prepare a delicious taco and commit it to the [`EventStore`]({{< ref "docs/concepts/event-store" >}}) for the specified tenant.
+While configuring the client we register the `EventTypes` and `EventHandlers` so that the Runtime knows about them. Then we can prepare a delicious taco and commit it to the [`EventStore`]({{< ref "docs/concepts/event_store" >}}) for the specified tenant.
 
 {{< tabs name="client_tab" >}}
 {{% tab name="C#" %}}
@@ -192,7 +192,7 @@ namespace Kitchen
 }
 ```
 
-The GUID given in `FromEventSource()` is the [`EventSourceId`]({{< ref "docs/concepts/events/eventsourceid" >}}), which is used to identify where the events come from.
+The GUID given in `FromEventSource()` is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify where the events come from.
 {{% /tab %}}
 
 {{% tab name="TypeScript" %}}
@@ -218,7 +218,7 @@ client.eventStore
     .commit(preparedTaco, 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
 ```
 
-The GUID given in the `commit()` call is the [`EventSourceId`]({{< ref "docs/concepts/events/eventsourceid" >}}), which is used to identify where the events come from.
+The GUID given in the `commit()` call is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify where the events come from.
 {{% /tab %}}
 {{< /tabs >}}
 

@@ -58,31 +58,6 @@ Renders to:
 ### Cross Repositories
 Link pages from other repositories using Hugos [`relref/ref` functions](https://gohugo.io/content-management/shortcodes/#ref-and-relref) inside the markdown.
 
-The root of the documentation for references is `Source/content/` folder of [Documentation](https://github.com/dolittle/Documentation) repository:
-
-```console
-Here is a [link]({{</* ref "/docs/tutorial/csharp.md" */>}}) to the Quickstart page.
-```
-
-Renders to:
-```
-Here is a [link]({{< ref "/docs/tutorial/csharp.md" >}}) to the Quickstart page.
-```
-
-You can also let Hugo figure out the correct path:
-
-```markdown
-Some text [with a link]({{</* ref style_guide */>}})
-```
-
-Renders to:
-```
-Some text [with a link]({{< ref style_guide >}})
-```
-
-Be aware that this matches the filename with or without the `.md` suffix. If there are other documents with the same name, you'll need to either rename those or include the entire path to the file.
-
-
 ### External resources
 
 Linking to external resources is done in the standard Markdown way:
