@@ -10,11 +10,11 @@ aliases:
 - /docs/tutorials/getting-started
 ---
 
-Welcome to the tutorial to the Dolittle platform, where you learn how to write a [Microservice]({{< ref "docs/concepts/overview#microservice" >}}) that keeps track of foods prepared by the chefs.
+Welcome to the tutorial for Dolittle, where you learn how to write a [Microservice]({{< ref "docs/concepts/overview#microservice" >}}) that keeps track of foods prepared by the chefs.
 
 After this tutorial you will have:
 
-* a running Dolittle [Runtime]({{< ref "docs/concepts/overview" >}}) and MongoDB, and
+* a running Dolittle environment with a [Runtime]({{< ref "docs/concepts/overview" >}}) and a MongoDB, and
 * a [Microservice]({{< ref "docs/concepts/overview#microservice" >}}) that commits and handles [Events]({{< ref "docs/concepts/events" >}})
 
 Use the tabs to switch between the [C#](https://github.com/dolittle/dotnet.sdk) and [TypeScript](https://github.com/dolittle/javaScript.SDK/) code examples. Full tutorial code available on GitHub for [C#](https://github.com/dolittle/DotNET.SDK/tree/master/Samples/Kitchen) and [TypeScript](https://github.com/dolittle/JavaScript.SDK/tree/master/Samples/Kitchen).
@@ -223,8 +223,8 @@ The GUID given in the `commit()` call is the [`EventSourceId`]({{< ref "docs/con
 {{% /tab %}}
 {{< /tabs >}}
 
-### Start the Dolittle Runtime
-Start the Dolittle Runtime with all the necessary dependencies with the following command:
+### Start the Dolittle environment
+Start the Dolittle environment with all the necessary dependencies with the following command:
 
 ```shell
 $ docker run -p 50053:50053 -p 27017:27017 dolittle/runtime:latest-development
