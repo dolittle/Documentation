@@ -86,8 +86,19 @@ h4 code,
 h5 code,
 h6 code {
     color: inherit;
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: rgba($black, 0.05);
     padding: 0.1em 0.15em;
+}
+
+// for `monospace` inside alert boxes
+div.alert > code {
+  color: inherit;
+  padding: 0.2em 0.4em;
+  margin: 0;
+  font-size: 85%;
+  word-break: normal;
+  background-color: rgba($black, 0.05);
+  border-radius: $border-radius;
 }
 
 // for giving some space for the subtitle on pages
