@@ -1,6 +1,6 @@
 ---
 title: Tutorials
-description: Tutorials for the Dolittle platoform
+description: Tutorials for the Dolittle platform
 keywords: overview, dolittle, why dolittle, what is dolittle, 
 author: Dolittle
 weight: 5
