@@ -251,3 +251,7 @@ Mr. Taco has prepared Bean Blaster Taco. Yummm!
 ```
 {{% /tab %}}
 {{< /tabs >}}
+
+## What's next
+
+- Learn how to [deploy your application]({{< ref "docs/platform/deploy_an_application" >}}) into our [Platform]({{< ref "docs/platform" >}}).
