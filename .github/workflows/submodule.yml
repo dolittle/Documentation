@@ -12,8 +12,14 @@ jobs:
     - uses: actions/checkout@v2
     - name: Checkout submodule
       run: git submodule update --init --remote ./Source/repositories/Runtime
-    - name: Commit and push submodule changes
+    - name: Commit submodule changes
       run: |
+        git config --local user.email "build@dolittle.com"
+        git config --local user.name "dolittle-build"
         git add ./Source/repositories/Runtime
         git commit -m "Update Runtime submodule from update-runtime workflow"
-        git push
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: 'master'
