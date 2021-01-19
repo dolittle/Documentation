@@ -1,0 +1,22 @@
+name: Update submodule
+
+on:
+  repository_dispatch:
+    types: [runtime-documentation]
+
+jobs:
+  update-runtime:
+    name: Update Runtime Submodule
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Checkout submodule
+      run: git submodule update ./Source/repositories/Runtime
+    - name: Pull Runtime master
+      run: git pull master
+      working-directory: ./Source/repositories/Runtime
+    - name: Commit and push submodule changes
+      run: |
+        git add ./Source/repositories/Runtime
+        git commit -m "Update Runtime submodule from update-runtime workflow"
+        git push
