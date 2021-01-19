@@ -5,6 +5,11 @@ on:
     branches:
     - master
     - main
+  workflow_run:
+    workflows: ["Update submodule"]
+    branches: [main, master]
+    types:
+      - completed
 
 jobs:
   release-docker:
