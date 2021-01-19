@@ -11,10 +11,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Checkout submodule
-      run: git submodule update ./Source/repositories/Runtime
-    - name: Pull Runtime master
-      run: git pull master
-      working-directory: ./Source/repositories/Runtime
+      run: git submodule update --init --remote ./Source/repositories/Runtime
     - name: Commit and push submodule changes
       run: |
         git add ./Source/repositories/Runtime
