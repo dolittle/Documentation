@@ -233,6 +233,10 @@ $ docker run -p 50053:50053 -p 27017:27017 dolittle/runtime:latest-development
 This will start a container with the Dolittle Development Runtime on port 50053 and a MongoDB server on port 27017.
 The Runtime handles committing the events and the event handlers while the MongoDB is used for persistence.
 
+{{% alert title="Docker on Windows" color="warning" %}}
+Docker on Windows using the WSL2 backend can use massive amounts of RAM if not limited. Configuring a limit in the `.wslconfig` file can help greatly, as mentioned in [this issue](https://github.com/microsoft/WSL/issues/4166#issuecomment-526725261). The RAM usage is also lowered if you disable the WSL2 backend in Docker for Desktop settings.
+{{% /alert %}}
+
 ### Run your microservice
 Run your code, and get a delicious serving of taco:
 
