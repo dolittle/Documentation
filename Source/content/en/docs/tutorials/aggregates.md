@@ -3,7 +3,7 @@ title: Aggregates
 description: Get started with Aggregates
 keywords: Learning, Quickstart, setup, prerequisites, how to, guide, walkthrough, csharp, c#, dotnet, .NET, typescript, javascript
 author: joel, jakob, sindre
-weight: 1
+weight: 10
 aliases:
 - /docs/tutorials/csharp/aggregates
 - /docs/tutorials/typescript/aggregates
