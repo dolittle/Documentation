@@ -21,7 +21,7 @@ This might take a while.
 ## Developing
 Check docsy [documentation](https://www.docsy.dev/docs/) for how to build and customize stuff.
 
-You'll need Hugo `v0.71` or higher.
+You'll need Hugo extended `v0.71` or higher.
 
 Markdown files are either in  `Source/content` or symlinks to their respective submodules from `Repositories/`.
 
