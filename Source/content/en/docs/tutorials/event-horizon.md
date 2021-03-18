@@ -258,7 +258,7 @@ const client = Client
 
 {{% /tab %}}
 {{< /tabs >}}
-Now as you can see there is lots of stuff going on here. Let's try and disect this piece for piece.
+There's a lot of stuff going on the code so let's break it down:
 
 {{< tabs name="with-runtime-on-tab" >}}
 {{% tab name="C#" %}}
