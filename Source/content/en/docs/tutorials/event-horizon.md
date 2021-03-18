@@ -41,7 +41,13 @@ We'll come back to the docker-compose [later]({{< ref "#setup-your-environment" 
 
 ## Producer
 ### Create a `Public Filter`
-A `public filter` filters all events that are committed as public events into a [`public stream`]({{< ref "docs/concepts/streams" >}}), which is special stream that another microservice can subscribe to. A public filter definition in the SDK's perspective is simply a method that returns a partitioned filter result which simply is an object with two properties: a boolean that says whether the event should be included in the stream and a partition id which is the partition that the event should belong to in the stream. Only the events that are committed as a public events gets filtered through the public filters.  
+A `public filter` filters all events that are committed as public events into a [`public stream`]({{< ref "docs/conceptsA [`public filter`]({{< ref "docs/concepts/event_handlers_and_filters#public-filters" >}}) filters all public events that pass the filter into a [`public stream`]({{< ref "docs/concepts/streams" >}}), which is special stream that another microservice can [subscribe]({{< ref "docs/concepts/event_horizon#subscription" >}}) to.
+
+A public filter is defined as a method that returns a partitioned filter result, which is an object with two properties:
+- a boolean that says whether the event should be included in the public stream
+- a partition id which is the [partition]({{< ref "docs/concepts/streams/#partitions" >}}) that the event should belong to in the public stream.
+
+Only public events get filtered through the public filters.  
 
 {{< tabs name="public-filter-tab" >}}
 {{% tab name="C#" %}}
