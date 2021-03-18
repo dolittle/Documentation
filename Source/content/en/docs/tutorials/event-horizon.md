@@ -118,6 +118,7 @@ const client = Client
 ```
 {{% /tab %}}
 {{< /tabs >}}
+
 Notice that the returned PartitionedFilterResult has `true` and an *unspecified* PartitionId (which is the same as an empty GUID). This means that this filter creates a public stream that includes all public events, and that they are put into the *unspecified* partition of that stream.
 
 ### Commit the public event
