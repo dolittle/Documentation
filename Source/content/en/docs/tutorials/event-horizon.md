@@ -20,11 +20,11 @@ After this tutorial you will have:
 
 Use the tabs to switch between the [C#](https://github.com/dolittle/dotnet.sdk) and [TypeScript](https://github.com/dolittle/javaScript.SDK/) code examples. Full tutorial code available on GitHub for [C#](https://github.com/dolittle/DotNET.SDK/tree/master/Samples/EventHorizon) and [TypeScript](https://github.com/dolittle/JavaScript.SDK/tree/master/Samples/EventHorizon).
 
-### Pre requisites
+### Prerequisites
 <!-- Use the % signs if you need to render the stuff inside as markdown -->
 <!-- check https://kubernetes.io/docs/contribute/style/hugo-shortcodes/#tabs -->
 
-This tutorial builds directly upon and that you have gone through our [getting started]({{< ref "docs/tutorials/getting_started" >}}) guide; that you have the files from the tutorial.
+This tutorial builds directly upon the [getting started]({{< ref "docs/tutorials/getting_started" >}}) guide and the files from the it.
 
 ### Setup
 In this tutorial is going to have a slightly different setup as we're going to have two microservices; one that produces public events and one that subscribe to those public events. Let's make a folder structure that resembles that:
