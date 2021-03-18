@@ -376,7 +376,7 @@ This code will create a [partitioned]({{< ref "docs/concepts/streams#partitions"
 Remember, that the events from an event horizon subscription get put into a [scoped event-log]({{< ref "docs/concepts/event_store#scope" >}}) that is identified by the scope id. Having the scope id defined when creating an event handler signifies that it will only handle events in that scope and no other.
 
 ## Setup your environment
-Now that we have the different microservices setup with the code we need to setup the environment for them to run in and configure them to be connected to each other.
+Now we have the producer and consumer microservices [Heads]({{< ref "docs/concepts/overview#components" >}}) coded, we need to setup the environment for them to run in and configure their Runtimes to be connected.
 
 First thing you need to do is change directory into the environment folder we created in the beginning of this tutorial. Here we'll have a couple of files:
 
