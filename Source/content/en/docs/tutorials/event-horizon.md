@@ -175,9 +175,11 @@ client.eventStore
 {{% /tab %}}
 {{< /tabs >}}
 
+Now we have a producer microservice with a public stream of `DishPrepared` events.
+
 ## Consumer
 ### Subscribe to the public stream of events
-Now that we have a microservice with a public stream of *DishPrepared* events now the only thing left is to have another microservice subscribes to that subscribes to that public stream of events.
+Let's create another microservice that [subscribes]({{< ref "docs/concepts/event_horizon#subscription" >}}) to the producer's public stream.
 
 {{< tabs name="event-horizon-subscription-tab" >}}
 {{% tab name="C#" %}}
