@@ -116,7 +116,7 @@ const client = Client
 ```
 {{% /tab %}}
 {{< /tabs >}}
-Notice that the returned PartitionedFilterResult always has true and the *unspecified* PartitionId. This means that this particular public stream includes all public events and they are put in the *unspecified* partition (which is the empty guid)
+Notice that the returned PartitionedFilterResult has `true` and an *unspecified* PartitionId (which is the same as an empty GUID). This means that this filter creates a public stream that includes all public events, and that they are put into the *unspecified* partition of that stream.
 
 ### Commit the public event
 Now that we have a public stream we'd naturally want to commit public events to fill it up. Doing this is as easy as committing private (non-public) events. Let's show you an example where we commit a *DishPrepared* event as a public event.
