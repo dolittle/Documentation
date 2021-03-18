@@ -353,7 +353,7 @@ Remember that the event horizon subscription includes a scope and that the event
 You can read more about the event horizon [here]({{< ref "docs/concepts/event_handlers_and_filters#scope" >}}).
 
 ## Setup your environment
-Now that we have the different microservices setup with the code we need to setup the environment for them to run in and configure them to be connected to each other.
+Now we have the producer and consumer microservices [Heads]({{< ref "docs/concepts/overview#components" >}}) coded, we need to setup the environment for them to run in and configure their Runtimes to be connected.
 
 First thing you need to do is change directory into the environment folder we created in the beginning of this tutorial. Here we'll have a couple of files:
 
