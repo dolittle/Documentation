@@ -92,6 +92,8 @@ namespace Kitchen
 ```typescript
 // index.ts
 import { Client } from '@dolittle/sdk';
+import { EventContext, PartitionId } from '@dolittle/sdk.events';
+import { PartitionedFilterResult } from '@dolittle/sdk.events.filtering';
 import { TenantId } from '@dolittle/sdk.execution';
 import { DishPrepared } from './DishPrepared';
 import { DishHandler } from './DishHandler';
@@ -165,7 +167,7 @@ const preparedTaco = new DishPrepared('Bean Blaster Taco', 'Mr. Taco');
 
 client.eventStore
     .forTenant(TenantId.development)
-    .commit(preparedTaco, 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
+    .commitPublic(preparedTaco, 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
 
 })();
 ```
