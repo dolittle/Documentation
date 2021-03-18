@@ -18,7 +18,7 @@ After this tutorial you will have:
 * a [Microservice]({{< ref "docs/concepts/overview#microservice" >}}) that commits and handles [Events]({{< ref "docs/concepts/events" >}}) and puts it in a public stream and
 * a Microservice that subscribes to the public stream and processes those events
 
-Use the tabs to switch between the [C#](https://github.com/dolittle/dotnet.sdk) and [TypeScript](https://github.com/dolittle/javaScript.SDK/) code examples. Full tutorial code available on GitHub for [C#](https://github.com/dolittle/DotNET.SDK/tree/master/Samples/Aggregates) and [TypeScript](https://github.com/dolittle/JavaScript.SDK/tree/master/Samples/Aggregates).
+Use the tabs to switch between the [C#](https://github.com/dolittle/dotnet.sdk) and [TypeScript](https://github.com/dolittle/javaScript.SDK/) code examples. Full tutorial code available on GitHub for [C#](https://github.com/dolittle/DotNET.SDK/tree/master/Samples/EventHorizon) and [TypeScript](https://github.com/dolittle/JavaScript.SDK/tree/master/Samples/EventHorizon).
 
 ### Pre requisites
 <!-- Use the % signs if you need to render the stuff inside as markdown -->
