@@ -200,21 +200,19 @@ namespace Kitchen
                 .WithRuntimeOn("localhost", 50055)
                 .WithEventTypes(eventTypes =>
                     eventTypes.Register<DishPrepared>())
-                .WithEventHandlers(_ =>
-                    _.CreateEventHandler("6c3d358f-3ecc-4c92-a91e-5fc34cacf27e")
-                        .InScope("808ddde4-c937-4f5c-9dc2-140580f6919e")
-                        .Partitioned()
-                        .Handle<DishPrepared>((@event, context) => Console.WriteLine($"Handled event {@event} from public stream")))
-                .WithEventHorizons(eventHorizons => {
-                    eventHorizons.ForTenant(TenantId.Development, subscriptions => {
+                .WithEventHorizons(eventHorizons =>
+                    eventHorizons.ForTenant(TenantId.Development, subscriptions =>
                         subscriptions
                             .FromProducerMicroservice("f39b1f61-d360-4675-b859-53c05c87c0e6")
                             .FromProducerTenant(TenantId.Development)
                             .FromProducerStream("2c087657-b318-40b1-ae92-a400de44e507")
                             .FromProducerPartition(PartitionId.Unspecified)
-                            .ToScope("808ddde4-c937-4f5c-9dc2-140580f6919e");
-                    });
-                })
+                            .ToScope("808ddde4-c937-4f5c-9dc2-140580f6919e")))
+                .WithEventHandlers(_ =>
+                    _.CreateEventHandler("6c3d358f-3ecc-4c92-a91e-5fc34cacf27e")
+                        .InScope("808ddde4-c937-4f5c-9dc2-140580f6919e")
+                        .Partitioned()
+                        .Handle<DishPrepared>((@event, context) => Console.WriteLine($"Handled event {@event} from public stream")))
                 .Build();
             // Blocks until the EventHandlers are finished, i.e. forever
             client.Start().Wait();
@@ -237,29 +235,35 @@ const client = Client
     .withRuntimeOn('localhost', 50055)
     .withEventTypes(eventTypes =>
         eventTypes.register(DishPrepared))
+    .withEventHorizons(_ => {
+        _.forTenant(TenantId.development, ts =>
+            ts.fromProducerMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
+                .fromProducerTenant(TenantId.development)
+                .fromProducerStream('2c087657-b318-40b1-ae92-a400de44e507')
+                .fromProducerPartition(PartitionId.unspecified.value)
+                .toScope('808ddde4-c937-4f5c-9dc2-140580f6919e'))})
     .withEventHandlers(eventHandlers =>
         eventHandlers
             .createEventHandler("6c3d358f-3ecc-4c92-a91e-5fc34cacf27e", _ =>
                 _.inScope("808ddde4-c937-4f5c-9dc2-140580f6919e")
                 .partitioned()
                 .handle(DishPrepared, (event, context) => console.log(`Handled event ${event} from public stream`))))
-    .withEventHorizons(_ => {
-        _.forTenant(TenantId.development, ts => {
-            ts.fromProducerMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
-                .fromProducerTenant(TenantId.development)
-                .fromProducerStream('2c087657-b318-40b1-ae92-a400de44e507')
-                .fromProducerPartition(PartitionId.unspecified.value)
-                .toScope('808ddde4-c937-4f5c-9dc2-140580f6919e');
-            });
-    })
     .build();
 
 ```
 
 {{% /tab %}}
 {{< /tabs >}}
+
+Now we have a consumer microservice that:
+- Connects to another Runtime running on port `50055`
+- Subscribes to the producer's public stream with the id of `2c087657-b318-40b1-ae92-a400de44e507` (same as the producer's public filter)
+- Puts those events into a [Scope]({{< ref "docs/concepts/event_store#scope" >}}) with id of `808ddde4-c937-4f5c-9dc2-140580f6919e` 
+- Handles them incoming events in a [scoped event handler]({{< ref "docs/concepts/event_handlers_and_filters#scope" >}}) with an id of `6c3d358f-3ecc-4c92-a91e-5fc34cacf27e`
+
 There's a lot of stuff going on the code so let's break it down:
 
+#### Connection to the Runtime
 {{< tabs name="with-runtime-on-tab" >}}
 {{% tab name="C#" %}}
 ```csharp
@@ -279,11 +283,64 @@ There's a lot of stuff going on the code so let's break it down:
 ```
 {{% /tab %}}
 {{< /tabs >}}
-The previous tutorials has not used this builder method before. The reason for that is that there was no need as the default value of this configuration is having a Runtime running on localhost on port 50053.
-Since we in this tutorial will end up with two running instances of the Runtime they will have to run with different ports. The *producer* Runtime will be running on the default 50053 port and the consumer Runtime will be running on port 50055.
-We'll see this reflected in the `docker-compose.yml` file later in this tutorial.
 
+This line configures the hostname and port of the [Runtime]({{< ref "docs/concepts/overview" >}}) for this client. By default, it connects to the Runtimes default port of `50053` on `localhost`.
+
+Since we in this tutorial will end up with two running instances of the Runtime they will have to run with different ports. The *producer* Runtime will be running on the default 50053 port and the consumer Runtime will be running on port 50055.
+We'll see this reflected in the `docker-compose.yml` file [later]({{< ref "#setup-your-environment" >}}) in this tutorial.
+
+#### Event Horizon
 {{< tabs name="with-event-horizons-tab" >}}
+{{% tab name="C#" %}}
+```csharp
+// Program.cs
+.WithEventHorizons(eventHorizons =>
+    eventHorizons.ForTenant(TenantId.Development, subscriptions =>
+        subscriptions
+            .FromProducerMicroservice("f39b1f61-d360-4675-b859-53c05c87c0e6")
+            .FromProducerTenant(TenantId.Development)
+            .FromProducerStream("2c087657-b318-40b1-ae92-a400de44e507")
+            .FromProducerPartition(PartitionId.Unspecified)
+            .ToScope("808ddde4-c937-4f5c-9dc2-140580f6919e")))
+// Rest of builder here...
+```
+{{% /tab %}}
+
+{{% tab name="TypeScript" %}}
+```typescript
+// index.ts
+.withEventHorizons(_ =>
+    _.forTenant(TenantId.development, ts =>
+        ts.fromProducerMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
+            .fromProducerTenant(TenantId.development)
+            .fromProducerStream('2c087657-b318-40b1-ae92-a400de44e507')
+            .fromProducerPartition(PartitionId.unspecified.value)
+            .toScope('808ddde4-c937-4f5c-9dc2-140580f6919e')))
+// Rest of builder here...
+```
+
+{{% /tab %}}
+{{< /tabs >}}
+
+#### Event Horizon
+Here we define an event horizon [subscription]({{< ref "docs/concepts/subscription" >}}). Each subscription is submitted and managed by the Runtime. A subscription defines:
+- The consumers [Tenant]({{< ref "docs/concepts/tenants" >}})
+- The producer microservice, [Public Stream]({{< ref "docs/concepts/streams#public-vs-private-streams" >}}) and that streams [Partition]({{< ref "docs/concepts/streams#partitions" >}}) to get the events from
+- The [Scoped event-log]({{< ref "docs/concepts/event_store#scope" >}}) of the consumer to put the subscribed events to
+
+When the consumer's Runtime receives a subscription, it will send a subscription request to the producer's Runtime. If the producer accepts that request, the producer's Runtime will start sending the public stream over to the consumer's Runtime, one event at a time.
+
+The acceptance depends on two things:
+- The consumer needs to know where to access the other microservices, ie the URL address.
+- The producer needs to give formal [Consent]({{< ref "docs/concepts/event_horizon" >}}) for a tenant in another microservice to subscribe to public streams of a tenant.
+
+We'll setup the consent [later]({{< ref "#setup-your-environment" >}}).
+
+The consumer will receive events from the producer and put those events in a specialized [event-log]({{< ref "docs/concepts/event_store#event-log" >}}) that is identified by the [scope's]({{< ref "docs/concepts/event_store#scope">}}) id, so that events received over the event horizon don't mix with private events. We'll talk more about the scope when we talk about the [scoped event handler]({{< ref "#scoped-event-handler" >}}).
+
+
+#### Scoped Event Handler
+{{< tabs name="scoped-event-handler-tab" >}}
 {{% tab name="C#" %}}
 ```csharp
 // Program.cs
@@ -292,16 +349,6 @@ We'll see this reflected in the `docker-compose.yml` file later in this tutorial
         .InScope("808ddde4-c937-4f5c-9dc2-140580f6919e")
         .Partitioned()
         .Handle<DishPrepared>((@event, context) => Console.WriteLine($"Handled event {@event} from public stream")))
-.WithEventHorizons(eventHorizons => {
-    eventHorizons.ForTenant(TenantId.Development, subscriptions => {
-        subscriptions
-            .FromProducerMicroservice("f39b1f61-d360-4675-b859-53c05c87c0e6")
-            .FromProducerTenant(TenantId.Development)
-            .FromProducerStream("2c087657-b318-40b1-ae92-a400de44e507")
-            .FromProducerPartition(PartitionId.Unspecified)
-            .ToScope("808ddde4-c937-4f5c-9dc2-140580f6919e");
-    });
-})
 // Rest of builder here...
 ```
 {{% /tab %}}
@@ -315,42 +362,18 @@ We'll see this reflected in the `docker-compose.yml` file later in this tutorial
             _.inScope("808ddde4-c937-4f5c-9dc2-140580f6919e")
             .partitioned()
             .handle(DishPrepared, (event, context) => console.log(`Handled event ${event} from public stream`))))
-.withEventHorizons(_ => {
-    _.forTenant(TenantId.development, ts => {
-        ts.fromProducerMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
-            .fromProducerTenant(TenantId.development)
-            .fromProducerStream('2c087657-b318-40b1-ae92-a400de44e507')
-            .fromProducerPartition(PartitionId.unspecified.value)
-            .toScope('808ddde4-c937-4f5c-9dc2-140580f6919e');
-        });
 })
 // Rest of builder here...
-
 ```
 
 {{% /tab %}}
 {{< /tabs >}}
-This is the most complicated piece of the code, and rightfully so there is a lot of things going on behind the scenes. Let's start at the 'event horizons' part.
 
-#### Event Horizon
-An event horizon is a subscription that is submitted to and managed in the Runtime. That subscription belongs to a tenant and it tells the Runtime that it wants to get events from a specific partition in a public stream of a tenant in another microservice (synonym with Runtime).
+Here we use the opportunity to create an event handler inline by using the client's builder function. This way we don't need to create a class and register it as an event handler.
 
-On the consumer side when the Runtime receives a subscription like this it initiates a background process that will send a subscription request to the producer Runtime. If that request is acknowledged the producer Runtime will start a background process that sends over one event at a time.
-The consumer will receive events from the producer and put those events in a specialized event-log that is identified by the *scope* id. We'll talk more about the `scope` when we talk about the event handler.
+This code will create a [partitioned]({{< ref "docs/concepts/streams#partitions" >}}) event handler with id `6c3d358f-3ecc-4c92-a91e-5fc34cacf27e` (same as from [getting started]({{< ref "docs/tutorials/getting_started" >}})) in a specific [scope]({{< ref "docs/concepts/event_handlers_and_filters#scope" >}}).
 
-The acknowledgement part is important, and getting to it depends on two things:
-
-- The consumer needs to know where to access the other microservices, i.e the URL addresses.
-- The producer needs to give formal consent for a tenant in another microservice to subscribe to public streams of a tenant.
-
-We'll come back to how this is setup later.
-
-#### Scoped Event Handler
-So now that we have a consumer microservice that has subscribed to the producer's public stream `2c087657-b318-40b1-ae92-a400de44e507` the natural progression for us would be to register an event handler that handles those events. This code sequence also introduces a new way of creating event handlers. Previously we've made event handlers as classes in separated files, but the Client Builder gives us the opportunity to create these directly.
-This code will create a partitioned event handler with id `6c3d358f-3ecc-4c92-a91e-5fc34cacf27e`. That should feel familiar. The thing that may not be familiar is the *scope* part.
-Remember that the event horizon subscription includes a scope and that the events from the that event horizon gets put in a specialized event-log identified by the scope id. Having the scope id defined when creating an event handler signifies that it will only handle events that are put into that scope and no other. Read more about event handlers and scopes [here]({{< ref "docs/concepts/event_handlers_and_filters#scope" >}}).
-
-You can read more about the event horizon [here]({{< ref "docs/concepts/event_handlers_and_filters#scope" >}}).
+Remember, that the events from an event horizon subscription get put into a [scoped event-log]({{< ref "docs/concepts/event_store#scope" >}}) that is identified by the scope id. Having the scope id defined when creating an event handler signifies that it will only handle events in that scope and no other.
 
 ## Setup your environment
 Now we have the producer and consumer microservices [Heads]({{< ref "docs/concepts/overview#components" >}}) coded, we need to setup the environment for them to run in and configure their Runtimes to be connected.
