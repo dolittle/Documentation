@@ -27,20 +27,17 @@ Use the tabs to switch between the [C#](https://github.com/dolittle/dotnet.sdk) 
 This tutorial builds directly upon and that you have gone through our [getting started]({{< ref "docs/tutorials/getting_started" >}}) guide; that you have the files from the tutorial.
 
 ### Setup
-In this tutorial is going to have a slightly different setup as we're going to have two microservices; one that produces public events and one that subscribe to those public events. For that reason you should have a folder structure to resembles that. I would recommend this particular folder structure for this tutorial:
+In this tutorial is going to have a slightly different setup as we're going to have two microservices; one that produces public events and one that subscribe to those public events. Let's make a folder structure that resembles that:
 
-    event-horizon-tutorial
-        consumer
-            ...
-        producer
-            ...
-        environment
-            docker-compose.yml
-            ...
+    └── event-horizon-tutorial/
+        ├── consumer/
+        ├── producer/
+        └── environment/
+            └── docker-compose.yml
 
-Go into both the *consumer* and the *producer* folders and initiate the project as we've gone through in our [getting started]({{< ref "docs/tutorials/getting_started" >}}) guide. I.e copy over all the code from the getting started tutorial to the *consumer* and *producer* folders.
+Go into both the *consumer* and the *producer* folders and initiate the project as we've gone through in our [getting started]({{< ref "docs/tutorials/getting_started" >}}) guide. I.e copy over all the code from the getting started tutorial to the *consumer* and *producer* folders. You can choose different languages for the microservices if you want to.
 
-We'll come back to the docker-compose later in this tutorial.
+We'll come back to the docker-compose [later]({{< ref "#setup-your-environment" >}}) in this tutorial.
 
 ## Producer
 ### Create a `Public Filter`
