@@ -10,7 +10,7 @@ aliases:
 - /docs/tutorials/event-horizon
 ---
 
-Welcome to the tutorial for Dolittle, where you learn how to write a [Microservice]({{< ref "docs/concepts/overview#microservice" >}}) that keeps track of foods prepared by the chefs.
+Welcome to the tutorial for [Event Horizon]({{< ref "docs/concepts/event_horizon">}}), where you learn how to write a [Microservice]({{< ref "docs/concepts/overview#microservice" >}}) that produces public events of dishes prepared by chefs, and another microservice consumes those events.
 
 After this tutorial you will have:
 
