@@ -15,8 +15,8 @@ Welcome to the tutorial for Dolittle, where you learn how to write a [Microservi
 After this tutorial you will have:
 
 * a running Dolittle environment with two [Runtimes]({{< ref "docs/concepts/overview" >}}) and a MongoDB,
-* a [Microservice]({{< ref "docs/concepts/overview#microservice" >}}) that commits and handles [Events]({{< ref "docs/concepts/events" >}}) and puts it in a public stream and
-* a Microservice that subscribes to the public stream and processes those events
+* a [Producer]({{< ref "docs/concepts/event_horizon#producer" >}}) Microservice that commits and handles a [Public Event]({{< ref "docs/concepts/events#public-vs-private" >}}) and filters it into a [Public Stream]({{< ref "docs/concepts/streams#publicvs-private-streams" >}}) and
+* a [Consumer]({{< ref "docs/concepts/event_horizon#consumer" >}}) Microservice that [Subscribes]({{< ref "docs/concepts/event_horizon#subscription" >}}) to the consumers public stream and processes those public events
 
 Use the tabs to switch between the [C#](https://github.com/dolittle/dotnet.sdk) and [TypeScript](https://github.com/dolittle/javaScript.SDK/) code examples. Full tutorial code available on GitHub for [C#](https://github.com/dolittle/DotNET.SDK/tree/master/Samples/EventHorizon) and [TypeScript](https://github.com/dolittle/JavaScript.SDK/tree/master/Samples/EventHorizon).
 
