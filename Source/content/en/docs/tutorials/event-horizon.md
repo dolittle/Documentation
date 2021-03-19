@@ -26,8 +26,28 @@ Use the tabs to switch between the [C#](https://github.com/dolittle/dotnet.sdk) 
 
 This tutorial builds directly upon the [getting started]({{< ref "docs/tutorials/getting_started" >}}) guide and the files from the it.
 
+{{< tabs name="setup_tab" >}}
+{{% tab name="C#" %}}
+
+Prerequisites:
+* [.NET Core SDK](https://dotnet.microsoft.com/download)
+* [Docker](https://www.docker.com/products/docker-desktop)
+* [Docker Compose](https://docs.docker.com/compose/install/)
+
+{{% /tab %}}
+
+{{% tab name="TypeScript" %}}
+
+Prerequisites:
+* [Node.js >= 12](https://nodejs.org/en/download/)
+* [Docker](https://www.docker.com/products/docker-desktop)
+* [Docker Compose](https://docs.docker.com/compose/install/)
+
+{{% /tab %}}
+{{< /tabs >}}
+
 ### Setup
-In this tutorial is going to have a slightly different setup as we're going to have two microservices; one that produces public events and one that subscribe to those public events. Let's make a folder structure that resembles that:
+This tutorial will have a setup with two microservices; one that produces public events, and a consumer that subscribes to those public events. Let's make a folder structure that resembles that:
 
     └── event-horizon-tutorial/
         ├── consumer/
@@ -45,7 +65,7 @@ A [`public filter`]({{< ref "docs/concepts/event_handlers_and_filters#public-fil
 
 A public filter is defined as a method that returns a partitioned filter result, which is an object with two properties:
 - a boolean that says whether the event should be included in the public stream
-- a partition id which is the [partition]({{< ref "docs/concepts/streams/#partitions" >}}) that the event should belong to in the public stream.
+- a partition id which is the [partition]({{< ref "docs/concepts/streams#partitions" >}}) that the event should belong to in the public stream.
 
 Only public events get filtered through the public filters.  
 
@@ -286,7 +306,7 @@ There's a lot of stuff going on the code so let's break it down:
 
 This line configures the hostname and port of the [Runtime]({{< ref "docs/concepts/overview" >}}) for this client. By default, it connects to the Runtimes default port of `50053` on `localhost`.
 
-Since we in this tutorial will end up with two running instances of the Runtime they will have to run with different ports. The *producer* Runtime will be running on the default 50053 port and the consumer Runtime will be running on port 50055.
+Since we in this tutorial will end up with two running instances of the Runtime, they will have to run with different ports. The *producer* Runtime will be running on the default `50053` port, and the consumer Runtime will be running on port 50055.
 We'll see this reflected in the `docker-compose.yml` file [later]({{< ref "#setup-your-environment" >}}) in this tutorial.
 
 #### Event Horizon
@@ -323,7 +343,7 @@ We'll see this reflected in the `docker-compose.yml` file [later]({{< ref "#setu
 {{< /tabs >}}
 
 #### Event Horizon
-Here we define an event horizon [subscription]({{< ref "docs/concepts/subscription" >}}). Each subscription is submitted and managed by the Runtime. A subscription defines:
+Here we define an event horizon [subscription]({{< ref "docs/concepts/event_horizon#subscription" >}}). Each subscription is submitted and managed by the Runtime. A subscription defines:
 - The consumers [Tenant]({{< ref "docs/concepts/tenants" >}})
 - The producer microservice, [Public Stream]({{< ref "docs/concepts/streams#public-vs-private-streams" >}}) and that streams [Partition]({{< ref "docs/concepts/streams#partitions" >}}) to get the events from
 - The [Scoped event-log]({{< ref "docs/concepts/event_store#scope" >}}) of the consumer to put the subscribed events to
@@ -378,20 +398,29 @@ Remember, that the events from an event horizon subscription get put into a [sco
 ## Setup your environment
 Now we have the producer and consumer microservices [Heads]({{< ref "docs/concepts/overview#components" >}}) coded, we need to setup the environment for them to run in and configure their Runtimes to be connected.
 
-First thing you need to do is change directory into the environment folder we created in the beginning of this tutorial. Here we'll have a couple of files:
+Let's go to the environment folder we created in the beginning of this tutorial. Here we'll need to configure:
+- [`resources.json`]({{< ref "docs/reference/runtime/configuration#resourcesjson" >}})
+- [`endpoints.json`]({{< ref "docs/reference/runtime/configuration#endpointsjson" >}})
+- [`microservices.json`]({{< ref "docs/reference/runtime/configuration#microservicesjson" >}})
+- [`event-horizon-consents.json`]({{< ref "docs/reference/runtime/configuration#event-horizon-consentsjson" >}}).
 
-The first thing that we need to do is to set up [resources]({{< ref "docs/reference/runtime/configuration#resourcesjson" >}}). The reason we have to do this now is that the two microservices needs to have their own [event store]({{< ref "docs/concepts/event_store" >}}) databases running on the same mongo container. In the previous tutorials we could just use the default configurations provided in the Docker image, but for this example we cannot.
+### Resources
+[`resources.json`]({{< ref "docs/reference/runtime/configuration#resourcesjson" >}}) define a microservices [event store]({{< ref "docs/concepts/event_store" >}}). We have 2 microservices so they both need their own event store database. By default the database is called `event_store`.
 
-Note that the development tenant is `445f8ea8-1a6f-40d7-b2fc-796dba92dc44`.
+
+Let's create 2 files, `consumer-resources.json` and `producer-resources.json`:
 
 ```json
 //consumer-resources.json
 {
+    // the tenant to define this resource for
     "445f8ea8-1a6f-40d7-b2fc-796dba92dc44": {
         "eventStore": {
             "servers": [
+                // hostname of the mongodb
                 "mongo"
             ],
+            // the database name for the event store
             "database": "consumer_event_store"
         }
     }
@@ -400,18 +429,26 @@ Note that the development tenant is `445f8ea8-1a6f-40d7-b2fc-796dba92dc44`.
 ```json
 //producer-resources.json
 {
+    // the tenant to define this resource for
     "445f8ea8-1a6f-40d7-b2fc-796dba92dc44": {
         "eventStore": {
             "servers": [
+                // hostname of the mongodb
                 "mongo"
             ],
+            // the database name for the event store
             "database": "producer_event_store"
         }
     }
 }
 ```
 
-Then we need to set up the consumer Runtime's [endpoints]({{< ref "docs/reference/runtime/configuration#endpointsjson" >}}) so that we can access it from the SDK and that we can get the communication going between the Runtimes.
+Note that the development tenant is `445f8ea8-1a6f-40d7-b2fc-796dba92dc44` (same as `TenantId.Development`).
+
+### Endpoints
+[`endpoints.json`]({{< ref "docs/reference/runtime/configuration#endpointsjson" >}}) defines the private (where the SDK connects) and public port (where other Runtimes can connect) of the Runtime.
+
+We can leave the producer with the default ports (`50052` for public, `50053` for private), but let's create `consumer-endpoints.json` to change the consumer's ports:
 
 ```json
 //consumer-endpoints.json
@@ -425,12 +462,16 @@ Then we need to set up the consumer Runtime's [endpoints]({{< ref "docs/referenc
 }
 ```
 
-The `50055` port is the port that we configured the consumer with in the *with runtime* method.
+The `50055` port is the port that we configured the consumer microservice [earlier]({{< ref "#connection-to-the-runtime" >}}) in the `withRuntimeOn()` method.
 
-Now that we've configured the consumer Runtime to run using different ports than the default *50052* and *50053* ports we need to configure the consumer Runtime to know where it can access the producer Runtime. We do this by giving it a [microservices]({{< ref "docs/reference/runtime/configuration#microservicesjson" >}}) configuration.
+### Microservices
+[`microservices.json`]({{< ref "docs/reference/runtime/configuration#microservicesjson" >}}) define where the producer microservices are so that the consumer can subscribe to them.
+
+Let's create a `consumer-microservices.json` file to define where the consumer can find the producer:
 ```json
-//consumer-microservices.json
+// consumer-microservices.json
 {
+    // the producer microservices id, hostname and port
     "f39b1f61-d360-4675-b859-53c05c87c0e6": {
         "host": "producer-runtime",
         "port": 50052
@@ -438,15 +479,21 @@ Now that we've configured the consumer Runtime to run using different ports than
 }
 ```
 
-Now the last piece of the puzzle is to configure the [event horizon consent]({{< ref "docs/reference/runtime/configuration#event-horizon-consentsjson" >}}) that the producer needs to give to the consumer who wants to subscribe to its public stream.
+### Consent
+[`event-horizon-consents.json`]({{< ref "docs/reference/runtime/configuration#event-horizon-consentsjson" >}}) defines the [Consents]({{< ref "docs/concepts/event_horizon#consent" >}}) that the producer gives to consumers.
+
+Let's create `producer-event-horizon-consents.json` where we give a consumer consent to subscribe to our public stream.
 
 ```json
-//producer-event-horizon-consents.json
+// producer-event-horizon-consents.json
 {
+    // the producer's tenant that gives the consent
     "445f8ea8-1a6f-40d7-b2fc-796dba92dc44": [
         {
+            // the consumer's microservice and tenant to give consent to
             "microservice": "a14bb24e-51f3-4d83-9eba-44c4cffe6bb9",
             "tenant": "445f8ea8-1a6f-40d7-b2fc-796dba92dc44",
+            // the producer's public stream and partition to give consent to subscribe to
             "stream": "2c087657-b318-40b1-ae92-a400de44e507",
             "partition": "00000000-0000-0000-0000-000000000000",
             // an identifier for this consent. This is random
@@ -457,7 +504,8 @@ Now the last piece of the puzzle is to configure the [event horizon consent]({{<
 
 ```
 
-Now that all the configuration files are done we just need to glue it all together in a `docker-compose.yml` and start the environment.
+### Configure `docker-compose.yml`
+Now we can glue all the configuration files together in the `docker-compose.yml`. The configuration files are mounted inside `/app.dolittle/` inside the `dolittle/runtime` image.
 
 ```yml
 version: '3.1'
@@ -491,23 +539,27 @@ services:
 
 ```
 
-### Start the Dolittle environment
+{{< alert title="Resource file naming" color="info" >}}
+The configuration files mounted inside the image need to be named as they are defined in the [configuration reference]({{< ref "docs/reference/runtime/configuration">}}). Otherwise the Runtime can't find them.
+{{< /alert >}}
+
+### Start the environment
+
 Start the docker-compose with this command
 
 ```shell
 $ docker-compose up
 ```
 
-This will spin up a mongo container and two Runtimes.
+This will spin up a MongoDB container and two Runtimes.
 
 {{% alert title="Docker on Windows" color="warning" %}}
 Docker on Windows using the WSL2 backend can use massive amounts of RAM if not limited. Configuring a limit in the `.wslconfig` file can help greatly, as mentioned in [this issue](https://github.com/microsoft/WSL/issues/4166#issuecomment-526725261). The RAM usage is also lowered if you disable the WSL2 backend in Docker for Desktop settings.
 {{% /alert %}}
 
 ### Run your microservices
-Run your code, and see the consumer event handler handle the event from the producer microservice!
+Run both the consumer and producer microservices in their respective folders, and see the consumer handle the events from the producer:
 
-In both consumer and producer folders run this command (it does not matter which you start first)
 {{< tabs name="run_tab" >}}
 {{% tab name="C#" %}}
 ```shell
@@ -524,4 +576,5 @@ $ npx ts-node index.ts
 
 ## What's next
 
-- Learn how to [deploy your application]({{< ref "docs/platform/deploy_an_application" >}}) into our [Platform]({{< ref "docs/platform" >}}).
+- Learn how to [deploy your application]({{< ref "docs/platform/deploy_an_application" >}}) into our [Platform]({{< ref "docs/platform" >}})
+- Learn more about the [Event Horizon]({{< ref "docs/concepts/event_horizon" >}})
