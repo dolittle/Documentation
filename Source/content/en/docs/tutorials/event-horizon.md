@@ -342,7 +342,6 @@ We'll see this reflected in the `docker-compose.yml` file [later]({{< ref "#setu
 {{% /tab %}}
 {{< /tabs >}}
 
-#### Event Horizon
 Here we define an event horizon [subscription]({{< ref "docs/concepts/event_horizon#subscription" >}}). Each subscription is submitted and managed by the Runtime. A subscription defines:
 - The consumers [Tenant]({{< ref "docs/concepts/tenants" >}})
 - The producer microservice, [Public Stream]({{< ref "docs/concepts/streams#public-vs-private-streams" >}}) and that streams [Partition]({{< ref "docs/concepts/streams#partitions" >}}) to get the events from
