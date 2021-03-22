@@ -18,7 +18,7 @@ After this tutorial you will have:
 * a [Microservice]({{< ref "docs/concepts/overview#microservice" >}}) that commits and handles [Events]({{< ref "docs/concepts/events" >}}) and
 * a stateful aggregate root that applies events and is controlled by an invariant
 
-Use the tabs to switch between the [C#](https://github.com/dolittle/dotnet.sdk) and [TypeScript](https://github.com/dolittle/javaScript.SDK/) code examples. Full tutorial code available on GitHub for [C#](https://github.com/dolittle/DotNET.SDK/tree/master/Samples/Aggregates) and [TypeScript](https://github.com/dolittle/JavaScript.SDK/tree/master/Samples/Aggregates).
+Use the tabs to switch between the [C#](https://github.com/dolittle/dotnet.sdk) and [TypeScript](https://github.com/dolittle/javaScript.SDK/) code examples. Full tutorial code available on GitHub for [C#](https://github.com/dolittle/DotNET.SDK/tree/master/Samples/Tutorials/Aggregates) and [TypeScript](https://github.com/dolittle/JavaScript.SDK/tree/master/Samples/Tutorials/Aggregates).
 
 ### Pre requisites
 <!-- Use the % signs if you need to render the stuff inside as markdown -->
