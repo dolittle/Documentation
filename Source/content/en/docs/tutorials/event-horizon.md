@@ -18,7 +18,7 @@ After this tutorial you will have:
 * a [Producer]({{< ref "docs/concepts/event_horizon#producer" >}}) Microservice that commits and handles a [Public Event]({{< ref "docs/concepts/events#public-vs-private" >}}) and filters it into a [Public Stream]({{< ref "docs/concepts/streams#publicvs-private-streams" >}}) and
 * a [Consumer]({{< ref "docs/concepts/event_horizon#consumer" >}}) Microservice that [Subscribes]({{< ref "docs/concepts/event_horizon#subscription" >}}) to the consumers public stream over the [Event Horizon]({{< ref "docs/concepts/event_horizon" >}}) and processes those public events
 
-Use the tabs to switch between the [C#](https://github.com/dolittle/dotnet.sdk) and [TypeScript](https://github.com/dolittle/javaScript.SDK/) code examples. Full tutorial code available on GitHub for [C#](https://github.com/dolittle/DotNET.SDK/tree/master/Samples/EventHorizon) and [TypeScript](https://github.com/dolittle/JavaScript.SDK/tree/master/Samples/EventHorizon).
+Use the tabs to switch between the [C#](https://github.com/dolittle/dotnet.sdk) and [TypeScript](https://github.com/dolittle/javaScript.SDK/) code examples. Full tutorial code available on GitHub for [C#](https://github.com/dolittle/DotNET.SDK/tree/master/Samples/EventHorizon) and [TypeScript](https://github.com/dolittle/JavaScript.SDK/tree/master/Samples/Tutorials/EventHorizon).
 
 ### Prerequisites
 <!-- Use the % signs if you need to render the stuff inside as markdown -->
@@ -128,7 +128,7 @@ const client = Client
         filterBuilder
             .createPublicFilter('2c087657-b318-40b1-ae92-a400de44e507', fb =>
                 fb.handle((event: any, context: EventContext) => {
-                    console.log(`Filtering event ${event} to public stream`);
+                    console.log(`Filtering event ${JSON.stringify(event)} to public stream`);
                     return new PartitionedFilterResult(true, PartitionId.unspecified);
                 })
             ))
@@ -267,7 +267,7 @@ const client = Client
             .createEventHandler("6c3d358f-3ecc-4c92-a91e-5fc34cacf27e", _ =>
                 _.inScope("808ddde4-c937-4f5c-9dc2-140580f6919e")
                 .partitioned()
-                .handle(DishPrepared, (event, context) => console.log(`Handled event ${event} from public stream`))))
+                .handle(DishPrepared, (event, context) => console.log(`Handled event ${JSON.stringify(event)} from public stream`))))
     .build();
 
 ```
@@ -381,7 +381,7 @@ The consumer will receive events from the producer and put those events in a spe
         .createEventHandler("6c3d358f-3ecc-4c92-a91e-5fc34cacf27e", _ =>
             _.inScope("808ddde4-c937-4f5c-9dc2-140580f6919e")
             .partitioned()
-            .handle(DishPrepared, (event, context) => console.log(`Handled event ${event} from public stream`))))
+            .handle(DishPrepared, (event, context) => console.log(`Handled event ${JSON.stringify(event)} from public stream`))))
 })
 // Rest of builder here...
 ```
@@ -568,8 +568,17 @@ $ dotnet run
 
 {{% /tab %}}
 {{% tab name="TypeScript" %}}
+#### Producer
 ```shell
 $ npx ts-node index.ts
+Filtering event {"Dish":"Bean Blaster Taco","Chef":"Mr. Taco"} to public stream
+Mr. Taco has prepared Bean Blaster Taco. Yummm!
+```
+
+#### Consumer
+```shell
+$ npx ts-node index.ts
+Handled event {"Dish":"Bean Blaster Taco","Chef":"Mr. Taco"} from public stream
 ```
 {{% /tab %}}
 {{< /tabs >}}
