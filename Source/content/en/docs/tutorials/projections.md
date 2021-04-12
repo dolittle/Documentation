@@ -15,7 +15,7 @@ After this tutorial you will have:
 
 Use the tabs to switch between the [C#](https://github.com/dolittle/dotnet.sdk) and [TypeScript](https://github.com/dolittle/javaScript.SDK/) code examples. Full tutorial code available on GitHub for [C#](https://github.com/dolittle/DotNET.SDK/tree/master/Samples/Tutorials/Projections) and [TypeScript](https://github.com/dolittle/JavaScript.SDK/tree/master/Samples/Tutorials/Projections).
 
-### Setup
+## Setup
 <!-- Use the % signs if you need to render the stuff inside as markdown -->
 <!-- check https://kubernetes.io/docs/contribute/style/hugo-shortcodes/#tabs -->
 This tutorial builds directly upon the [getting started]({{< ref "docs/tutorials/getting_started" >}}) guide and the files from the it.
@@ -27,6 +27,14 @@ Prerequisites:
 * [.NET Core SDK](https://dotnet.microsoft.com/download)
 * [Docker](https://www.docker.com/products/docker-desktop)
 
+Before getting started, your directory should look something like this:
+
+    └── Projections/
+        ├── DishHandler.cs
+        ├── DishPrepared.cs
+        ├── Program.cs
+        └── Projections.csproj
+
 {{% /tab %}}
 
 {{% tab name="TypeScript" %}}
@@ -37,7 +45,7 @@ Prerequisites:
 
 Before getting started, your directory should look something like this:
 
-    └── projection-tutorial/
+    └── projections/
         ├── .eslintrc
         ├── DishHandler.ts
         ├── DishPrepared.ts
@@ -48,8 +56,19 @@ Before getting started, your directory should look something like this:
 {{% /tab %}}
 {{< /tabs >}}
 
-### Create a `DishCounter` Projection
-First we'll create a [Projection]({{< ref "docs/concepts/projections" >}}) that keeps track of the dishes and how many times the chefs have prepared them. Projections are a special type of event handler that mutate a read model based on incoming events.
+### Start the Dolittle environment
+Start the Dolittle environment with all the necessary dependencies (if you didn't have it running already) with the following command:
+
+```shell
+$ docker run -p 50053:50053 -p 27017:27017 dolittle/runtime:latest-development
+```
+
+This will start a container with the Dolittle Development Runtime on port 50053 and a MongoDB server on port 27017.
+The Runtime handles committing the events and the projections, while the MongoDB is used for persistence.
+
+
+## Create a `DishCounter` Projection
+First, we'll create a [Projection]({{< ref "docs/concepts/projections" >}}) that keeps track of the dishes and how many times the chefs have prepared them. Projections are a special type of event handler that mutate a read model based on incoming events.
 
 {{< tabs name="dishes_counter_tab" >}}
 {{% tab name="C#" %}}
@@ -73,9 +92,9 @@ namespace Kitchen
 }
 
 ```
-The `[Projection()]` attribute identifies this Projection in the Runtime, and is used to keep track of the events that it processes, and retrying the handling of an event if the handler fails (throws an exception). If the Projection is changed somehow (eg. a new `On()` method or the `EventType` changes), it will replay all of it's events.
+The `[Projection()]` attribute identifies this Projection in the Runtime, and is used to keep track of the events that it processes, and retrying the handling of an event if the handler fails (throws an exception). If the Projection is changed somehow (eg. a new `On()` method or the `EventType` changes), it will replay all of its events.
 
-When an event is committed, the `On()` method will be called for all the Projections that handle that `EventType`. The attribute `[KeyFromEventProperty()]` defines what property on the event will be used as the read model's key (or id). You can choose the `[KeyFromEventSource]`, `[KeyFromPartitionId]` or a property from the event with `[KeyFromEventProperty(@event => @event.Property)]`.
+When an event is committed, the `On()` method is called for all the Projections that handle that `EventType`. The attribute `[KeyFromEventProperty()]` defines what property on the event will be used as the read model's key (or id). You can choose the `[KeyFromEventSource]`, `[KeyFromPartitionId]` or a property from the event with `[KeyFromEventProperty(@event => @event.Property)]`.
 
 {{% /tab %}}
 
@@ -101,7 +120,7 @@ When an event is committed, the method decoratored with `@on()` will be called f
 {{% /tab %}}
 {{< /tabs >}}
 
-### Register the projection, commit events and get the projection
+## Register and get the  `DishCounter` Projection
 Let's register the projection, commit new `DishPrepared` events and get the projection to see how it reacted.
 
 {{< tabs name="client_tab" >}}
@@ -166,7 +185,11 @@ namespace Kitchen
     }
 }
 ```
-//TODO: Write about getting events
+
+The `GetAll<DishCounter>()` method returns all Projections for that particular type. The returned object is a dictionary of each projections' key and that projections' current state.
+
+The GUID given in `FromEventSource()` is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify where the events come from.
+
 {{% /tab %}}
 
 {{% tab name="TypeScript" %}}
@@ -203,25 +226,19 @@ const client = Client
     }, 1000);
 })();
 ```
-//TODO: Write about getting events
+
+The `getAll(DishCounter)` method returns all Projections for that particular type. The returned object is a map of each projections' key and that projections' current state.
+
+The GUID given in `commit(event, 'event-source-id')` is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify where the events come from.
 {{% /tab %}}
 {{< /tabs >}}
 
-### Start the Dolittle environment
-Start the Dolittle environment with all the necessary dependencies with the following command:
-
-```shell
-$ docker run -p 50053:50053 -p 27017:27017 dolittle/runtime:latest-development
-```
-
-This will start a container with the Dolittle Development Runtime on port 50053 and a MongoDB server on port 27017.
-The Runtime handles committing the events and the projections, while the MongoDB is used for persistence.
 
 {{% alert title="Docker on Windows" color="warning" %}}
 Docker on Windows using the WSL2 backend can use massive amounts of RAM if not limited. Configuring a limit in the `.wslconfig` file can help greatly, as mentioned in [this issue](https://github.com/microsoft/WSL/issues/4166#issuecomment-526725261). The RAM usage is also lowered if you disable the WSL2 backend in Docker for Desktop settings.
 {{% /alert %}}
 
-### Run your microservice
+## Run your microservice
 Run your code, and see the different dishes:
 
 {{< tabs name="run_tab" >}}
@@ -254,7 +271,7 @@ The kitchen has prepared Chili Canon Wrap 2 times
 
 
 
-### Add `Chef` read model
+## Add `Chef` read model
 
 Let's add another read model to keep track of all the chefs and . This time let's only create the class for the read model:
 
@@ -272,7 +289,6 @@ namespace Kitchen
         public List<string> Dishes = new List<string>();
     }
 }
-
 ```
 
 {{% /tab %}}
@@ -290,7 +306,7 @@ export class Chef {
 {{% /tab %}}
 {{< /tabs >}}
 
-### Create inline projection for `Chef` read model
+## Create and get the inline projection for `Chef` read model
 You can also create a Projection inline in the client building steps instead of declaring a class for it.
 
 Let's create an inline Projection for the `Chef` read model:
@@ -372,7 +388,8 @@ namespace Kitchen
 }
 ```
 
-The GUID given in `FromEventSource()` is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify where the events come from.
+The `Get<Chef>('key')` method returns a Projection instance with that particular key. The key is declared by the `KeyFromProperty(_.Chef)` callback function on the `On()` method. In this case, the id of each `Chef` projection instance is based on the chefs name.
+
 {{% /tab %}}
 
 {{% tab name="TypeScript" %}}
@@ -422,8 +439,12 @@ const client = Client
     }, 1000);
 })();
 ```
+
+The `get<Chef>(Chef, 'key')` method returns a Projection instance with that particular key. The key is declared by the `keyFromProperty('Chef')` callback function on the `on()` method. In this case, the id of each `Chef` projection instance is based on the chefs name.
 {{% /tab %}}
 {{< /tabs >}}
+
+## Run your microservice with the inline `Chef` projection
 
 Run your code, and get a delicious serving of taco:
 
