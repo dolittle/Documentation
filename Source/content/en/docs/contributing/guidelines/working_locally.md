@@ -5,6 +5,7 @@ keywords: development, locally, local, work
 author: einari
 weight: 13
 ---
+
 ## Local packages
 
 A lot of projects have a `NuGet.config` file, in this you'll often find a local source and if you do a ...
