@@ -1,12 +1,10 @@
 ---
 title: Working Locally
-description: Working Locally
+description: Learn about working locally with Dolittle projects
 keywords: development, locally, local, work
 author: einari
 weight: 13
 ---
-
-# Working Locally
 
 ## Local packages
 
