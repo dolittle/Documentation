@@ -5,7 +5,6 @@ author: Dolittle
 keywords: analysis, tooling
 weight: 1
 ---
-
 ## Static code analysis and test coverage
 At Dolittle we employ static code analysis and test coverage reports to ensure that we:
 
@@ -20,10 +19,10 @@ Having a high test coverage means developers don't need a deep understanding of 
 The static code analysis tools checks for these common mistakes so that we can learn from the community.
 
 The tools we have set up continuously monitor our code and reports on [pull requests]({{< ref "../guidelines/pull_requests.md" >}}) to help motivate us to produce high quality code, and reduce the manual work for reviewers. We are currently in the process of figuring out what tools work best for us (there are a lot to choose from), and we have set up the experiment on these repositories:
-- Runtime [repository](https://github.com/dolittle/Runtime) uses Codacy. See [the dashboard](https://app.codacy.com/gh/dolittle/Runtime/dashboard).
-- DotNET.SDK [repository](https://github.com/dolittle/DotNET.SDK) uses Codacy. See [the dashboard](https://codeclimate.com/github/dolittle/DotNET.SDK).
+- Runtime [repository](https://github.com/dolittle/Runtime) uses Codacy, see [the dashboard](https://app.codacy.com/gh/dolittle/Runtime/dashboard)
+- DotNET.SDK [repository](https://github.com/dolittle/DotNET.SDK) uses Code Climate, see [the dashboard](https://codeclimate.com/github/dolittle/DotNET.SDK)
 
-### The tools we have chosen
+## The tools we have chosen
 We are currently evaluating two options, [Codacy](https://www.codacy.com) and [Codeclimate](https://codeclimate.com).
 Our requirements for a tool is:
 1. To keep track of test coverage over time. Additional features related to code quality is considered benefitial, but not neccesary.
@@ -55,43 +54,35 @@ These checks appear at the bottom of the pull request in GitHub like this:
 You can click the _details_ link to see what issues have been introduced and how to resolve them before the pull request can be merged.
 
 ### How to set it up
+
 #### Codacy
-- Signup with a provider ()
+
+1. Sign up with Github provider
+2. Authorize for the Github user and Dolittle organization(s)
+    - (Optional) Invite people to Codacy
+3. Give Codacy access to a repository
+4. Adjust settings
+    - Configure excluded/ignored paths for static analysis
+6. Copy API token for sending coverage results and create corresponding secret in the repository
+7. Configure the workflow to create and send coverage results to API using the correct token (example [workflow from Runtime](https://github.com/dolittle/Runtime/blob/master/.github/workflows/runtime.yml#L24))
+8. After running the workflow, check your dashboard in Codacy (example dashboard from the [Runtime](https://app.codacy.com/gh/dolittle/Runtime/dashboard))
+9. Repeat steps 3-8 per repo
+
+Runtime's Codacy Dashboard:
+![Codacy Dashboard](/images/contributing/codacy_dashboard.png)
+
 #### Code Climate
 
+1. Sign up with Github provider
+2. Authorize for the Github user and Dolittle organization(s)
+3. Give CodeClimate access to a repository
+4. Adjust settings
+    - Configure excluded/ignored paths for static analysis
+5. Copy API token for sending coverage results and create corresponding secret in the repository
+6. Configure the workflow to create and send coverage results to API using the correct token (example [workflow from DotNET.SDK](https://github.com/dolittle/DotNET.SDK/blob/415da5961345439bee433619b21edf8ae0f11b4e/.github/workflows/dotnet-library.yml#L35))
+    - You need to setup both dotCover and a tool for converting dotCover format to Cobertura test reporting
+7. After running the workflow, check your dashboard in Code Climate (example dashboard from the [.NET SDK](https://codeclimate.com/github/dolittle/DotNET.SDK))
+8. Repeat steps 3-8 per repo
 
-- the goals
-  - Maintain a high code quality on our repositories
-    - Consistent style => Readability, Maintainability => easier to contribute and onboard new developers
-    - Good test coverage (and meaningfull tests) => confidence that code does what it is supposed to do, and ability to change code in production without breaking things.
-    - Avoid common pitfalls (security, robustness) => obvious. Harder to breach (security), robust, avoid crashes
-  - Motivation
-    - Motivate to fix errors 
-    - Motivate to improve coverage
-- what tools we use
-  - currently testing out two
-    - why we picked these
-- how to use it (website, often a "project" per repo that is set up)
-- how to configure it/set it up
-  - Codacy
-    - Create account with github provider
-    - Give acces to orginisation
-    - Give acces to repos
-    - Add repository to GUI
-      - Customize analysis?
-      - Configure which files to ignore in terms of static analysis
-      - Setup so that it suggests fixes and does status checks on PRs
-    - Setup generation of code coverage report in workflow
-      - For C# we use dotCover. It produces report in a format that Codacy understands
-    - Copy Codacy API token for repo to the github repo's secrets
-    - Use API token secret when sending coverage report
-  - Code Climate
-    - Create account with github provider
-    - Give acces to orginisation
-    - Give acces to repos
-      - Exclude patterns for ignoring static analysis on files
-      - Settings - Enable inline issue comments
-    - Setup generation of code coverage report in workflow
-      - For C# we use dotCover. It produces report in a format that needs to be converted to Cobertura by another tool (an extra step in the pipeline)
-    - Copy Code CLimate API token for repo to the github repo's secrets
-    - Use API token secret when sending coverage report
+.NET SDK's Code Climate Dashboard:
+![Code Climate Dashboard](/images/contributing/code_climate_dashboard.png)
