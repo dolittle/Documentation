@@ -64,7 +64,7 @@ namespace Kitchen
     }
 }
 ```
-The GUID given in the `[AggregateRoot()]` attribute is the [`AggregateRootId`]({{< ref "docs/concepts/aggregates/#aggregaterootid" >}}), which is used to identify this `AggregateRoot` in the Runtime.
+The GUID given in the `[AggregateRoot()]` attribute is the [`AggregateRootId`]({{< ref "docs/concepts/aggregates#structure-of-an-aggregateroot" >}}), which is used to identify this `AggregateRoot` in the Runtime.
 {{% /tab %}}
 
 {{% tab name="TypeScript" %}}
@@ -95,7 +95,7 @@ export class Kitchen extends AggregateRoot {
     }
 }
 ```
-The GUID given in the `@aggregateRoot()` decorator is the [`AggregateRootId`]({{< ref "docs/concepts/aggregates/#aggregaterootid" >}}), which is used to identify this `AggregateRoot` in the Runtime.
+The GUID given in the `@aggregateRoot()` decorator is the [`AggregateRootId`]({{< ref "docs/concepts/aggregates#structure-of-an-aggregateroot" >}}), which is used to identify this `AggregateRoot` in the Runtime.
 {{% /tab %}}
 {{< /tabs >}}
 
