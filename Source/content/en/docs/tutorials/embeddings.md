@@ -166,7 +166,6 @@ import { eventType } from '@dolittle/sdk.events';
 export class EmployeeTransferred {
     constructor(readonly name: string, readonly from: string, readonly to: string) {}
 }
-
 ```
 
 **EmployeeRetired**:
