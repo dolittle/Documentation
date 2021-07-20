@@ -27,6 +27,7 @@ Use the tabs to switch between the [C#](https://github.com/dolittle/dotnet.sdk) 
 ## Setup
 <!-- Use the % signs if you need to render the stuff inside as markdown -->
 <!-- check https://kubernetes.io/docs/contribute/style/hugo-shortcodes/#tabs -->
+Setup is the same as in the [getting started tutorial]({{< ref "docs/tutorials/getting_started#setup" >}}).
 
 {{< tabs name="setup_tab" >}}
 {{% tab name="C#" %}}
@@ -144,11 +145,41 @@ namespace Kitchen
 {{% /tab %}}
 
 {{% tab name="TypeScript" %}}
+
+**EmployeeHired**:
 ```typescript
+//EmployeeHired.ts
+import { eventType } from '@dolittle/sdk.events';
+
+@eventType('8fdf45bc-f484-4348-bcb0-4d6f134aaf6c')
+export class EmployeeHired {
+    constructor(readonly name: string) {}
+}
+```
+
+**EmployeeTransferred**:
+```typescript
+//EmployeeTransferred.ts
+import { eventType } from '@dolittle/sdk.events';
+
+@eventType('b27f2a39-a2d4-43a7-9952-62e39cbc7ebc')
+export class EmployeeTransferred {
+    constructor(readonly name: string, readonly from: string, readonly to: string) {}
+}
+```
+
+**EmployeeRetired**:
+```typescript
+//EmployeeRetired.ts
+import { eventType } from '@dolittle/sdk.events';
+
+@eventType('1932beb4-c8cd-4fee-9a7e-a92af3693510')
+export class EmployeeRetired {
+    constructor(readonly name: string) {}
+}
 ```
 {{% /tab %}}
 {{< /tabs >}}
-
 
 ## Create an `Employee` Embedding
 
@@ -209,6 +240,8 @@ The `[Embedding()]` attribute identifies this embedding in the Runtime, and is u
 
 `ResolveUpdateToEvents()` method will be called whenever the current state of the embeddings read model is different from the updated state. This method needs to return one or many events that will update the read model so that it moves "closer" to matching the desired state. The Runtime will then apply the returned events onto the embeddings `On()` methods. If the states still differ, it will call the `ResolveUpdateToEvents()` method again until the read models current state matches the updated state. At that point, the events will be committed to the [Event Log]({{< ref "docs/concepts/event_store#event-log" >}}). If the `On()` methods fail, or the Runtime detects that the embeddings state is looping, the process will be stopped and no events will be committed. This means that events will only be committed if they successfully result in the states matching.
 
+The `ResolveDeletionToEvents()` method is the same, except the resulting events have to result in the read model being deleted. This is done by returning a `ProjectionResult<Employee>.Delete` in the corresponding `On()` method.
+
 The committed events are always [public]({{< ref "docs/concepts/events#public-vs-private" >}}) [Aggregate events]({{< ref "docs/concepts/aggregates#aggregateevents" >}}). The `AggregateRootId` is the same as the `EmbeddingId`, and the `EventSourceId` is computed from the read models key.
 
 Unlike projections, you don't need to specify a [`KeySelector`]({{< ref "docs/concepts/projections#key-selector" >}}) for the `On()` methods. The Runtime will automatically calculate a unique [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}) for the committed events based on the embeddings [Key]({{< ref "docs/concepts/embeddings#key" >}}).
@@ -217,8 +250,65 @@ Unlike projections, you don't need to specify a [`KeySelector`]({{< ref "docs/co
 
 {{% tab name="TypeScript" %}}
 ```typescript
+// Employee.ts
+import { CouldNotResolveUpdateToEvents, embedding, EmbeddingContext, EmbeddingProjectContext, on, resolveDeletionToEvents, resolveUpdateToEvents } from '@dolittle/sdk.embeddings';
+import { ProjectionResult } from '@dolittle/sdk.projections';
+import { EmployeeHired } from './EmployeeHired';
+import { EmployeeRetired } from './EmployeeRetired';
+import { EmployeeTransferred } from './EmployeeTransferred';
+
+@embedding('e5577d2c-0de7-481c-b5be-6ef613c2fcd6')
+export class Employee {
+
+    constructor(
+        public name: string = '',
+        public workplace: string = 'Unassigned') {
+    }
+
+    @resolveUpdateToEvents()
+    resolveUpdateToEvents(updatedEmployee: Employee, context: EmbeddingContext) {
+        if (this.name !== updatedEmployee.name) {
+            return new EmployeeHired(updatedEmployee.name);
+        } else if (this.workplace !== updatedEmployee.workplace) {
+            return new EmployeeTransferred(this.name, this.workplace, updatedEmployee.workplace);
+        }
+
+        throw new CouldNotResolveUpdateToEvents();
+    }
+
+    @resolveDeletionToEvents()
+    resolveDeletionToEvents(context: EmbeddingContext) {
+        return new EmployeeRetired(this.name);
+    }
+
+    @on(EmployeeHired)
+    onEmployeeHired(event: EmployeeHired, context: EmbeddingProjectContext) {
+        this.name = event.name;
+    }
+
+    @on(EmployeeTransferred)
+    onEmployeeTransferred(event: EmployeeTransferred, context: EmbeddingProjectContext) {
+        this.workplace = event.to;
+    }
+
+    @on(EmployeeRetired)
+    onEmployeeRetired(event: EmployeeRetired, context: EmbeddingProjectContext) {
+        return ProjectionResult.delete;
+    }
+}
 ```
 {{% /tab %}}
+
+The `@embedding()` attribute identifies this embedding in the Runtime, and is used to keep track of the events that it creates and processes, it's state and the retrying the handling of an event if the handler fails (throws an exception).
+
+The `@resolveUpdateToEvents()` decorated method will be called whenever the current state of the embeddings read model is different from the updated state. This method needs to return one or many events that will update the read model so that it moves "closer" to matching the desired state. The Runtime will then apply the returned events onto the embeddings `@on()` decorated methods. If the states still differ, it will call the `@resolveUpdateToEvents()` decorated method again until the read models current state matches the updated state. At that point, the events will be committed to the [Event Log]({{< ref "docs/concepts/event_store#event-log" >}}). If the `@on()` decorated methods fail, or the Runtime detects that the embeddings state is looping, the process will be stopped and no events will be committed. This means that events will only be committed if they successfully result in the states matching.
+
+The `@resolveDeletionToEvents()` decorated method is the same, except the resulting events have to result in the read model being deleted. This is done by returning a `ProjectionResult.delete` in the corresponding `@on()` decorated method.
+
+The committed events are always [public]({{< ref "docs/concepts/events#public-vs-private" >}}) [Aggregate events]({{< ref "docs/concepts/aggregates#aggregateevents" >}}). The `AggregateRootId` is the same as the `EmbeddingId`, and the `EventSourceId` is computed from the read models key.
+
+Unlike projections, you don't need to specify a [`KeySelector`]({{< ref "docs/concepts/projections#key-selector" >}}) for the `@on()` decorated methods. The Runtime will automatically calculate a unique [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}) for the committed events based on the embeddings [Key]({{< ref "docs/concepts/embeddings#key" >}}).
+
 {{< /tabs >}}
 
 {{< alert title="Committing embeddings events outside of embedding" color="warning" >}}
@@ -228,6 +318,7 @@ To enforce this, the embedding works like an [Aggregate]({{< ref "docs/concepts/
 {{< /alert >}}
 
 ## Register the `Employee` embedding, and update and delete a read model
+
 Let's register the new event types and the embedding. Then we can update and delete a read model from it.
 
 {{< tabs name="client_tab" >}}
@@ -286,20 +377,63 @@ namespace Kitchen
 ```
 The `Update()` method tries to update the embeddings read model with the specified key to match the updated state by calling the embeddings `ResolveUpdateToEvents()` method. If no read model exists with the key, it will create one with the read model set to the embedding's initial state.
 
-The `Delete()` method will call the embeddings `ResolveDeletionToEvents()` for the specified key. This method then return an event, which when handled will delete the read model.
+The `Delete()` method will call the embeddings `ResolveDeletionToEvents()` for the specified key. This method then returns one or many events, which when handled will delete the read model.
 
 {{% /tab %}}
 
 {{% tab name="TypeScript" %}}
 ```typescript
 // index.ts
+
+import { Client } from '@dolittle/sdk';
+import { TenantId } from '@dolittle/sdk.execution';
+import { Employee } from './Employee';
+import { EmployeeHired } from './EmployeeHired';
+import { EmployeeRetired } from './EmployeeRetired';
+import { EmployeeTransferred } from './EmployeeTransferred';
+
+const client = Client
+    .forMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
+    .withEventTypes(eventTypes => {
+        eventTypes.register(EmployeeHired);
+        eventTypes.register(EmployeeTransferred);
+        eventTypes.register(EmployeeRetired);
+    })
+    .withEmbeddings(builder => {
+        builder.register(Employee);
+    })
+    .build();
+
+(async () => {
+
+    // wait for the registration to complete
+    setTimeout(async () => {
+        // mock of the state from the external HR system
+        const updatedEmployee = new Employee(
+            'Mr. Taco',
+            'Street Food Taco Truck');
+
+        await client.embeddings
+            .forTenant(TenantId.development)
+            .update(Employee, updatedEmployee.name, updatedEmployee);
+        console.log(`Updated ${updatedEmployee.name}`);
+
+        await client.embeddings
+            .forTenant(TenantId.development)
+            .delete(Employee, updatedEmployee.name);
+        console.log(`Deleted ${updatedEmployee.name}`);
+    }, 1000);
+})();
 ```
+The `update()` method tries to update the embeddings read model with the specified key to match the updated state by calling the embeddings `@resolveUpdateToEvents()` decorated method. If no read model exists with the key, it will create one with the read model set to the embedding's initial state.
+
+The `delete()` method will call the embeddings `@resolveDeletionToEvents()` decorated method for the specified key. This method then returns one or many events, which when handled will delete the read model.
 {{% /tab %}}
 {{< /tabs >}}
 
 ## Run your microservice
 
-Let's run the code! It should commit e events to the event log, one for hiring `"Mr. Taco"`, one for transferring him to `"Street Food Taco Truck"`, and one for Mr. Tacos retirement.
+Let's run the code! It should commit events to the event log, one for hiring `"Mr. Taco"`, one for transferring him to `"Street Food Taco Truck"`, and one for Mr. Tacos retirement.
 
 {{< tabs name="run_tab" >}}
 {{% tab name="C#" %}}
@@ -313,6 +447,8 @@ Deleted Mr. Taco.
 {{% tab name="TypeScript" %}}
 ```shell
 $ npx ts-node index.ts
+Updated Mr. Taco.
+Deleted Mr. Taco.
 ```
 {{% /tab %}}
 {{< /tabs >}}
@@ -390,8 +526,19 @@ var employeeKeys = client.Embeddings
 ```
 {{% /tab %}}
 {{% tab name="TypeScript" %}}
-```shell
-$ npx ts-node index.ts
+```typescript
+/*
+setup builder and update the read model first
+*/
+const mrTaco = client.embeddings
+    .forTenant(TenantId.development)
+    .get(Employee, 'Mr. Taco');
+const allEmployees = client.embeddings
+    .forTenant(TenantId.development)
+    .getAll(Employee);
+cosnt employeeKeys = client.embeddings
+    .forTenant(TenantId.development)
+    .getKeys(Employee);
 ```
 {{% /tab %}}
 {{< /tabs >}}
@@ -401,7 +548,6 @@ If you try to get an embedding that doesn't exist, the Runtime will return you t
 {{% alert title="Viewing the read models" color="info" %}}
 Do note, that the read models work like [Aggregates]({{< ref "docs/concepts/aggregates" >}}), they exist to uphold the rules of committing the correct events. They aren't meant to produce a view necessarily.
 {{% /alert %}}
-
 
 ## What's next
 
