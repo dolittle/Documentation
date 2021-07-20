@@ -99,7 +99,7 @@ docker container rm [container_id]
 ```
 
 ## Issues and Contributing
-To learn how to contribute please read our [contributing](https://dolittle.io/contributing/) guides.
+To learn how to contribute please read our [contributing](https://dolittle.io/docs/contributing/) guides.
 
 ## Our other projects:
  - [Runtime](https://github.com/dolittle/Runtime)
