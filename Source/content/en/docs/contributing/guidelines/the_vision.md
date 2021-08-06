@@ -54,7 +54,7 @@ possible by engaging very close with domain experts and developers working on li
 A presentation @ NDC 2011 showcases the work that was done, you can find it [here](https://vimeo.com/45594255).
 From 2012 to 2015 it got further developed @ Statoil and their needs for a critical LOB application; ProCoSys.
 In 2015, [Børge Nordli](https://github.com/bnordli) became the primary Dolittle resource @ Statoil and late 2015 he started
-maintaining a fork that was used by the project. Pull Requests from the fork has been
+maintaining a [fork](https://github.com/ProCoSys/Bifrost) that was used by the project. Pull Requests from the fork has been
 coming in steadily.
 
 The effort of design and thoughtwork going into the project is a result of great collaboration over the years.
