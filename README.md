@@ -55,7 +55,7 @@ dolittle-documentation-server
 
 ### Running a container locally
 
-You can run docsy-example inside a [Docker](ihttps://docs.docker.com/)
+You can run docsy-example inside a [Docker](https://docs.docker.com/)
 container, the container runs with a volume bound to the `docsy-example`
 folder. This approach doesn't require you to install any dependencies other
 than Docker.
