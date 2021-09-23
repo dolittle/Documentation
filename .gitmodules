@@ -6,4 +6,4 @@
 	url = https://github.com/dolittle/Runtime.git
 [submodule "Source/repositories/whitepapers"]
 	path = Source/repositories/whitepapers
-	url = https://github.com/dolittle/whitepapers.git
+	url = git@github.com:dolittle/whitepapers.git
