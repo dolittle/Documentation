@@ -1,10 +1,10 @@
 ---
 title: "Documentation"
 linkTitle: "Documentation"
-weight: 20
+weight: 50
 menu:
   main:
-    weight: 20
+    weight: 50
 ---
 
 Dolittle is an open-source, decentralized, distributed and event-driven microservice platform. The platform has been designed to build Line of Business applications without sacrificing architectural quality, code quality, maintainability or scalability.
