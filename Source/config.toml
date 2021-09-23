@@ -170,3 +170,6 @@ enable = false
 [[module.mounts]]
   source = 'repositories/whitepapers/images'
   target = 'static/images/whitepapers'
+[[module.mounts]]
+  source = 'static'
+  target = 'static'
