@@ -10,8 +10,8 @@ publish = "Source/public"
 command = "cd themes/docsy && git submodule update -f --init && cd ../.. && hugo --enableGitInfo"
 
 [context.production.environment]
-HUGO_VERSION = "0.79.1"
+HUGO_VERSION = "0.88.1"
 HUGO_ENV = "production"
 
 [context.deploy-preview.environment]
-HUGO_VERSION = "0.79.1"
+HUGO_VERSION = "0.88.1"
