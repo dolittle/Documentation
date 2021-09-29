@@ -73,5 +73,4 @@ Others has said similar things with the same sentiments - like LinkedIns Reid Ho
 "If you're not embarrassed by your first product release, you've released it too late.".
 
 In order to be able to do so and guarantee a consistent level og quality, you have
-to have some core values and guiding principles to help you along the way. We have
-come up with a set of principles to make it easier to do so, read more [here]({{< relref just_enough_software >}}).
+to have some core values and guiding principles to help you along the way.

@@ -480,4 +480,5 @@ Mrs. Tex Mex has prepared Bean Blaster Taco,Chili Canon Wrap
 
 ## What's next
 
+- Learn how to use [Embeddings]({{< ref "embeddings" >}}) to event source changes from an external system.
 - Learn how to [deploy your application]({{< ref "docs/platform/deploy_an_application" >}}) into our [Platform]({{< ref "docs/platform" >}}).

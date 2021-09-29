@@ -1,3 +1,5 @@
+![Dolittle logo](/Source/static/images/dolittle_negativ_horisontal_RGB.svg)
+
 # Documentation
 [![Netlify Status](https://api.netlify.com/api/v1/badges/dbad4963-107d-451b-bd0a-5ffcf63c65e5/deploy-status)](https://app.netlify.com/sites/dolittle-io/deploys)
 
@@ -97,7 +99,7 @@ docker container rm [container_id]
 ```
 
 ## Issues and Contributing
-To learn how to contribute please read our [contributing](https://dolittle.io/contributing/) guides.
+To learn how to contribute please read our [contributing](https://dolittle.io/docs/contributing/) guides.
 
 ## Our other projects:
  - [Runtime](https://github.com/dolittle/Runtime)

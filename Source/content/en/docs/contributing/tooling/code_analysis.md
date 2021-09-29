@@ -18,7 +18,7 @@ Having a high test coverage means developers don't need a deep understanding of 
 3. Avoid **common pitfalls** related to secure and robust code. It is easy to make mistakes while writing code, and many of theese mistakes are widely known.
 The static code analysis tools checks for these common mistakes so that we can learn from the community.
 
-The tools we have set up continuously monitor our code and reports on [pull requests]({{< ref "../guidelines/pull_requests.md" >}}) to help motivate us to produce high quality code, and reduce the manual work for reviewers. We are currently in the process of figuring out what tools work best for us (there are a lot to choose from), and we have set up the experiment on these repositories:
+The tools we have set up continuously monitor our code and reports on pull requests to help motivate us to produce high quality code, and reduce the manual work for reviewers. We are currently in the process of figuring out what tools work best for us (there are a lot to choose from), and we have set up the experiment on these repositories:
 - Runtime [repository](https://github.com/dolittle/Runtime) uses Codacy, see [the dashboard](https://app.codacy.com/gh/dolittle/Runtime/dashboard)
 - DotNET.SDK [repository](https://github.com/dolittle/DotNET.SDK) uses Code Climate, see [the dashboard](https://codeclimate.com/github/dolittle/DotNET.SDK)
 
