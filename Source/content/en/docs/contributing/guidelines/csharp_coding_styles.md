@@ -8,14 +8,12 @@ weight: 17
 
 This is the to be considered the coding standard for Dolittle and is subject to automated
 verification during automated builds and also part of code-reviews such as those done for
-pull requests. Some things are common between languages, such as [naming]({{< relref naming >}}).
+pull requests.
 
 ## Values, principles and patterns & practices
 
-It is assumed that all code written is adhering to our [core values]({{< relref core_values >}}),
-[core principles]({{< relref core_principles >}}) and [development principles]({{< relref development_principles >}}).
-On top of this we apply patterns that also reflect a lot of the mindset of things we do.
-Read more [here]({{< relref patterns >}}).
+It is assumed that all code written is adhering to our [core values]({{< relref core_values >}}) and
+[core principles]({{< relref core_principles >}}).
 
 ## Compactness
 
@@ -30,7 +28,7 @@ Things that are implicit, **SHALL** be left implicit and not turned into explici
 Types are implicitly provided by the compiler and considered noise during declaration.
 If one feel the need for explicitly declaring variables with their type, it is often a
 symptom of something else being wrong - such as large methods that you can't get a feel
-for straight away. This is most likely breaking the [Single Responsibility Principle]({{< relref development_principles >}}).
+for straight away. This is most likely breaking the [Single Responsibility Principle](https://en.wikipedia.org/wiki/Single-responsibility_principle).
 You **MUST** use `var` and let the compiler infer the type implicitly.
 
 ### Private members
