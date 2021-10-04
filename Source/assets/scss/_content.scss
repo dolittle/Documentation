@@ -157,7 +157,6 @@ For changing the navbar etc. Should probably live in a different file.
   }
 }
 
-
 // change front page button colors
 .btn-secondary {
   color: white;
@@ -181,4 +180,10 @@ For changing the navbar etc. Should probably live in a different file.
   a:hover {
     color: rgba(#53d3fd, 0.5);
   }
+}
+
+// Make the ToC scrollbar heading have a bit more space at the top
+.td-sidebar-nav .td-sidebar-link.tree-root {
+  padding-top: 0.375rem;
+  margin-top: 0.375rem;
 }

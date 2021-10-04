@@ -15,7 +15,7 @@ Familiar with the following:
 - Microsoft Azure
 
 ## Recommendation
-For users on Windows OS, we recommend that you use WSL/Ubuntu as your shell/terminal instead of CMD/Poweshell.
+For users on Windows OS, we recommend that you use WSL/Ubuntu as your shell/terminal instead of CMD/Powershell.
 
 - [Install WSL on Windows 10](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
 
