@@ -134,7 +134,7 @@ namespace Kitchen
 }
 ```
 
-The GUID given in `AggregateOf<Kitchen>()` is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify the aggregate of the aggregate root to perform the action on.
+The string given in `AggregateOf<Kitchen>()` is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify the aggregate of the aggregate root to perform the action on.
 {{% /tab %}}
 
 {{% tab name="TypeScript" %}}
@@ -163,7 +163,7 @@ import { Kitchen } from './Kitchen';
 })();
 ```
 
-The GUID given in the `aggregateOf()` call is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify the aggregate of the aggregate root to perform the action on.
+The string given in the `aggregateOf()` call is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify the aggregate of the aggregate root to perform the action on.
 {{% /tab %}}
 {{< /tabs >}}
 

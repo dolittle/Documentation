@@ -188,7 +188,7 @@ namespace Kitchen
 
 The `GetAll<DishCounter>()` method returns all Projections for that particular type. The returned object is a dictionary of each projections' key and that projections' current state.
 
-The GUID given in `FromEventSource()` is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify where the events come from.
+The string given in `FromEventSource()` is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify where the events come from.
 
 {{% /tab %}}
 
@@ -229,7 +229,7 @@ const client = Client
 
 The `getAll(DishCounter)` method returns all Projections for that particular type. The returned object is a map of each projections' key and that projections' current state.
 
-The GUID given in `commit(event, 'event-source-id')` is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify where the events come from.
+The string given in `commit(event, 'event-source-id')` is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify where the events come from.
 {{% /tab %}}
 {{< /tabs >}}
 

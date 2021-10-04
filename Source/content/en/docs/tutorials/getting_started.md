@@ -193,7 +193,7 @@ namespace Kitchen
 }
 ```
 
-The GUID given in `FromEventSource()` is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify where the events come from.
+The string given in `FromEventSource()` is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify where the events come from.
 {{% /tab %}}
 
 {{% tab name="TypeScript" %}}
@@ -219,7 +219,7 @@ client.eventStore
     .commit(preparedTaco, 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
 ```
 
-The GUID given in the `commit()` call is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify where the events come from.
+The string given in the `commit()` call is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify where the events come from.
 {{% /tab %}}
 {{< /tabs >}}
 
