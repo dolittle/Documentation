@@ -52,9 +52,8 @@ Setup a TypeScript NodeJS project using your favorite package manager. For this 
 $ npm init
 $ npm -D install typescript ts-node
 $ npm install @dolittle/sdk
-$ npx tsc --init
+$ npx tsc --init --experimentalDecorators
 ```
-This tutorial makes use of experimental decorators. To enable it simply make sure you have "experimentalDecorators" set to true in your tsconfig.json.
 {{% /tab %}}
 {{< /tabs >}}
 
