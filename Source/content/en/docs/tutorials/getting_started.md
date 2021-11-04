@@ -52,7 +52,7 @@ Setup a TypeScript NodeJS project using your favorite package manager. For this 
 $ npm init
 $ npm -D install typescript ts-node
 $ npm install @dolittle/sdk
-$ npx tsc --init --experimentalDecorators
+$ npx tsc --init --experimentalDecorators --target es6
 ```
 {{% /tab %}}
 {{< /tabs >}}
@@ -159,6 +159,7 @@ While configuring the client we register the `EventTypes` and `EventHandlers` so
 {{% tab name="C#" %}}
 ```csharp
 // Program.cs
+using System.Threading.Tasks;
 using Dolittle.SDK;
 using Dolittle.SDK.Tenancy;
 
@@ -166,7 +167,7 @@ namespace Kitchen
 {
     class Program
     {
-        public static void Main()
+        public static async Task Main()
         {
             var client = Client
                 .ForMicroservice("f39b1f61-d360-4675-b859-53c05c87c0e6")
@@ -178,12 +179,12 @@ namespace Kitchen
 
             var preparedTaco = new DishPrepared("Bean Blaster Taco", "Mr. Taco");
 
-            client.EventStore
+            await client.EventStore
                 .ForTenant(TenantId.Development)
                 .Commit(eventsBuilder =>
                     eventsBuilder
                         .CreateEvent(preparedTaco)
-                        .FromEventSource("bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9"));
+                        .FromEventSource("Dolittle Tacos"));
 
             // Blocks until the EventHandlers are finished, i.e. forever
             client.Start().Wait();
@@ -215,7 +216,7 @@ const preparedTaco = new DishPrepared('Bean Blaster Taco', 'Mr. Taco');
 
 client.eventStore
     .forTenant(TenantId.development)
-    .commit(preparedTaco, 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
+    .commit(preparedTaco, 'Dolittle Tacos');
 ```
 
 The string given in the `commit()` call is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify where the events come from.
@@ -226,10 +227,10 @@ The string given in the `commit()` call is the [`EventSourceId`]({{< ref "docs/c
 Start the Dolittle environment with all the necessary dependencies with the following command:
 
 ```shell
-$ docker run -p 50053:50053 -p 27017:27017 dolittle/runtime:latest-development
+$ docker run -p 50053:50053 -p 51052:51052 -p 27017:27017 dolittle/runtime:latest-development -d
 ```
 
-This will start a container with the Dolittle Development Runtime on port 50053 and a MongoDB server on port 27017.
+This will start a container with the Dolittle Development Runtime on port 50053 and 51052 and a MongoDB server on port 27017.
 The Runtime handles committing the events and the event handlers while the MongoDB is used for persistence.
 
 {{% alert title="Docker on Windows" color="warning" %}}
@@ -243,6 +244,8 @@ Run your code, and get a delicious serving of taco:
 {{% tab name="C#" %}}
 ```shell
 $ dotnet run
+info: Dolittle.SDK.Events.Processing.EventProcessors[0]
+      EventHandler f2d366cf-c00a-4479-acc4-851e04b6fbba registered with the Runtime, start handling requests
 Mr. Taco has prepared Bean Blaster Taco. Yummm!
 ```
 
@@ -250,11 +253,40 @@ Mr. Taco has prepared Bean Blaster Taco. Yummm!
 {{% tab name="TypeScript" %}}
 ```shell
 $ npx ts-node index.ts
+info: EventHandler f2d366cf-c00a-4479-acc4-851e04b6fbba registered with the Runtime, start handling requests.
 Mr. Taco has prepared Bean Blaster Taco. Yummm!
 ```
 {{% /tab %}}
 {{< /tabs >}}
 
+### Check the status of your microservice
+With everything is up and running you can use the [Dolittle CLI]({{< ref "docs/reference/cli" >}}) to check what's going on.
+
+Open a new terminal.
+
+Now you can list the registered event types with the following command:
+```shell
+$ dolittle runtime eventtypes list
+EventType   
+------------
+DishPrepared
+```
+
+And check the status of the event handler with the following commands:
+```shell
+$ dolittle runtime eventhandlers list
+EventHandler  Scope    Partitioned  Status
+------------------------------------------
+DishHandler   Default  ✅            ✅ 
+
+$ dolittle runtime eventhandlers get DishHandler
+Tenant                                Position  Status
+------------------------------------------------------
+445f8ea8-1a6f-40d7-b2fc-796dba92dc44  1         ✅
+```
+
 ## What's next
 
+- Learn how to use [Aggregates]({{< ref "aggregates" >}}) implement rules.
+- Learn how to use [Projections]({{< ref "projections" >}}) to create read models.
 - Learn how to [deploy your application]({{< ref "docs/platform/deploy_an_application" >}}) into our [Platform]({{< ref "docs/platform" >}}).
