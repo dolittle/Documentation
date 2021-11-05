@@ -62,14 +62,14 @@ Before getting started, your directory should look something like this:
 {{< /tabs >}}
 
 ### Start the Dolittle environment
-Start the Dolittle environment with all the necessary dependencies (if you didn't have it running already) with the following command:
+If you don't have a Runtime already going from a previous tutorial, start the Dolittle environment with all the necessary dependencies with the following command:
 
 ```shell
-$ docker run -p 50053:50053 -p 27017:27017 dolittle/runtime:latest-development
+$ docker run -p 50053:50053 -p 51052:51052 -p 27017:27017 dolittle/runtime:latest-development -d
 ```
 
-This will start a container with the Dolittle Development Runtime on port 50053 and a MongoDB server on port 27017.
-The Runtime handles committing the events and the embeddings, while the MongoDB is used for persistence.
+This will start a container with the Dolittle Development Runtime on port 50053 and 51052 and a MongoDB server on port 27017.
+The Runtime handles committing the events and the event handlers while the MongoDB is used for persistence.
 
 {{% alert title="Docker on Windows" color="warning" %}}
 Docker on Windows using the WSL2 backend can use massive amounts of RAM if not limited. Configuring a limit in the `.wslconfig` file can help greatly, as mentioned in [this issue](https://github.com/microsoft/WSL/issues/4166#issuecomment-526725261). The RAM usage is also lowered if you disable the WSL2 backend in Docker for Desktop settings.
@@ -189,6 +189,8 @@ In this example, we want to events source the data coming from a mocked HR syste
 {{% tab name="C#" %}}
 ```csharp
 // Employee.cs
+using System;
+using Dolittle.SDK.Embeddings;
 using Dolittle.SDK.Projections;
 
 namespace Kitchen
@@ -207,7 +209,7 @@ namespace Kitchen
             }
             else if (Workplace != updatedEmployee.Workplace)
             {
-                return new EmployeeTransferred(Name, updatedEmployee.Workplace);
+                return new EmployeeTransferred(Name, Workplace , updatedEmployee.Workplace);
             }
 
             throw new NotImplementedException();
@@ -228,9 +230,9 @@ namespace Kitchen
             Workplace = @event.To;
         }
 
-        public ProjectionResult<Employee> On(EmployeeRetired @event, EmbeddingProjectContext context)
+        public ProjectionResultType On(EmployeeRetired @event, EmbeddingProjectContext context)
         {
-            return ProjectionResult<Employee>.Delete;
+            return ProjectionResultType.Delete;
         }
     }
 }
@@ -242,9 +244,9 @@ The `[Embedding()]` attribute identifies this embedding in the Runtime, and is u
 
 The `ResolveDeletionToEvents()` method is the same, except the resulting events have to result in the read model being deleted. This is done by returning a `ProjectionResult<Employee>.Delete` in the corresponding `On()` method.
 
-The committed events are always [public]({{< ref "docs/concepts/events#public-vs-private" >}}) [Aggregate events]({{< ref "docs/concepts/aggregates#aggregateevents" >}}). The `AggregateRootId` is the same as the `EmbeddingId`, and the `EventSourceId` is computed from the read models key.
+The committed events are always [public]({{< ref "docs/concepts/events#public-vs-private" >}}) [Aggregate events]({{< ref "docs/concepts/aggregates#aggregateevents" >}}). The `AggregateRootId` is the same as the `EmbeddingId`, and the `EventSourceId` is the same as the read models key.
 
-Unlike projections, you don't need to specify a [`KeySelector`]({{< ref "docs/concepts/projections#key-selector" >}}) for the `On()` methods. The Runtime will automatically calculate a unique [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}) for the committed events based on the embeddings [Key]({{< ref "docs/concepts/embeddings#key" >}}).
+Unlike projections, you don't need to specify a [`KeySelector`]({{< ref "docs/concepts/projections#key-selector" >}}) for the `On()` methods.
 
 {{% /tab %}}
 
@@ -439,6 +441,8 @@ Let's run the code! It should commit events to the event log, one for hiring `"M
 {{% tab name="C#" %}}
 ```shell
 $ dotnet run
+info: Dolittle.SDK.Events.Processing.EventProcessors[0]
+      Embedding e5577d2c-0de7-481c-b5be-6ef613c2fcd6 registered with the Runtime, start handling requests
 Updated Mr. Taco.
 Deleted Mr. Taco.
 ```
@@ -447,60 +451,32 @@ Deleted Mr. Taco.
 {{% tab name="TypeScript" %}}
 ```shell
 $ npx ts-node index.ts
-Updated Mr. Taco.
-Deleted Mr. Taco.
+info: Embedding e5577d2c-0de7-481c-b5be-6ef613c2fcd6 registered with the Runtime, start handling requests.
+Updated Mr. Taco
+Deleted Mr. Taco
 ```
 {{% /tab %}}
 {{< /tabs >}}
 
 ### Check the events
 
-Let's check the committed events from the event log:
+Let's check the committed events from the embedding. Since the embedding commits aggregate events, we can use the [Dolittle CLI]({{< ref "docs/reference/cli" >}}) to list the events with the following commands:
 
-{{< tabs name="mongodb_tab" >}}
-{{% tab name="MongoDB" %}}
-You can look at the events in the database through a database viewer (like [MongoDB Compass](https://www.mongodb.com/products/compass)) or by querying the database running in the `dolittle/runtime:latest-development` image through the [`mongo`](https://docs.mongodb.com/v4.2/mongo/) shell.
+```shell
+$ dolittle runtime aggregates get e5577d2c-0de7-481c-b5be-6ef613c2fcd6 --wide
+Tenant                                EventSource  AggregateRootVersion
+-----------------------------------------------------------------------
+445f8ea8-1a6f-40d7-b2fc-796dba92dc44  Mr. Taco     3
 
-**MongoDB Compass**:
-
-![MongoDB Compass with 2 events](/images/tutorials/embeddings_mongodb_compass_events.png)
-
-**`mongo` shell**:
-
-```console
-$ docker exec <mongo-container> mongo event_store --quiet --eval 'db.getCollection("event-log").find({}, {Content: 1})'
-{ "_id" : NumberDecimal("0"), "Content" : { "Name" : "Mr. Taco" } }
-{ "_id" : NumberDecimal("1"), "Content" : { "Name" : "Mr. Taco", "From" : "Unassigned", "To" : "Street Food Taco Truck" } }
-{ "_id" : NumberDecimal("2"), "Content" : { "Name" : "Mr. Taco" } }
+$ dolittle runtime aggregates events e5577d2c-0de7-481c-b5be-6ef613c2fcd6 "Mr. Taco"
+AggregateRootVersion  EventLogSequenceNumber  EventType          
+-----------------------------------------------------------------
+0                     0                       EmployeeHired      
+1                     1                       EmployeeTransferred
+2                     2                       EmployeeRetired
 ```
-{{% /tab %}}
-{{< /tabs >}}
 
-### Check the persisted embeddings
-
-We can also check the state of the embeddings read models from the database. Embeddings are saved into a database defined in the [`resources.json`]({{< ref "docs/reference/runtime/configuration#resourcesjson" >}}) (defaults to `embeddings`), and each embedding gets it's unique collection named `embedding-<embedding-id>`. Deleted embeddings are "soft-deleted" with the `IsRemoved` property marking their deletion. If the read model is later updated, `IsRemoved` will be set to `false`.
-
-{{< tabs name="mongodb_tab" >}}
-{{% tab name="MongoDB" %}}
-
-**MongoDB Compass**:
-
-![MongoDB Compass showing mr taco read model](/images/tutorials/embeddings_mongodb_compass_read_models.png)
-
-**`mongo` shell**:
-
-```console
-$ docker exec <mongo-container> mongo embeddings --quiet --eval 'db.getCollection("embedding-e5577d2c-0de7-481c-b5be-6ef613c2fcd6").find().pretty()'
-{
-	"_id" : "Mr. Taco",
-	"Content" : "{\"Name\":\"Mr. Taco\",\"Workplace\":\"Street Food Taco Truck\"}",
-	"IsRemoved" : true,
-	"Version" : NumberLong(3)
-}
-```
-{{% /tab %}}
-{{< /tabs >}}
-
+The aggregate root id argument is the same as the embedding id.
 
 ### Get the Embeddings
 
@@ -514,15 +490,27 @@ For example, the HR system might only return the currently hired employees. Any 
 /*
 setup builder and update the read model first
 */
-var mrTaco = client.Embeddings
+await client.Embeddings
     .ForTenant(TenantId.Development)
-    .Get<Employee>("Mr. Taco");
-var allEmployees = client.Embeddings
+    .Update(updatedEmployee.Name, updatedEmployee);
+Console.WriteLine($"Updated {updatedEmployee.Name}.");
+
+var mrTaco = await client.Embeddings
     .ForTenant(TenantId.Development)
-    .GetAll<Employee>();
-var employeeKeys = client.Embeddings
+    .Get<Employee>("Mr. Taco")
+    .ConfigureAwait(false);
+Console.WriteLine($"Mr. Taco is now working at {mrTaco.State.Workplace}");
+
+var allEmployeeNames = await client.Embeddings
     .ForTenant(TenantId.Development)
-    .GetKeys<Employee>();
+    .GetKeys<Employee>()
+    .ConfigureAwait(false);
+Console.WriteLine($"All current employees are {string.Join(",", allEmployeeNames)}");
+
+await client.Embeddings
+    .ForTenant(TenantId.Development)
+    .Delete<Employee>(updatedEmployee.Name);
+Console.WriteLine($"Deleted {updatedEmployee.Name}.");
 ```
 {{% /tab %}}
 {{% tab name="TypeScript" %}}
@@ -530,24 +518,58 @@ var employeeKeys = client.Embeddings
 /*
 setup builder and update the read model first
 */
-const mrTaco = client.embeddings
+await client.embeddings
+    .forTenant(TenantId.development)
+    .update(Employee, updatedEmployee.name, updatedEmployee);
+console.log(`Updated ${updatedEmployee.name}`);
+
+const mrTaco = await client.embeddings
     .forTenant(TenantId.development)
     .get(Employee, 'Mr. Taco');
-const allEmployees = client.embeddings
-    .forTenant(TenantId.development)
-    .getAll(Employee);
-cosnt employeeKeys = client.embeddings
+console.log(`Mr. Taco is now working at ${mrTaco.state.workplace}`);
+
+const allEmployeeNames = await client.embeddings
     .forTenant(TenantId.development)
     .getKeys(Employee);
+console.log(`All current employees are ${allEmployeeNames}`);
+
+await client.embeddings
+    .forTenant(TenantId.development)
+    .delete(Employee, updatedEmployee.name);
+console.log(`Deleted ${updatedEmployee.name}`);
 ```
 {{% /tab %}}
 {{< /tabs >}}
 
-If you try to get an embedding that doesn't exist, the Runtime will return you the initial state of the embedding.
+Running the code with the modifications above, should print the following:
+{{< tabs name="get_output_tab" >}}
+{{% tab name="C#" %}}
+```shell
+$ dotnet run
+info: Dolittle.SDK.Events.Processing.EventProcessors[0]
+      Embedding e5577d2c-0de7-481c-b5be-6ef613c2fcd6 registered with the Runtime, start handling requests
+Updated Mr. Taco.
+Mr. Taco is now working at Street Food Taco Truck
+All current employees are Mr. Taco
+Deleted Mr. Taco.
+```
+{{% /tab %}}
+{{% tab name="TypeScript" %}}
+```shell
+$ npx ts-node index.ts
+Updated Mr. Taco
+Mr. Taco is now Employee { name: 'Mr. Taco', workplace: 'Street Food Taco Truck' }
+All current employees are [ 'Mr. Taco' ]
+Deleted Mr. Taco
+```
+{{% /tab %}}
+{{< /tabs >}}
 
-{{% alert title="Viewing the read models" color="info" %}}
-Do note, that the read models work like [Aggregates]({{< ref "docs/concepts/aggregates" >}}), they exist to uphold the rules of committing the correct events. They aren't meant to produce a view necessarily.
-{{% /alert %}}
+{{< alert title="Embeddings have a default state" color="info" >}}
+Like projections, embeddings have an initial state.
+This means that if you get an embedding that has not been updated, the SDK will return the initial state of the embedding, instead of a null result or throwing an error.
+If you need to check whether an embedding _exists_, get the embedding keys and check whether the expected key is in the returned list.
+{{< /alert >}}
 
 ## What's next
 

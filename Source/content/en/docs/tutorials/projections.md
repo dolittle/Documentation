@@ -57,15 +57,18 @@ Before getting started, your directory should look something like this:
 {{< /tabs >}}
 
 ### Start the Dolittle environment
-Start the Dolittle environment with all the necessary dependencies (if you didn't have it running already) with the following command:
+If you don't have a Runtime already going from a previous tutorial, start the Dolittle environment with all the necessary dependencies with the following command:
 
 ```shell
-$ docker run -p 50053:50053 -p 27017:27017 dolittle/runtime:latest-development
+$ docker run -p 50053:50053 -p 51052:51052 -p 27017:27017 dolittle/runtime:latest-development -d
 ```
 
-This will start a container with the Dolittle Development Runtime on port 50053 and a MongoDB server on port 27017.
-The Runtime handles committing the events and the projections, while the MongoDB is used for persistence.
+This will start a container with the Dolittle Development Runtime on port 50053 and 51052 and a MongoDB server on port 27017.
+The Runtime handles committing the events and the event handlers while the MongoDB is used for persistence.
 
+{{% alert title="Docker on Windows" color="warning" %}}
+Docker on Windows using the WSL2 backend can use massive amounts of RAM if not limited. Configuring a limit in the `.wslconfig` file can help greatly, as mentioned in [this issue](https://github.com/microsoft/WSL/issues/4166#issuecomment-526725261). The RAM usage is also lowered if you disable the WSL2 backend in Docker for Desktop settings.
+{{% /alert %}}
 
 ## Create a `DishCounter` Projection
 First, we'll create a [Projection]({{< ref "docs/concepts/projections" >}}) that keeps track of the dishes and how many times the chefs have prepared them. Projections are a special type of event handler that mutate a read model based on incoming events.
@@ -142,8 +145,6 @@ namespace Kitchen
                 .ForMicroservice("f39b1f61-d360-4675-b859-53c05c87c0e6")
                 .WithEventTypes(eventTypes =>
                     eventTypes.Register<DishPrepared>())
-                .WithEventHandlers(builder =>
-                    builder.RegisterEventHandler<DishHandler>())
                 .WithProjections(builder => 
                     builder.RegisterProjection<DishCounter>())
                 .Build();
@@ -154,19 +155,19 @@ namespace Kitchen
 
             await eventStore.Commit(_ =>
                 _.CreateEvent(new DishPrepared("Bean Blaster Taco", "Mr. Taco"))
-                .FromEventSource("bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9"))
+                .FromEventSource("Dolittle Tacos"))
                 .ConfigureAwait(false);
             await eventStore.Commit(_ =>
                 _.CreateEvent(new DishPrepared("Bean Blaster Taco", "Mrs. Tex Mex"))
-                .FromEventSource("bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9"))
+                .FromEventSource("Dolittle Tacos"))
                 .ConfigureAwait(false);
             await eventStore.Commit(_ =>
                 _.CreateEvent(new DishPrepared("Avocado Artillery Tortilla", "Mr. Taco"))
-                .FromEventSource("bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9"))
+                .FromEventSource("Dolittle Tacos"))
                 .ConfigureAwait(false);
             await eventStore.Commit(_ =>
                 _.CreateEvent(new DishPrepared("Chili Canon Wrap", "Mrs. Tex Mex"))
-                .FromEventSource("bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9"))
+                .FromEventSource("Dolittle Tacos"))
                 .ConfigureAwait(false);
 
             await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
@@ -188,7 +189,7 @@ namespace Kitchen
 
 The `GetAll<DishCounter>()` method returns all Projections for that particular type. The returned object is a dictionary of each projections' key and that projections' current state.
 
-The GUID given in `FromEventSource()` is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify where the events come from.
+The string given in `FromEventSource()` is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify where the events come from.
 
 {{% /tab %}}
 
@@ -198,15 +199,12 @@ The GUID given in `FromEventSource()` is the [`EventSourceId`]({{< ref "docs/con
 import { Client } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
 import { DishPrepared } from './DishPrepared';
-import { DishHandler } from './DishHandler';
 import { DishCounter } from './DishCounter';
 
 const client = Client
     .forMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
     .withEventTypes(eventTypes =>
         eventTypes.register(DishPrepared))
-    .withEventHandlers(builder =>
-        builder.register(DishHandler))
     .withProjections(builder =>
         builder.register(DishCounter))
     .build();
@@ -214,10 +212,10 @@ const client = Client
 (async () => {
     const eventStore = client.eventStore.forTenant(TenantId.development);
 
-    await eventStore.commit(new DishPrepared('Bean Blaster Taco', 'Mr. Taco'), 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
-    await eventStore.commit(new DishPrepared('Bean Blaster Taco', 'Mrs. Tex Mex'), 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
-    await eventStore.commit(new DishPrepared('Avocado Artillery Tortilla', 'Mr. Taco'), 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
-    await eventStore.commit(new DishPrepared('Chili Canon Wrap', 'Mrs. Tex Mex'), 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
+    await eventStore.commit(new DishPrepared('Bean Blaster Taco', 'Mr. Taco'), 'Dolittle Tacos');
+    await eventStore.commit(new DishPrepared('Bean Blaster Taco', 'Mrs. Tex Mex'), 'Dolittle Tacos');
+    await eventStore.commit(new DishPrepared('Avocado Artillery Tortilla', 'Mr. Taco'), 'Dolittle Tacos');
+    await eventStore.commit(new DishPrepared('Chili Canon Wrap', 'Mrs. Tex Mex'), 'Dolittle Tacos');
 
     setTimeout(async () => {
         for (const [dish, { state: counter }] of await client.projections.forTenant(TenantId.development).getAll(DishCounter)) {
@@ -229,7 +227,7 @@ const client = Client
 
 The `getAll(DishCounter)` method returns all Projections for that particular type. The returned object is a map of each projections' key and that projections' current state.
 
-The GUID given in `commit(event, 'event-source-id')` is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify where the events come from.
+The string given in `commit(event, 'event-source-id')` is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify where the events come from.
 {{% /tab %}}
 {{< /tabs >}}
 
@@ -245,26 +243,21 @@ Run your code, and see the different dishes:
 {{% tab name="C#" %}}
 ```shell
 $ dotnet run
-Mr. Taco has prepared Bean Blaster Taco. Yummm!
-Mrs. Tex Mex has prepared Bean Blaster Taco. Yummm!
-Mr. Taco has prepared Avocado Artillery Tortilla. Yummm!
-Mrs. Tex Mex has prepared Chili Canon Wrap. Yummm!
-The kitchen has prepared Bean Blaster Taco 6 times
-The kitchen has prepared Avocado Artillery Tortilla 2 times
-The kitchen has prepared Chili Canon Wrap 2 times
+info: Dolittle.SDK.Events.Processing.EventProcessors[0]
+      Projection 98f9db66-b6ca-4e5f-9fc3-638626c9ecfa registered with the Runtime, start handling requests
+The kitchen has prepared Bean Blaster Taco 2 times
+The kitchen has prepared Avocado Artillery Tortilla 1 times
+The kitchen has prepared Chili Canon Wrap 1 times
 ```
 
 {{% /tab %}}
 {{% tab name="TypeScript" %}}
 ```shell
 $ npx ts-node index.ts
-Mr. Taco has prepared Bean Blaster Taco. Yummm!
-Mrs. Tex Mex has prepared Bean Blaster Taco. Yummm!
-Mr. Taco has prepared Avocado Artillery Tortilla. Yummm!
-Mrs. Tex Mex has prepared Chili Canon Wrap. Yummm!
-The kitchen has prepared Bean Blaster Taco 6 times
-The kitchen has prepared Avocado Artillery Tortilla 2 times
-The kitchen has prepared Chili Canon Wrap 2 times
+info: Projection 98f9db66-b6ca-4e5f-9fc3-638626c9ecfa registered with the Runtime, start handling requests.
+The kitchen has prepared Bean Blaster Taco 2 times
+The kitchen has prepared Avocado Artillery Tortilla 1 times
+The kitchen has prepared Chili Canon Wrap 1 times
 ```
 {{% /tab %}}
 {{< /tabs >}}
@@ -330,8 +323,6 @@ namespace Kitchen
                 .ForMicroservice("f39b1f61-d360-4675-b859-53c05c87c0e6")
                 .WithEventTypes(eventTypes =>
                     eventTypes.Register<DishPrepared>())
-                .WithEventHandlers(builder =>
-                    builder.RegisterEventHandler<DishHandler>())
                 .WithProjections(builder => {
                     builder.RegisterProjection<DishCounter>();
 
@@ -351,19 +342,19 @@ namespace Kitchen
 
             await eventStore.Commit(_ =>
                 _.CreateEvent(new DishPrepared("Bean Blaster Taco", "Mr. Taco"))
-                .FromEventSource("bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9"))
+                .FromEventSource("Dolittle Tacos"))
                 .ConfigureAwait(false);
             await eventStore.Commit(_ =>
                 _.CreateEvent(new DishPrepared("Bean Blaster Taco", "Mrs. Tex Mex"))
-                .FromEventSource("bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9"))
+                .FromEventSource("Dolittle Tacos"))
                 .ConfigureAwait(false);
             await eventStore.Commit(_ =>
                 _.CreateEvent(new DishPrepared("Avocado Artillery Tortilla", "Mr. Taco"))
-                .FromEventSource("bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9"))
+                .FromEventSource("Dolittle Tacos"))
                 .ConfigureAwait(false);
             await eventStore.Commit(_ =>
                 _.CreateEvent(new DishPrepared("Chili Canon Wrap", "Mrs. Tex Mex"))
-                .FromEventSource("bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9"))
+                .FromEventSource("Dolittle Tacos"))
                 .ConfigureAwait(false);
 
             await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
@@ -424,10 +415,10 @@ const client = Client
 (async () => {
     const eventStore = client.eventStore.forTenant(TenantId.development);
 
-    await eventStore.commit(new DishPrepared('Bean Blaster Taco', 'Mr. Taco'), 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
-    await eventStore.commit(new DishPrepared('Bean Blaster Taco', 'Mrs. Tex Mex'),'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
-    await eventStore.commit(new DishPrepared('Avocado Artillery Tortilla', 'Mr. Taco'), 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
-    await eventStore.commit(new DishPrepared('Chili Canon Wrap', 'Mrs. Tex Mex'), 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
+    await eventStore.commit(new DishPrepared('Bean Blaster Taco', 'Mr. Taco'), 'Dolittle Tacos');
+    await eventStore.commit(new DishPrepared('Bean Blaster Taco', 'Mrs. Tex Mex'), 'Dolittle Tacos');
+    await eventStore.commit(new DishPrepared('Avocado Artillery Tortilla', 'Mr. Taco'), 'Dolittle Tacos');
+    await eventStore.commit(new DishPrepared('Chili Canon Wrap', 'Mrs. Tex Mex'), 'Dolittle Tacos');
 
     setTimeout(async () => {
         for (const [dish, { state: counter }] of await client.projections.forTenant(TenantId.development).getAll(DishCounter)) {
@@ -452,25 +443,23 @@ Run your code, and get a delicious serving of taco:
 {{% tab name="C#" %}}
 ```shell
 $ dotnet run
-Mr. Taco has prepared Bean Blaster Taco. Yummm!
-Mrs. Tex Mex has prepared Bean Blaster Taco. Yummm!
-Mr. Taco has prepared Avocado Artillery Tortilla. Yummm!
-Mrs. Tex Mex has prepared Chili Canon Wrap. Yummm!
-The kitchen has prepared Bean Blaster Taco 6 times
+info: Dolittle.SDK.Events.Processing.EventProcessors[0]
+      Projection 0767bc04-bc03-40b8-a0be-5f6c6130f68b registered with the Runtime, start handling requests
+info: Dolittle.SDK.Events.Processing.EventProcessors[0]
+      Projection 98f9db66-b6ca-4e5f-9fc3-638626c9ecfa registered with the Runtime, start handling requests
+The kitchen has prepared Bean Blaster Taco 4 times
 The kitchen has prepared Avocado Artillery Tortilla 2 times
 The kitchen has prepared Chili Canon Wrap 2 times
-Mrs. Tex Mex has prepared Bean Blaster Taco,Chili Canon Wrap
+Mrs. Tex Mex has prepared Bean Blaster Taco, Chili Canon Wrap
 ```
 
 {{% /tab %}}
 {{% tab name="TypeScript" %}}
 ```shell
 $ npx ts-node index.ts
-Mr. Taco has prepared Bean Blaster Taco. Yummm!
-Mrs. Tex Mex has prepared Bean Blaster Taco. Yummm!
-Mr. Taco has prepared Avocado Artillery Tortilla. Yummm!
-Mrs. Tex Mex has prepared Chili Canon Wrap. Yummm!
-The kitchen has prepared Bean Blaster Taco 6 times
+info: Projection 98f9db66-b6ca-4e5f-9fc3-638626c9ecfa registered with the Runtime, start handling requests.
+info: Projection 0767bc04-bc03-40b8-a0be-5f6c6130f68b registered with the Runtime, start handling requests.
+The kitchen has prepared Bean Blaster Taco 4 times
 The kitchen has prepared Avocado Artillery Tortilla 2 times
 The kitchen has prepared Chili Canon Wrap 2 times
 Mrs. Tex Mex has prepared Bean Blaster Taco,Chili Canon Wrap

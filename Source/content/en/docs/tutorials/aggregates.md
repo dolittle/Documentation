@@ -27,9 +27,16 @@ Use the tabs to switch between the [C#](https://github.com/dolittle/dotnet.sdk) 
 This tutorial builds directly upon and that you have gone through our [getting started]({{< ref "docs/tutorials/getting_started" >}}) guide; done the setup, created the EventType, EventHandler and connected the client
 
 ### Create an `AggregateRoot`
-An [`aggregate root`]({{< ref "docs/concepts/aggregates" >}}) is a class that upholds the rules (invariants) for the aggregates of that aggregate root. It encapsulates the domain objects, enforces business rules, and ensures that the aggregate can't be put into an invalid state. The aggregate root usually exposes methods that creates and applies an event.
+An [`aggregate root`]({{< ref "docs/concepts/aggregates" >}}) is a class that upholds the rules (invariants) in your domain.
+An aggregate root is responsible for deciding which events should be committed.
+It exposes public methods that represents actions to be performed, and holds internal state to decide if the action is allowed.
 
-There are essentially two types of aggregate roots, stateless and stateful. The aggregate root in this example is stateful because it tracks a value called _counter that is used to control the invariant that no more than two dishes can be prepared. Stateful aggregate roots have On() methods that takes in a single parameter, an event type. Each time an event of that type is applied to this aggregate root the On method will be called. It is important that the On methods only updates the internal state of the aggregate root!
+Before one of the public methods is called, the internal state is _rehydrated_ by calling the On-methods for all the events the aggregate root has already applied.
+These On-methods updates the internal state of the aggregate root, and __must not__ have any other side-effects.
+When a public action method is executed, it can use this internal state decide either to apply events to be committed, or throw an error if the action is not allowed.
+
+
+The following code implements an aggregate root for a Kitchen that only has enough ingredients to prepare two dishes:
 
 {{< tabs name="aggregate_root_tab" >}}
 {{% tab name="C#" %}}
@@ -45,7 +52,7 @@ namespace Kitchen
     [AggregateRoot("01ad9a9f-711f-47a8-8549-43320f782a1e")]
     public class Kitchen : AggregateRoot
     {
-        int _counter;
+        int _ingredients = 2;
 
         public Kitchen(EventSourceId eventSource)
             : base(eventSource)
@@ -54,13 +61,13 @@ namespace Kitchen
 
         public void PrepareDish(string dish, string chef)
         {
-            if (_counter >= 2) throw new Exception("Cannot prepare more than 2 dishes");
+            if (_ingredients <= 0) throw new Exception("We have run out of ingredients, sorry!");
             Apply(new DishPrepared(dish, chef));
-            Console.WriteLine($"Kitchen Aggregate {EventSourceId} has applied {_counter} {typeof(DishPrepared)} events");
+            Console.WriteLine($"Kitchen {EventSourceId} prepared a {dish}, there are {_ingredients} ingredients left.");
         }
 
         void On(DishPrepared @event)
-            => _counter++;
+            => _ingredients--;
     }
 }
 ```
@@ -83,7 +90,7 @@ export class Kitchen extends AggregateRoot {
     }
 
     prepareDish(dish: string, chef: string) {
-        if (this._counter >= 2) throw new Error("Cannot prepare more than 2 dishes");
+        if (this._counter >= 2) throw new Error('Cannot prepare more than 2 dishes');
         this.apply(new DishPrepared(dish, chef));
         console.log(`Kitchen Aggregate ${this.eventSourceId} has applied ${this._counter} ${DishPrepared.name} events`);
     }
@@ -106,6 +113,7 @@ Let's expand upon the client built in the getting started guide. But instead of 
 {{% tab name="C#" %}}
 ```csharp
 // Program.cs
+using System.Threading.Tasks;
 using Dolittle.SDK;
 using Dolittle.SDK.Tenancy;
 
@@ -113,7 +121,7 @@ namespace Kitchen
 {
     class Program
     {
-        public static void Main()
+        public static async Task Main()
         {
             var client = Client
                 .ForMicroservice("f39b1f61-d360-4675-b859-53c05c87c0e6")
@@ -121,10 +129,12 @@ namespace Kitchen
                     eventTypes.Register<DishPrepared>())
                 .WithEventHandlers(builder =>
                     builder.RegisterEventHandler<DishHandler>())
+                .WithAggregateRoots(builder =>
+                    builder.Register<Kitchen>())
                 .Build();
 
-            client
-                .AggregateOf<Kitchen>("bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9", _ => _.ForTenant(TenantId.Development))
+            await client
+                .AggregateOf<Kitchen>("Dolittle Tacos", _ => _.ForTenant(TenantId.Development))
                 .Perform(kitchen => kitchen.PrepareDish("Bean Blaster Taco", "Mr. Taco"));
 
             // Blocks until the EventHandlers are finished, i.e. forever
@@ -134,7 +144,9 @@ namespace Kitchen
 }
 ```
 
-The GUID given in `AggregateOf<Kitchen>()` is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify the aggregate of the aggregate root to perform the action on.
+The string given in `AggregateOf<Kitchen>()` is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify the aggregate of the aggregate root to perform the action on.
+
+Note that we also register the aggregate root class on the client builder using `.WithAggregateRoots(...)`.
 {{% /tab %}}
 
 {{% tab name="TypeScript" %}}
@@ -153,28 +165,30 @@ import { Kitchen } from './Kitchen';
             eventTypes.register(DishPrepared))
         .withEventHandlers(builder =>
             builder.register(DishHandler))
+        .withAggregateRoots(aggregateRoots =>
+            aggregateRoots.register(Kitchen))
         .build();
 
     await client
-        .aggregateOf(Kitchen, 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9', _ => _.forTenant(TenantId.development))
+        .aggregateOf(Kitchen, 'Dolittle Tacos', _ => _.forTenant(TenantId.development))
         .perform(kitchen => kitchen.prepareDish('Bean Blaster Taco', 'Mr. Taco'));
-
-    console.log('Done');
 })();
 ```
 
-The GUID given in the `aggregateOf()` call is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify the aggregate of the aggregate root to perform the action on.
+The string given in the `aggregateOf()` call is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify the aggregate of the aggregate root to perform the action on.
+
+Note that we also register the aggregate root class on the client builder using `.withAggregateRoots(...)`.
 {{% /tab %}}
 {{< /tabs >}}
 
 ### Start the Dolittle environment
-Start the Dolittle environment with all the necessary dependencies with the following command:
+If you don't have a Runtime already going from a previous tutorial, start the Dolittle environment with all the necessary dependencies with the following command:
 
 ```shell
-$ docker run -p 50053:50053 -p 27017:27017 dolittle/runtime:latest-development
+$ docker run -p 50053:50053 -p 51052:51052 -p 27017:27017 dolittle/runtime:latest-development -d
 ```
 
-This will start a container with the Dolittle Development Runtime on port 50053 and a MongoDB server on port 27017.
+This will start a container with the Dolittle Development Runtime on port 50053 and 51052 and a MongoDB server on port 27017.
 The Runtime handles committing the events and the event handlers while the MongoDB is used for persistence.
 
 {{% alert title="Docker on Windows" color="warning" %}}
@@ -182,12 +196,21 @@ Docker on Windows using the WSL2 backend can use massive amounts of RAM if not l
 {{% /alert %}}
 
 ### Run your microservice
-Run your code, and get a delicious serving of taco:
+Run your code twice, and get a two delicious servings of taco:
 
 {{< tabs name="run_tab" >}}
 {{% tab name="C#" %}}
 ```shell
 $ dotnet run
+Kitchen Dolittle Tacos prepared a Bean Blaster Taco, there are 1 ingredients left.
+info: Dolittle.SDK.Events.Processing.EventProcessors[0]
+      EventHandler f2d366cf-c00a-4479-acc4-851e04b6fbba registered with the Runtime, start handling requests
+Mr. Taco has prepared Bean Blaster Taco. Yummm!
+
+$ dotnet run
+Kitchen Dolittle Tacos prepared a Bean Blaster Taco, there are 0 ingredients left.
+info: Dolittle.SDK.Events.Processing.EventProcessors[0]
+      EventHandler f2d366cf-c00a-4479-acc4-851e04b6fbba registered with the Runtime, start handling requests
 Mr. Taco has prepared Bean Blaster Taco. Yummm!
 ```
 
@@ -195,11 +218,89 @@ Mr. Taco has prepared Bean Blaster Taco. Yummm!
 {{% tab name="TypeScript" %}}
 ```shell
 $ npx ts-node index.ts
+info: EventHandler f2d366cf-c00a-4479-acc4-851e04b6fbba registered with the Runtime, start handling requests.
+Kitchen Dolittle Tacos prepared a Bean Blaster Taco, there are 1 ingredients left.
+Mr. Taco has prepared Bean Blaster Taco. Yummm!
+
+$ npx ts-node index.ts
+info: EventHandler f2d366cf-c00a-4479-acc4-851e04b6fbba registered with the Runtime, start handling requests.
+Kitchen Dolittle Tacos prepared a Bean Blaster Taco, there are 0 ingredients left.
 Mr. Taco has prepared Bean Blaster Taco. Yummm!
 ```
 {{% /tab %}}
 {{< /tabs >}}
 
+
+### Check the status of your Kitchen aggregate root
+Open a new terminal for the [Dolittle CLI]({{< ref "docs/reference/cli" >}}) and run the following commands:
+
+```shell
+$ dolittle runtime aggregates list
+AggregateRoot  Instances
+------------------------
+Kitchen        1
+
+$ dolittle runtime aggregates get Kitchen --wide
+Tenant                                EventSource     AggregateRootVersion
+--------------------------------------------------------------------------
+445f8ea8-1a6f-40d7-b2fc-796dba92dc44  Dolittle Tacos  2
+
+$ dolittle runtime aggregates events Kitchen "Dolittle Tacos" --wide
+AggregateRootVersion  EventLogSequenceNumber  EventType     Public  Occurred                  
+----------------------------------------------------------------------------------------------
+0                     0                       DishPrepared  False   11/04/2021 14:04:19 +00:00
+1                     1                       DishPrepared  False   11/04/2021 14:04:37 +00:00
+```
+
+### Try to prepare a dish without any ingredients
+Since we have already used up all the available ingredients, the Kitchen aggregate root should not allow us to prepare any more dishes.
+Run your code a third time, and you will see that the exception gets thrown from the aggregate root.
+
+{{< tabs name="run_fail_tab" >}}
+{{% tab name="C#" %}}
+```shell
+$ dotnet run
+Unhandled exception. System.Exception: We have run out of ingredients, sorry!
+... stack trace ...
+```
+{{% /tab %}}
+{{% tab name="TypeScript" %}}
+```shell
+$ npx ts-node index.ts
+info: EventHandler f2d366cf-c00a-4479-acc4-851e04b6fbba registered with the Runtime, start handling requests.
+(node:9250) UnhandledPromiseRejectionWarning: Error: We have run out of ingredients, sorry!
+... stack trace ...
+```
+{{% /tab %}}
+{{< /tabs >}}
+
+You can verify that the Kitchen did not allow a third dish to be prepared, by checking the committed events:
+```shell
+$ dolittle runtime aggregates events Kitchen "Dolittle Tacos" --wide
+AggregateRootVersion  EventLogSequenceNumber  EventType     Public  Occurred                  
+----------------------------------------------------------------------------------------------
+0                     0                       DishPrepared  False   11/04/2021 14:04:19 +00:00
+1                     1                       DishPrepared  False   11/04/2021 14:04:37 +00:00
+```
+
+### Events from aggregate roots are just normal events
+The events applied (committed) from aggregate roots are handled the same way as events committed directly to the event store.
+You can verify this by checking the status of the DishHandler:
+
+```shell
+$ dolittle runtime eventhandlers get DishHandler
+Tenant                                Position  Status
+------------------------------------------------------
+445f8ea8-1a6f-40d7-b2fc-796dba92dc44  2         ✅  
+```
+
+{{< alert title="Committing events outside of an aggregate root" color="warning" >}}
+If you went through the getting started tutorial and this tutorial without stopping the Dolittle environment in between, the last command will show that the DishHandler has handled 3 events - even though the Kitchen can only prepare two dishes.
+This is fine, and expected behavior.
+Events committed outside of the Kitchen aggregate root (even if they are the same type), does not update the internal state.
+{{< /alert >}}
+
 ## What's next
 
+- Learn how to use [Projections]({{< ref "projections" >}}) to create read models.
 - Learn how to [deploy your application]({{< ref "docs/platform/deploy_an_application" >}}) into our [Platform]({{< ref "docs/platform" >}}).
