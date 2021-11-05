@@ -244,9 +244,9 @@ The `[Embedding()]` attribute identifies this embedding in the Runtime, and is u
 
 The `ResolveDeletionToEvents()` method is the same, except the resulting events have to result in the read model being deleted. This is done by returning a `ProjectionResult<Employee>.Delete` in the corresponding `On()` method.
 
-The committed events are always [public]({{< ref "docs/concepts/events#public-vs-private" >}}) [Aggregate events]({{< ref "docs/concepts/aggregates#aggregateevents" >}}). The `AggregateRootId` is the same as the `EmbeddingId`, and the `EventSourceId` is computed from the read models key.
+The committed events are always [public]({{< ref "docs/concepts/events#public-vs-private" >}}) [Aggregate events]({{< ref "docs/concepts/aggregates#aggregateevents" >}}). The `AggregateRootId` is the same as the `EmbeddingId`, and the `EventSourceId` is the same as the read models key.
 
-Unlike projections, you don't need to specify a [`KeySelector`]({{< ref "docs/concepts/projections#key-selector" >}}) for the `On()` methods. The Runtime will automatically calculate a unique [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}) for the committed events based on the embeddings [Key]({{< ref "docs/concepts/embeddings#key" >}}).
+Unlike projections, you don't need to specify a [`KeySelector`]({{< ref "docs/concepts/projections#key-selector" >}}) for the `On()` methods.
 
 {{% /tab %}}
 
