@@ -79,21 +79,19 @@ First, we'll create a [Projection]({{< ref "docs/concepts/projections" >}}) that
 // DishCounter.cs
 using Dolittle.SDK.Projections;
 
-namespace Kitchen
-{
-    [Projection("98f9db66-b6ca-4e5f-9fc3-638626c9ecfa")]
-    public class DishCounter
-    {
-        public int NumberOfTimesPrepared = 0;
+namespace Kitchen;
 
-        [KeyFromProperty("Dish")]
-        public void On(DishPrepared @event, ProjectionContext context)
-        {
-            NumberOfTimesPrepared ++;
-        }
+[Projection("98f9db66-b6ca-4e5f-9fc3-638626c9ecfa")]
+public class DishCounter
+{
+    public int NumberOfTimesPrepared = 0;
+
+    [KeyFromProperty("Dish")]
+    public void On(DishPrepared @event, ProjectionContext context)
+    {
+        NumberOfTimesPrepared++;
     }
 }
-
 ```
 The `[Projection()]` attribute identifies this Projection in the Runtime, and is used to keep track of the events that it processes, and retrying the handling of an event if the handler fails (throws an exception). If the Projection is changed somehow (eg. a new `On()` method or the `EventType` changes), it will replay all of its events.
 
@@ -130,59 +128,56 @@ Let's register the projection, commit new `DishPrepared` events and get the proj
 {{% tab name="C#" %}}
 ```csharp
 // Program.cs
-using System;
-using System.Threading.Tasks;
 using Dolittle.SDK;
 using Dolittle.SDK.Tenancy;
 
-namespace Kitchen
+namespace Kitchen;
+
+class Program
 {
-    class Program
+    static async Task Main(string[] args)
     {
-        public async static Task Main()
+        var client = DolittleClient
+            .ForMicroservice("f39b1f61-d360-4675-b859-53c05c87c0e6")
+            .WithEventTypes(eventTypes =>
+                eventTypes.Register<DishPrepared>())
+            .WithProjections(builder =>
+                builder.RegisterProjection<DishCounter>())
+            .Build();
+
+        var started = client.Start();
+        var eventStore = client.EventStore.ForTenant(TenantId.Development);
+
+        await eventStore.Commit(_ =>
+            _.CreateEvent(new DishPrepared("Bean Blaster Taco", "Mr. Taco"))
+            .FromEventSource("Dolittle Tacos"))
+            .ConfigureAwait(false);
+        await eventStore.Commit(_ =>
+            _.CreateEvent(new DishPrepared("Bean Blaster Taco", "Mrs. Tex Mex"))
+            .FromEventSource("Dolittle Tacos"))
+            .ConfigureAwait(false);
+        await eventStore.Commit(_ =>
+            _.CreateEvent(new DishPrepared("Avocado Artillery Tortilla", "Mr. Taco"))
+            .FromEventSource("Dolittle Tacos"))
+            .ConfigureAwait(false);
+        await eventStore.Commit(_ =>
+            _.CreateEvent(new DishPrepared("Chili Canon Wrap", "Mrs. Tex Mex"))
+            .FromEventSource("Dolittle Tacos"))
+            .ConfigureAwait(false);
+
+        await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
+
+        var dishes = await client.Projections
+            .ForTenant(TenantId.Development)
+            .GetAll<DishCounter>().ConfigureAwait(false);
+
+        foreach (var (dish, state) in dishes)
         {
-            var client = DolittleClient
-                .ForMicroservice("f39b1f61-d360-4675-b859-53c05c87c0e6")
-                .WithEventTypes(eventTypes =>
-                    eventTypes.Register<DishPrepared>())
-                .WithProjections(builder => 
-                    builder.RegisterProjection<DishCounter>())
-                .Build();
-
-            var started = client.Start();
-
-            var eventStore = client.EventStore.ForTenant(TenantId.Development);
-
-            await eventStore.Commit(_ =>
-                _.CreateEvent(new DishPrepared("Bean Blaster Taco", "Mr. Taco"))
-                .FromEventSource("Dolittle Tacos"))
-                .ConfigureAwait(false);
-            await eventStore.Commit(_ =>
-                _.CreateEvent(new DishPrepared("Bean Blaster Taco", "Mrs. Tex Mex"))
-                .FromEventSource("Dolittle Tacos"))
-                .ConfigureAwait(false);
-            await eventStore.Commit(_ =>
-                _.CreateEvent(new DishPrepared("Avocado Artillery Tortilla", "Mr. Taco"))
-                .FromEventSource("Dolittle Tacos"))
-                .ConfigureAwait(false);
-            await eventStore.Commit(_ =>
-                _.CreateEvent(new DishPrepared("Chili Canon Wrap", "Mrs. Tex Mex"))
-                .FromEventSource("Dolittle Tacos"))
-                .ConfigureAwait(false);
-
-            await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
-
-            var dishes = await client.Projections
-                .ForTenant(TenantId.Development)
-                .GetAll<DishCounter>().ConfigureAwait(false);
-
-            foreach (var (dish, state) in dishes) {
-                 Console.WriteLine($"The kitchen has prepared {dish} {state.State.NumberOfTimesPrepared} times");
-            }
-
-            // Blocks until the EventHandlers are finished, i.e. forever
-            await started.ConfigureAwait(false);
+            Console.WriteLine($"The kitchen has prepared {dish} {state.State.NumberOfTimesPrepared} times");
         }
+
+        // Blocks until the EventHandlers are finished, i.e. forever
+        await started;
     }
 }
 ```
@@ -272,15 +267,12 @@ Let's add another read model to keep track of all the chefs and . This time let'
 {{% tab name="C#" %}}
 ```csharp
 // Chef.cs
-using System.Collections.Generic;
+namespace Kitchen;
 
-namespace Kitchen
+public class Chef
 {
-    public class Chef
-    {
-        public string Name = "";
-        public List<string> Dishes = new List<string>();
-    }
+    public string Name = "";
+    public List<string> Dishes = new();
 }
 ```
 
@@ -308,73 +300,73 @@ Let's create an inline Projection for the `Chef` read model:
 {{% tab name="C#" %}}
 ```csharp
 // Program.cs
-using System;
-using System.Threading.Tasks;
 using Dolittle.SDK;
 using Dolittle.SDK.Tenancy;
 
-namespace Kitchen
+namespace Kitchen;
+
+class Program
 {
-    class Program
+    static async Task Main(string[] args)
     {
-        public async static Task Main()
+        var client = DolittleClient
+            .ForMicroservice("f39b1f61-d360-4675-b859-53c05c87c0e6")
+            .WithEventTypes(eventTypes =>
+                eventTypes.Register<DishPrepared>())
+            .WithProjections(builder =>
+            {
+                builder.RegisterProjection<DishCounter>();
+
+                builder.CreateProjection("0767bc04-bc03-40b8-a0be-5f6c6130f68b")
+                    .ForReadModel<Chef>()
+                    .On<DishPrepared>(_ => _.KeyFromProperty(_ => _.Chef), (chef, @event, projectionContext) =>
+                    {
+                        chef.Name = @event.Chef;
+                        if (!chef.Dishes.Contains(@event.Dish)) chef.Dishes.Add(@event.Dish);
+                        return chef;
+                    });
+            })
+            .Build();
+
+        var started = client.Start();
+
+        var eventStore = client.EventStore.ForTenant(TenantId.Development);
+
+        await eventStore.Commit(_ =>
+            _.CreateEvent(new DishPrepared("Bean Blaster Taco", "Mr. Taco"))
+            .FromEventSource("Dolittle Tacos"))
+            .ConfigureAwait(false);
+        await eventStore.Commit(_ =>
+            _.CreateEvent(new DishPrepared("Bean Blaster Taco", "Mrs. Tex Mex"))
+            .FromEventSource("Dolittle Tacos"))
+            .ConfigureAwait(false);
+        await eventStore.Commit(_ =>
+            _.CreateEvent(new DishPrepared("Avocado Artillery Tortilla", "Mr. Taco"))
+            .FromEventSource("Dolittle Tacos"))
+            .ConfigureAwait(false);
+        await eventStore.Commit(_ =>
+            _.CreateEvent(new DishPrepared("Chili Canon Wrap", "Mrs. Tex Mex"))
+            .FromEventSource("Dolittle Tacos"))
+            .ConfigureAwait(false);
+
+        await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
+
+        var dishes = await client.Projections
+            .ForTenant(TenantId.Development)
+            .GetAll<DishCounter>().ConfigureAwait(false);
+
+        foreach (var (dish, state) in dishes)
         {
-            var client = DolittleClient
-                .ForMicroservice("f39b1f61-d360-4675-b859-53c05c87c0e6")
-                .WithEventTypes(eventTypes =>
-                    eventTypes.Register<DishPrepared>())
-                .WithProjections(builder => {
-                    builder.RegisterProjection<DishCounter>();
-
-                    builder.CreateProjection("0767bc04-bc03-40b8-a0be-5f6c6130f68b")
-                        .ForReadModel<Chef>()
-                        .On<DishPrepared>(_ => _.KeyFromProperty(_ => _.Chef), (chef, @event, projectionContext) => {
-                            chef.Name = @event.Chef;
-                            if (!chef.Dishes.Contains(@event.Dish)) chef.Dishes.Add(@event.Dish);
-                            return chef;
-                        });
-                })
-                .Build();
-
-            var started = client.Start();
-
-            var eventStore = client.EventStore.ForTenant(TenantId.Development);
-
-            await eventStore.Commit(_ =>
-                _.CreateEvent(new DishPrepared("Bean Blaster Taco", "Mr. Taco"))
-                .FromEventSource("Dolittle Tacos"))
-                .ConfigureAwait(false);
-            await eventStore.Commit(_ =>
-                _.CreateEvent(new DishPrepared("Bean Blaster Taco", "Mrs. Tex Mex"))
-                .FromEventSource("Dolittle Tacos"))
-                .ConfigureAwait(false);
-            await eventStore.Commit(_ =>
-                _.CreateEvent(new DishPrepared("Avocado Artillery Tortilla", "Mr. Taco"))
-                .FromEventSource("Dolittle Tacos"))
-                .ConfigureAwait(false);
-            await eventStore.Commit(_ =>
-                _.CreateEvent(new DishPrepared("Chili Canon Wrap", "Mrs. Tex Mex"))
-                .FromEventSource("Dolittle Tacos"))
-                .ConfigureAwait(false);
-
-            await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
-
-            var dishes = await client.Projections
-                .ForTenant(TenantId.Development)
-                .GetAll<DishCounter>().ConfigureAwait(false);
-
-            foreach (var (dish, state) in dishes) {
-                 Console.WriteLine($"The kitchen has prepared {dish} {state.State.NumberOfTimesPrepared} times");
-            }
-
-            var chef = await client.Projections
-                .ForTenant(TenantId.Development)
-                .Get<Chef>("Mrs. Tex Mex").ConfigureAwait(false);
-            Console.WriteLine($"{chef.Key} has prepared {string.Join(", ", chef.State.Dishes)}");
-
-            // Blocks until the EventHandlers are finished, i.e. forever
-            await started.ConfigureAwait(false);
+            Console.WriteLine($"The kitchen has prepared {dish} {state.State.NumberOfTimesPrepared} times");
         }
+
+        var chef = await client.Projections
+            .ForTenant(TenantId.Development)
+            .Get<Chef>("Mrs. Tex Mex").ConfigureAwait(false);
+        Console.WriteLine($"{chef.Key} has prepared {string.Join(", ", chef.State.Dishes)}");
+
+        // Blocks until the EventHandlers are finished, i.e. forever
+        await started;
     }
 }
 ```
