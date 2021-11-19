@@ -141,7 +141,7 @@ namespace Kitchen
     {
         public async static Task Main()
         {
-            var client = Client
+            var client = DolittleClient
                 .ForMicroservice("f39b1f61-d360-4675-b859-53c05c87c0e6")
                 .WithEventTypes(eventTypes =>
                     eventTypes.Register<DishPrepared>())
@@ -196,12 +196,12 @@ The string given in `FromEventSource()` is the [`EventSourceId`]({{< ref "docs/c
 {{% tab name="TypeScript" %}}
 ```typescript
 // index.ts
-import { Client } from '@dolittle/sdk';
+import { DolittleClient } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
 import { DishPrepared } from './DishPrepared';
 import { DishCounter } from './DishCounter';
 
-const client = Client
+const client = DolittleClient
     .forMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
     .withEventTypes(eventTypes =>
         eventTypes.register(DishPrepared))
@@ -319,7 +319,7 @@ namespace Kitchen
     {
         public async static Task Main()
         {
-            var client = Client
+            var client = DolittleClient
                 .ForMicroservice("f39b1f61-d360-4675-b859-53c05c87c0e6")
                 .WithEventTypes(eventTypes =>
                     eventTypes.Register<DishPrepared>())
@@ -386,14 +386,14 @@ The `Get<Chef>('key')` method returns a Projection instance with that particular
 {{% tab name="TypeScript" %}}
 ```typescript
 // index.ts
-import { Client } from '@dolittle/sdk';
+import { DolittleClient } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
 import { DishPrepared } from './DishPrepared';
 import { DishHandler } from './DishHandler';
 import { DishCounter } from './DishCounter';
 import { Chef } from './Chef';
 
-const client = Client
+const client = DolittleClient
     .forMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
     .withEventTypes(eventTypes =>
         eventTypes.register(DishPrepared))

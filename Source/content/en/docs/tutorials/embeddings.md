@@ -338,7 +338,7 @@ namespace Kitchen
     {
         public static async Task Main()
         {
-            var client = Client
+            var client = DolittleClient
                 .ForMicroservice("f39b1f61-d360-4675-b859-53c05c87c0e6")
                 .WithEventTypes(eventTypes =>
                 {
@@ -387,14 +387,14 @@ The `Delete()` method will call the embeddings `ResolveDeletionToEvents()` for t
 ```typescript
 // index.ts
 
-import { Client } from '@dolittle/sdk';
+import { DolittleClient } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
 import { Employee } from './Employee';
 import { EmployeeHired } from './EmployeeHired';
 import { EmployeeRetired } from './EmployeeRetired';
 import { EmployeeTransferred } from './EmployeeTransferred';
 
-const client = Client
+const client = DolittleClient
     .forMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
     .withEventTypes(eventTypes => {
         eventTypes.register(EmployeeHired);
