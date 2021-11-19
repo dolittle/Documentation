@@ -88,15 +88,17 @@ In this example, we want to [event source]({{< ref "docs/concepts/event_sourcing
 // EmployeeHired.cs
 using Dolittle.SDK.Events;
 
-namespace Kitchen
-{
-    [EventType("8fdf45bc-f484-4348-bcb0-4d6f134aaf6c")]
-    public class EmployeeHired
-    {
-        public string Name { get; set; }
+namespace Kitchen;
 
-        public EmployeeHired(string name) => Name = name;
+[EventType("8fdf45bc-f484-4348-bcb0-4d6f134aaf6c")]
+public class EmployeeHired
+{
+    public EmployeeHired(string name)
+    {
+        Name = name;
     }
+
+    public string Name { get; }
 }
 ```
 
@@ -106,22 +108,21 @@ namespace Kitchen
 // EmployeeTransferred.cs
 using Dolittle.SDK.Events;
 
-namespace Kitchen
-{
-    [EventType("b27f2a39-a2d4-43a7-9952-62e39cbc7ebc")]
-    public class EmployeeTransferred
-    {
-        public string Name { get; set; }
-        public string From { get; set; }
-        public string To { get; set; }
+namespace Kitchen;
 
-        public EmployeeTransferred(string name, string from, string to)
-        {
-            Name = name;
-            From = from;
-            To = to;
-        }
+[EventType("b27f2a39-a2d4-43a7-9952-62e39cbc7ebc")]
+public class EmployeeTransferred
+{
+    public EmployeeTransferred(string name, string from, string to)
+    {
+        Name = name;
+        From = from;
+        To = to;
     }
+
+    public string Name { get; }
+    public string From { get; }
+    public string To { get; }
 }
 ```
 
@@ -130,15 +131,17 @@ namespace Kitchen
 // EmployeeRetired.cs
 using Dolittle.SDK.Events;
 
-namespace Kitchen
-{
-    [EventType("1932beb4-c8cd-4fee-9a7e-a92af3693510")]
-    public class EmployeeRetired
-    {
-        public string Name { get; set; }
+namespace Kitchen;
 
-        public EmployeeRetired(string name) => Name = name;
+[EventType("1932beb4-c8cd-4fee-9a7e-a92af3693510")]
+public class EmployeeRetired
+{
+    public EmployeeRetired(string name)
+    {
+        Name = name;
     }
+
+    public string Name { get; }
 }
 ```
 
@@ -189,51 +192,49 @@ In this example, we want to events source the data coming from a mocked HR syste
 {{% tab name="C#" %}}
 ```csharp
 // Employee.cs
-using System;
 using Dolittle.SDK.Embeddings;
 using Dolittle.SDK.Projections;
 
-namespace Kitchen
+namespace Kitchen;
+
+[Embedding("e5577d2c-0de7-481c-b5be-6ef613c2fcd6")]
+public class Employee
 {
-    [Embedding("e5577d2c-0de7-481c-b5be-6ef613c2fcd6")]
-    public class Employee
+    public string Name { get; set; } = "";
+    public string Workplace { get; set; } = "Unassigned";
+
+    public object ResolveUpdateToEvents(Employee updatedEmployee, EmbeddingContext context)
     {
-        public string Name { get; set; } = "";
-        public string Workplace { get; set; } = "Unassigned";
-
-        public object ResolveUpdateToEvents(Employee updatedEmployee, EmbeddingContext context)
+        if (Name != updatedEmployee.Name)
         {
-            if (Name != updatedEmployee.Name)
-            {
-                return new EmployeeHired(updatedEmployee.Name);
-            }
-            else if (Workplace != updatedEmployee.Workplace)
-            {
-                return new EmployeeTransferred(Name, Workplace , updatedEmployee.Workplace);
-            }
-
-            throw new NotImplementedException();
+            return new EmployeeHired(updatedEmployee.Name);
+        }
+        else if (Workplace != updatedEmployee.Workplace)
+        {
+            return new EmployeeTransferred(Name, Workplace, updatedEmployee.Workplace);
         }
 
-        public object ResolveDeletionToEvents(EmbeddingContext context)
-        {
-            return new EmployeeRetired(Name);
-        }
+        throw new NotImplementedException();
+    }
 
-        public void On(EmployeeHired @event, EmbeddingProjectContext context)
-        {
-            Name = @event.Name;
-        }
+    public object ResolveDeletionToEvents(EmbeddingContext context)
+    {
+        return new EmployeeRetired(Name);
+    }
 
-        public void On(EmployeeTransferred @event, EmbeddingProjectContext context)
-        {
-            Workplace = @event.To;
-        }
+    public void On(EmployeeHired @event, EmbeddingProjectContext context)
+    {
+        Name = @event.Name;
+    }
 
-        public ProjectionResultType On(EmployeeRetired @event, EmbeddingProjectContext context)
-        {
-            return ProjectionResultType.Delete;
-        }
+    public void On(EmployeeTransferred @event, EmbeddingProjectContext context)
+    {
+        Workplace = @event.To;
+    }
+
+    public ProjectionResultType On(EmployeeRetired @event, EmbeddingProjectContext context)
+    {
+        return ProjectionResultType.Delete;
     }
 }
 ```
@@ -327,53 +328,50 @@ Let's register the new event types and the embedding. Then we can update and del
 {{% tab name="C#" %}}
 ```csharp
 // Program.cs
-using System;
-using System.Threading.Tasks;
 using Dolittle.SDK;
 using Dolittle.SDK.Tenancy;
 
-namespace Kitchen
+namespace Kitchen;
+
+class Program
 {
-    class Program
+    static async Task Main(string[] args)
     {
-        public static async Task Main()
-        {
-            var client = Client
-                .ForMicroservice("f39b1f61-d360-4675-b859-53c05c87c0e6")
-                .WithEventTypes(eventTypes =>
-                {
-                    eventTypes.Register<EmployeeHired>();
-                    eventTypes.Register<EmployeeTransferred>();
-                    eventTypes.Register<EmployeeRetired>();
-                })
-                .WithEmbeddings(builder =>
-                    builder.RegisterEmbedding<Employee>())
-                .Build();
-            _ = client.Start();
-
-            // wait for the registration to complete
-            await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
-
-            // mock of the state from the external HR system
-            var updatedEmployee = new Employee
+        var client = DolittleClient
+            .ForMicroservice("f39b1f61-d360-4675-b859-53c05c87c0e6")
+            .WithEventTypes(eventTypes =>
             {
-                Name = "Mr. Taco",
-                Workplace = "Street Food Taco Truck"
-            };
+                eventTypes.Register<EmployeeHired>();
+                eventTypes.Register<EmployeeTransferred>();
+                eventTypes.Register<EmployeeRetired>();
+            })
+            .WithEmbeddings(builder =>
+                builder.RegisterEmbedding<Employee>())
+            .Build();
+        _ = client.Start();
 
-            await client.Embeddings
-                .ForTenant(TenantId.Development)
-                .Update(updatedEmployee.Name, updatedEmployee);
-            Console.WriteLine($"Updated {updatedEmployee.Name}.");
+        // wait for the registration to complete
+        await Task.Delay(TimeSpan.FromSeconds(2));
 
-            await client.Embeddings
-                .ForTenant(TenantId.Development)
-                .Delete<Employee>(updatedEmployee.Name);
-            Console.WriteLine($"Deleted {updatedEmployee.Name}.");
+        // mock of the state from the external HR system
+        var updatedEmployee = new Employee
+        {
+            Name = "Mr. Taco",
+            Workplace = "Street Food Taco Truck"
+        };
 
-            // wait for the processing to finish before severing the connection
-            await Task.Delay(TimeSpan.FromSeconds(1)).ConfigureAwait(false);
-        }
+        await client.Embeddings
+            .ForTenant(TenantId.Development)
+            .Update(updatedEmployee.Name, updatedEmployee);
+        Console.WriteLine($"Updated {updatedEmployee.Name}.");
+
+        await client.Embeddings
+            .ForTenant(TenantId.Development)
+            .Delete<Employee>(updatedEmployee.Name);
+        Console.WriteLine($"Deleted {updatedEmployee.Name}.");
+
+        // wait for the processing to finish before severing the connection
+        await Task.Delay(TimeSpan.FromSeconds(1));
     }
 }
 ```
@@ -387,14 +385,14 @@ The `Delete()` method will call the embeddings `ResolveDeletionToEvents()` for t
 ```typescript
 // index.ts
 
-import { Client } from '@dolittle/sdk';
+import { DolittleClient } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
 import { Employee } from './Employee';
 import { EmployeeHired } from './EmployeeHired';
 import { EmployeeRetired } from './EmployeeRetired';
 import { EmployeeTransferred } from './EmployeeTransferred';
 
-const client = Client
+const client = DolittleClient
     .forMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
     .withEventTypes(eventTypes => {
         eventTypes.register(EmployeeHired);

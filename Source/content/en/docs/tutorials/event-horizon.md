@@ -86,7 +86,7 @@ namespace Kitchen
     {
         public static void Main()
         {
-            var client = Client
+            var client = DolittleClient
                 .ForMicroservice("f39b1f61-d360-4675-b859-53c05c87c0e6")
                 .WithEventTypes(eventTypes =>
                     eventTypes.Register<DishPrepared>())
@@ -111,14 +111,14 @@ namespace Kitchen
 {{% tab name="TypeScript" %}}
 ```typescript
 // index.ts
-import { Client } from '@dolittle/sdk';
+import { DolittleClient } from '@dolittle/sdk';
 import { EventContext, PartitionId } from '@dolittle/sdk.events';
 import { PartitionedFilterResult } from '@dolittle/sdk.events.filtering';
 import { TenantId } from '@dolittle/sdk.execution';
 import { DishPrepared } from './DishPrepared';
 import { DishHandler } from './DishHandler';
 
-const client = Client
+const client = DolittleClient
     .forMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
     .withEventTypes(eventTypes =>
         eventTypes.register(DishPrepared))
@@ -177,7 +177,7 @@ namespace Kitchen
 {{% tab name="TypeScript" %}}
 ```typescript
 // index.ts
-import { Client } from '@dolittle/sdk';
+import { DolittleClient } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
 import { DishPrepared } from './DishPrepared';
 import { DishHandler } from './DishHandler';
@@ -216,7 +216,7 @@ namespace Kitchen
     {
         public static void Main()
         {
-            var client = Client.ForMicroservice("a14bb24e-51f3-4d83-9eba-44c4cffe6bb9")
+            var client = DolittleClient.ForMicroservice("a14bb24e-51f3-4d83-9eba-44c4cffe6bb9")
                 .WithRuntimeOn("localhost", 50055)
                 .WithEventTypes(eventTypes =>
                     eventTypes.Register<DishPrepared>())
@@ -245,12 +245,12 @@ namespace Kitchen
 {{% tab name="TypeScript" %}}
 ```typescript
 // index.ts
-import { Client } from '@dolittle/sdk';
+import { DolittleClient } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
 import { PartitionId } from '@dolittle/sdk.events';
 import { DishPrepared } from './DishPrepared';
 
-const client = Client
+const client = DolittleClient
     .forMicroservice('a14bb24e-51f3-4d83-9eba-44c4cffe6bb9')
     .withRuntimeOn('localhost', 50055)
     .withEventTypes(eventTypes =>

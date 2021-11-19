@@ -42,33 +42,29 @@ The following code implements an aggregate root for a Kitchen that only has enou
 {{% tab name="C#" %}}
 ```csharp
 // Kitchen.cs
-
-using System;
 using Dolittle.SDK.Aggregates;
 using Dolittle.SDK.Events;
 
-namespace Kitchen
+namespace Kitchen;
+
+[AggregateRoot("01ad9a9f-711f-47a8-8549-43320f782a1e")]
+public class Kitchen : AggregateRoot
 {
-    [AggregateRoot("01ad9a9f-711f-47a8-8549-43320f782a1e")]
-    public class Kitchen : AggregateRoot
+    int _ingredients = 2;
+
+    public Kitchen(EventSourceId eventSource)
+        : base(eventSource)
     {
-        int _ingredients = 2;
-
-        public Kitchen(EventSourceId eventSource)
-            : base(eventSource)
-        {
-        }
-
-        public void PrepareDish(string dish, string chef)
-        {
-            if (_ingredients <= 0) throw new Exception("We have run out of ingredients, sorry!");
-            Apply(new DishPrepared(dish, chef));
-            Console.WriteLine($"Kitchen {EventSourceId} prepared a {dish}, there are {_ingredients} ingredients left.");
-        }
-
-        void On(DishPrepared @event)
-            => _ingredients--;
     }
+
+    public void PrepareDish(string dish, string chef)
+    {
+        if (_ingredients <= 0) throw new Exception("We have run out of ingredients, sorry!");
+        Apply(new DishPrepared(dish, chef));
+        Console.WriteLine($"Kitchen {EventSourceId} prepared a {dish}, there are {_ingredients} ingredients left.");
+    }
+
+    void On(DishPrepared @event) => _ingredients--;
 }
 ```
 The GUID given in the `[AggregateRoot()]` attribute is the [`AggregateRootId`]({{< ref "docs/concepts/aggregates#structure-of-an-aggregateroot" >}}), which is used to identify this `AggregateRoot` in the Runtime.
@@ -113,33 +109,31 @@ Let's expand upon the client built in the getting started guide. But instead of 
 {{% tab name="C#" %}}
 ```csharp
 // Program.cs
-using System.Threading.Tasks;
 using Dolittle.SDK;
 using Dolittle.SDK.Tenancy;
 
-namespace Kitchen
+namespace Kitchen;
+
+class Program
 {
-    class Program
+    static async Task Main(string[] args)
     {
-        public static async Task Main()
-        {
-            var client = Client
-                .ForMicroservice("f39b1f61-d360-4675-b859-53c05c87c0e6")
-                .WithEventTypes(eventTypes =>
-                    eventTypes.Register<DishPrepared>())
-                .WithEventHandlers(builder =>
-                    builder.RegisterEventHandler<DishHandler>())
-                .WithAggregateRoots(builder =>
-                    builder.Register<Kitchen>())
-                .Build();
+        var client = DolittleClient
+            .ForMicroservice("f39b1f61-d360-4675-b859-53c05c87c0e6")
+            .WithEventTypes(eventTypes =>
+                eventTypes.Register<DishPrepared>())
+            .WithEventHandlers(builder =>
+                builder.RegisterEventHandler<DishHandler>())
+            .WithAggregateRoots(builder =>
+                builder.Register<Kitchen>())
+            .Build();
 
-            await client
-                .AggregateOf<Kitchen>("Dolittle Tacos", _ => _.ForTenant(TenantId.Development))
-                .Perform(kitchen => kitchen.PrepareDish("Bean Blaster Taco", "Mr. Taco"));
+        await client
+            .AggregateOf<Kitchen>("Dolittle Tacos", _ => _.ForTenant(TenantId.Development))
+            .Perform(kitchen => kitchen.PrepareDish("Bean Blaster Taco", "Mr. Taco"));
 
-            // Blocks until the EventHandlers are finished, i.e. forever
-            client.Start().Wait();
-        }
+        // Blocks until the EventHandlers are finished, i.e. forever
+        await client.Start();
     }
 }
 ```
@@ -152,14 +146,14 @@ Note that we also register the aggregate root class on the client builder using 
 {{% tab name="TypeScript" %}}
 ```typescript
 // index.ts
-import { Client } from '@dolittle/sdk';
+import { DolittleClient } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
 import { DishPrepared } from './DishPrepared';
 import { DishHandler } from './DishHandler';
 import { Kitchen } from './Kitchen';
 
 (async () => {
-    const client = Client
+    const client = DolittleClient
         .forMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
         .withEventTypes(eventTypes =>
             eventTypes.register(DishPrepared))
