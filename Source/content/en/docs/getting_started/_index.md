@@ -1,13 +1,14 @@
 ---
-title: Tutorials
+title: Getting Started
 description: Tutorials for the Dolittle platform
 keywords: overview, dolittle, why dolittle, what is dolittle, 
 author: Dolittle
-weight: 5
+weight: 1
 type: "space"
 icon: "ti-direction"
-repository: https://github.com/dolittle/Documentation
 aliases:
-    - /getting-started/tutorial/
-    - /getting-started/tutorial/setup/
+    - /getting-started/
+    - /getting-started/getting-started/
+    - /getting-started/quickstart/
+    - /getting-started/gettingstarted/
 ---
