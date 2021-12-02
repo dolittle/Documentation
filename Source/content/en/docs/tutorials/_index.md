@@ -5,7 +5,6 @@ keywords: overview, dolittle, why dolittle, what is dolittle,
 author: Dolittle
 weight: 5
 type: "space"
-icon: "ti-direction"
 repository: https://github.com/dolittle/Documentation
 aliases:
     - /getting-started/tutorial/
