@@ -204,3 +204,9 @@ For changing the navbar etc. Should probably live in a different file.
 .td-sidebar-nav .ul-1 ul {
   padding-left: 0.8em;
 }
+
+// Give some room around the Page Meta actions to separate from the Table of Contents
+.td-page-meta {
+  margin-left: 0px !important;
+  margin-bottom: 1.5rem !important;
+}
