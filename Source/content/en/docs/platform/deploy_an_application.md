@@ -4,7 +4,7 @@ description: How to deploy an application in the Dolittle Platform
 weight: 5
 ---
 {{% pageinfo color="info" %}}
-This guide is for the users of our [Platform]({{< ref "platform" >}}). If you aren't already a user, please [contact us](https://www.dolittle.com/contact-us) to host your microservices!
+This guide is for the users of our [Platform]({{< ref "platform" >}}). If you aren't already a user, please [contact us](https://www.dolittle.com/contact) to host your microservices!
 {{% /pageinfo %}}
 
 ## Prerequisites
