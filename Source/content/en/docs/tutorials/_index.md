@@ -7,6 +7,10 @@ weight: 5
 type: "space"
 repository: https://github.com/dolittle/Documentation
 aliases:
+    - /getting-started/
+    - /getting-started/getting-started/
+    - /getting-started/quickstart/
     - /getting-started/tutorial/
     - /getting-started/tutorial/setup/
+    - /getting-started/gettingstarted/
 ---
