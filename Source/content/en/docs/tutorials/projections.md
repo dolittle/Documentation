@@ -378,26 +378,19 @@ The `Get<Chef>('key')` method returns a Projection instance with that particular
 {{% tab name="TypeScript" %}}
 ```typescript
 // index.ts
-import { DolittleClient } from '@dolittle/sdk';
-import { TenantId } from '@dolittle/sdk.execution';
-import { setTimeout } from 'timers/promises';
-
-import { Chef } from './Chef';
-import { DishCounter } from './DishCounter';
-import { DishPrepared } from './DishPrepared';
-
 (async () => {
     const client = await DolittleClient
         .setup(builder => builder
-            .withProjections(builder => {
-                builder.createProjection('0767bc04-bc03-40b8-a0be-5f6c6130f68b')
+            .withProjections(_ => _
+                .create('0767bc04-bc03-40b8-a0be-5f6c6130f68b')
                     .forReadModel(Chef)
                     .on(DishPrepared, _ => _.keyFromProperty('Chef'), (chef, event, projectionContext) => {
                         chef.name = event.Chef;
                         if (!chef.dishes.includes(event.Dish)) chef.dishes.push(event.Dish);
                         return chef;
-                    });
-            }))
+                    })
+            )
+        )
         .connect();
 
     const eventStore = client.eventStore.forTenant(TenantId.development);
