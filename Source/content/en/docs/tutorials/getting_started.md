@@ -142,7 +142,7 @@ export class DishHandler {
     ) {}
 
     @handles(DishPrepared)
-    async dishPrepared(event: DishPrepared, eventContext: EventContext) {
+    dishPrepared(event: DishPrepared, eventContext: EventContext) {
         this._logger.info(`${event.Chef} has prepared ${event.Dish}. Yummm!`);
     }
 }
