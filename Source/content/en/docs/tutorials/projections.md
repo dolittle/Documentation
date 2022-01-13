@@ -103,6 +103,7 @@ When an event is committed, the `On()` method is called for all the Projections 
 ```typescript
 // DishCounter.ts
 import { ProjectionContext, projection, on } from '@dolittle/sdk.projections';
+
 import { DishPrepared } from './DishPrepared';
 
 @projection('98f9db66-b6ca-4e5f-9fc3-638626c9ecfa')
@@ -110,7 +111,7 @@ export class DishCounter {
     numberOfTimesPrepared: number = 0;
 
     @on(DishPrepared, _ => _.keyFromProperty('Dish'))
-    dishPrepared(event: DishPrepared, projectionContext: ProjectionContext) {
+    on(event: DishPrepared, projectionContext: ProjectionContext) {
         this.numberOfTimesPrepared ++;
     }
 }
@@ -193,18 +194,16 @@ The string given in `FromEventSource()` is the [`EventSourceId`]({{< ref "docs/c
 // index.ts
 import { DolittleClient } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
-import { DishPrepared } from './DishPrepared';
-import { DishCounter } from './DishCounter';
+import { setTimeout } from 'timers/promises';
 
-const client = DolittleClient
-    .forMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
-    .withEventTypes(eventTypes =>
-        eventTypes.register(DishPrepared))
-    .withProjections(builder =>
-        builder.register(DishCounter))
-    .build();
+import { DishCounter } from './DishCounter';
+import { DishPrepared } from './DishPrepared';
 
 (async () => {
+    const client = await DolittleClient
+        .setup()
+        .connect();
+
     const eventStore = client.eventStore.forTenant(TenantId.development);
 
     await eventStore.commit(new DishPrepared('Bean Blaster Taco', 'Mr. Taco'), 'Dolittle Tacos');
@@ -212,11 +211,12 @@ const client = DolittleClient
     await eventStore.commit(new DishPrepared('Avocado Artillery Tortilla', 'Mr. Taco'), 'Dolittle Tacos');
     await eventStore.commit(new DishPrepared('Chili Canon Wrap', 'Mrs. Tex Mex'), 'Dolittle Tacos');
 
-    setTimeout(async () => {
-        for (const [dish, { state: counter }] of await client.projections.forTenant(TenantId.development).getAll(DishCounter)) {
-            console.log(`The kitchen has prepared ${dish} ${counter.numberOfTimesPrepared} times`);
-        }
-    }, 1000);
+    await setTimeout(1000);
+
+    for (const [dish, { state: counter }] of await client.projections.forTenant(TenantId.development).getAll(DishCounter)) {
+        client.logger.info(`The kitchen has prepared ${dish} ${counter.numberOfTimesPrepared} times`);
+    }
+})();
 })();
 ```
 
@@ -250,9 +250,9 @@ The kitchen has prepared Chili Canon Wrap 1 times
 ```shell
 $ npx ts-node index.ts
 info: Projection 98f9db66-b6ca-4e5f-9fc3-638626c9ecfa registered with the Runtime, start handling requests.
-The kitchen has prepared Bean Blaster Taco 2 times
-The kitchen has prepared Avocado Artillery Tortilla 1 times
-The kitchen has prepared Chili Canon Wrap 1 times
+info: The kitchen has prepared Bean Blaster Taco 2 times
+info: The kitchen has prepared Avocado Artillery Tortilla 1 times
+info: The kitchen has prepared Chili Canon Wrap 1 times
 ```
 {{% /tab %}}
 {{< /tabs >}}
@@ -380,31 +380,26 @@ The `Get<Chef>('key')` method returns a Projection instance with that particular
 // index.ts
 import { DolittleClient } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
-import { DishPrepared } from './DishPrepared';
-import { DishHandler } from './DishHandler';
-import { DishCounter } from './DishCounter';
+import { setTimeout } from 'timers/promises';
+
 import { Chef } from './Chef';
-
-const client = DolittleClient
-    .forMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
-    .withEventTypes(eventTypes =>
-        eventTypes.register(DishPrepared))
-    .withEventHandlers(builder =>
-        builder.register(DishHandler))
-    .withProjections(builder => {
-        builder.register(DishCounter);
-
-        builder.createProjection('0767bc04-bc03-40b8-a0be-5f6c6130f68b')
-            .forReadModel(Chef)
-            .on(DishPrepared, _ => _.keyFromProperty('Chef'), (chef, event, projectionContext) => {
-                chef.name = event.Chef;
-                if (!chef.dishes.includes(event.Dish)) chef.dishes.push(event.Dish);
-                return chef;
-            });
-    })
-    .build();
+import { DishCounter } from './DishCounter';
+import { DishPrepared } from './DishPrepared';
 
 (async () => {
+    const client = await DolittleClient
+        .setup(builder => builder
+            .withProjections(builder => {
+                builder.createProjection('0767bc04-bc03-40b8-a0be-5f6c6130f68b')
+                    .forReadModel(Chef)
+                    .on(DishPrepared, _ => _.keyFromProperty('Chef'), (chef, event, projectionContext) => {
+                        chef.name = event.Chef;
+                        if (!chef.dishes.includes(event.Dish)) chef.dishes.push(event.Dish);
+                        return chef;
+                    });
+            }))
+        .connect();
+
     const eventStore = client.eventStore.forTenant(TenantId.development);
 
     await eventStore.commit(new DishPrepared('Bean Blaster Taco', 'Mr. Taco'), 'Dolittle Tacos');
@@ -412,14 +407,14 @@ const client = DolittleClient
     await eventStore.commit(new DishPrepared('Avocado Artillery Tortilla', 'Mr. Taco'), 'Dolittle Tacos');
     await eventStore.commit(new DishPrepared('Chili Canon Wrap', 'Mrs. Tex Mex'), 'Dolittle Tacos');
 
-    setTimeout(async () => {
-        for (const [dish, { state: counter }] of await client.projections.forTenant(TenantId.development).getAll(DishCounter)) {
-            console.log(`The kitchen has prepared ${dish} ${counter.numberOfTimesPrepared} times`);
-        }
+    await setTimeout(1000);
 
-        const chef = await client.projections.forTenant(TenantId.development).get<Chef>(Chef, 'Mrs. Tex Mex');
-        console.log(`${chef.key} has prepared ${chef.state.dishes}`);
-    }, 1000);
+    for (const [dish, { state: counter }] of await client.projections.forTenant(TenantId.development).getAll(DishCounter)) {
+        client.logger.info(`The kitchen has prepared ${dish} ${counter.numberOfTimesPrepared} times`);
+    }
+
+    const chef = await client.projections.forTenant(TenantId.development).get<Chef>(Chef, 'Mrs. Tex Mex');
+    client.logger.info(`${chef.key} has prepared ${chef.state.dishes}`);
 })();
 ```
 
@@ -449,12 +444,12 @@ Mrs. Tex Mex has prepared Bean Blaster Taco, Chili Canon Wrap
 {{% tab name="TypeScript" %}}
 ```shell
 $ npx ts-node index.ts
-info: Projection 98f9db66-b6ca-4e5f-9fc3-638626c9ecfa registered with the Runtime, start handling requests.
 info: Projection 0767bc04-bc03-40b8-a0be-5f6c6130f68b registered with the Runtime, start handling requests.
-The kitchen has prepared Bean Blaster Taco 4 times
-The kitchen has prepared Avocado Artillery Tortilla 2 times
-The kitchen has prepared Chili Canon Wrap 2 times
-Mrs. Tex Mex has prepared Bean Blaster Taco,Chili Canon Wrap
+info: Projection 98f9db66-b6ca-4e5f-9fc3-638626c9ecfa registered with the Runtime, start handling requests.
+info: The kitchen has prepared Bean Blaster Taco 4 times
+info: The kitchen has prepared Avocado Artillery Tortilla 2 times
+info: The kitchen has prepared Chili Canon Wrap 2 times
+info: Mrs. Tex Mex has prepared Bean Blaster Taco,Chili Canon Wrap
 ```
 {{% /tab %}}
 {{< /tabs >}}

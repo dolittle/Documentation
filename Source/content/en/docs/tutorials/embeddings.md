@@ -256,6 +256,7 @@ Unlike projections, you don't need to specify a [`KeySelector`]({{< ref "docs/co
 // Employee.ts
 import { CouldNotResolveUpdateToEvents, embedding, EmbeddingContext, EmbeddingProjectContext, on, resolveDeletionToEvents, resolveUpdateToEvents } from '@dolittle/sdk.embeddings';
 import { ProjectionResult } from '@dolittle/sdk.projections';
+
 import { EmployeeHired } from './EmployeeHired';
 import { EmployeeRetired } from './EmployeeRetired';
 import { EmployeeTransferred } from './EmployeeTransferred';
@@ -384,45 +385,32 @@ The `Delete()` method will call the embeddings `ResolveDeletionToEvents()` for t
 {{% tab name="TypeScript" %}}
 ```typescript
 // index.ts
-
 import { DolittleClient } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
-import { Employee } from './Employee';
-import { EmployeeHired } from './EmployeeHired';
-import { EmployeeRetired } from './EmployeeRetired';
-import { EmployeeTransferred } from './EmployeeTransferred';
+import { setTimeout } from 'timers/promises';
 
-const client = DolittleClient
-    .forMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
-    .withEventTypes(eventTypes => {
-        eventTypes.register(EmployeeHired);
-        eventTypes.register(EmployeeTransferred);
-        eventTypes.register(EmployeeRetired);
-    })
-    .withEmbeddings(builder => {
-        builder.register(Employee);
-    })
-    .build();
+import { Employee } from './Employee';
 
 (async () => {
+    const client = await DolittleClient
+        .setup()
+        .connect();
 
-    // wait for the registration to complete
-    setTimeout(async () => {
-        // mock of the state from the external HR system
-        const updatedEmployee = new Employee(
-            'Mr. Taco',
-            'Street Food Taco Truck');
+    await setTimeout(2000);
 
-        await client.embeddings
-            .forTenant(TenantId.development)
-            .update(Employee, updatedEmployee.name, updatedEmployee);
-        console.log(`Updated ${updatedEmployee.name}`);
+    const updatedEmployee = new Employee(
+        'Mr. Taco',
+        'Street Food Taco Truck');
 
-        await client.embeddings
-            .forTenant(TenantId.development)
-            .delete(Employee, updatedEmployee.name);
-        console.log(`Deleted ${updatedEmployee.name}`);
-    }, 1000);
+    await client.embeddings
+        .forTenant(TenantId.development)
+        .update(Employee, updatedEmployee.name, updatedEmployee);
+    client.logger.info(`Updated ${updatedEmployee.name}`);
+
+    await client.embeddings
+        .forTenant(TenantId.development)
+        .delete(Employee, updatedEmployee.name);
+    client.logger.info(`Deleted ${updatedEmployee.name}`);
 })();
 ```
 The `update()` method tries to update the embeddings read model with the specified key to match the updated state by calling the embeddings `@resolveUpdateToEvents()` decorated method. If no read model exists with the key, it will create one with the read model set to the embedding's initial state.
@@ -450,8 +438,8 @@ Deleted Mr. Taco.
 ```shell
 $ npx ts-node index.ts
 info: Embedding e5577d2c-0de7-481c-b5be-6ef613c2fcd6 registered with the Runtime, start handling requests.
-Updated Mr. Taco
-Deleted Mr. Taco
+info: Updated Mr. Taco
+info: Deleted Mr. Taco
 ```
 {{% /tab %}}
 {{< /tabs >}}
@@ -513,28 +501,43 @@ Console.WriteLine($"Deleted {updatedEmployee.Name}.");
 {{% /tab %}}
 {{% tab name="TypeScript" %}}
 ```typescript
-/*
-setup builder and update the read model first
-*/
-await client.embeddings
-    .forTenant(TenantId.development)
-    .update(Employee, updatedEmployee.name, updatedEmployee);
-console.log(`Updated ${updatedEmployee.name}`);
+import { DolittleClient } from '@dolittle/sdk';
+import { TenantId } from '@dolittle/sdk.execution';
+import { setTimeout } from 'timers/promises';
 
-const mrTaco = await client.embeddings
-    .forTenant(TenantId.development)
-    .get(Employee, 'Mr. Taco');
-console.log(`Mr. Taco is now working at ${mrTaco.state.workplace}`);
+import { Employee } from './Employee';
 
-const allEmployeeNames = await client.embeddings
-    .forTenant(TenantId.development)
-    .getKeys(Employee);
-console.log(`All current employees are ${allEmployeeNames}`);
+(async () => {
+    const client = await DolittleClient
+        .setup()
+        .connect();
 
-await client.embeddings
-    .forTenant(TenantId.development)
-    .delete(Employee, updatedEmployee.name);
-console.log(`Deleted ${updatedEmployee.name}`);
+    await setTimeout(2000);
+
+    const updatedEmployee = new Employee(
+        'Mr. Taco',
+        'Street Food Taco Truck');
+
+    await client.embeddings
+        .forTenant(TenantId.development)
+        .update(Employee, updatedEmployee.name, updatedEmployee);
+    client.logger.info(`Updated ${updatedEmployee.name}`);
+
+    const mrTaco = await client.embeddings
+        .forTenant(TenantId.development)
+        .get(Employee, 'Mr. Taco');
+    client.logger.info(`Mr. Taco is now working at ${mrTaco.state.workplace}`);
+
+    const allEmployeeNames = await client.embeddings
+        .forTenant(TenantId.development)
+        .getKeys(Employee);
+    client.logger.info(`All current employees are ${allEmployeeNames}`);
+
+    await client.embeddings
+        .forTenant(TenantId.development)
+        .delete(Employee, updatedEmployee.name);
+    client.logger.info(`Deleted ${updatedEmployee.name}`);
+})();
 ```
 {{% /tab %}}
 {{< /tabs >}}
@@ -555,10 +558,11 @@ Deleted Mr. Taco.
 {{% tab name="TypeScript" %}}
 ```shell
 $ npx ts-node index.ts
-Updated Mr. Taco
-Mr. Taco is now Employee { name: 'Mr. Taco', workplace: 'Street Food Taco Truck' }
-All current employees are [ 'Mr. Taco' ]
-Deleted Mr. Taco
+info: Embedding e5577d2c-0de7-481c-b5be-6ef613c2fcd6 registered with the Runtime, start handling requests.
+info: Updated Mr. Taco
+info: Mr. Taco is now working at Street Food Taco Truck
+info: All current employees are Mr. Taco
+info: Deleted Mr. Taco
 ```
 {{% /tab %}}
 {{< /tabs >}}

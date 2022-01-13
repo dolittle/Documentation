@@ -128,16 +128,22 @@ The `[EventHandler()]` attribute identifies this event handler in the Runtime, a
 {{% tab name="TypeScript" %}}
 ```typescript
 // DishHandler.ts
+import { inject } from '@dolittle/sdk.dependencyinversion';
 import { EventContext } from '@dolittle/sdk.events';
 import { eventHandler, handles } from '@dolittle/sdk.events.handling';
+import { Logger } from 'winston';
+
 import { DishPrepared } from './DishPrepared';
 
 @eventHandler('f2d366cf-c00a-4479-acc4-851e04b6fbba')
 export class DishHandler {
+    constructor(
+        @inject('Logger') private readonly _logger: Logger
+    ) {}
 
     @handles(DishPrepared)
-    dishPrepared(event: DishPrepared, eventContext: EventContext) {
-        console.log(`${event.Chef} has prepared ${event.Dish}. Yummm!`);
+    async dishPrepared(event: DishPrepared, eventContext: EventContext) {
+        this._logger.info(`${event.Chef} has prepared ${event.Dish}. Yummm!`);
     }
 }
 ```
@@ -196,22 +202,21 @@ The string given in `FromEventSource()` is the [`EventSourceId`]({{< ref "docs/c
 // index.ts
 import { DolittleClient } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
+
+import './DishHandler';
 import { DishPrepared } from './DishPrepared';
-import { DishHandler } from './DishHandler';
 
-const client = DolittleClient
-    .forMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
-    .withEventTypes(eventTypes =>
-        eventTypes.register(DishPrepared))
-    .withEventHandlers(builder =>
-        builder.register(DishHandler))
-    .build();
+(async () => {
+    const client = await DolittleClient
+        .setup()
+        .connect();
 
-const preparedTaco = new DishPrepared('Bean Blaster Taco', 'Mr. Taco');
+    const preparedTaco = new DishPrepared('Bean Blaster Taco', 'Mr. Taco');
 
-client.eventStore
-    .forTenant(TenantId.development)
-    .commit(preparedTaco, 'Dolittle Tacos');
+    await client.eventStore
+        .forTenant(TenantId.development)
+        .commit(preparedTaco, 'Dolittle Tacos');
+})();
 ```
 
 The string given in the `commit()` call is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify where the events come from.
@@ -249,7 +254,7 @@ Mr. Taco has prepared Bean Blaster Taco. Yummm!
 ```shell
 $ npx ts-node index.ts
 info: EventHandler f2d366cf-c00a-4479-acc4-851e04b6fbba registered with the Runtime, start handling requests.
-Mr. Taco has prepared Bean Blaster Taco. Yummm!
+info: Mr. Taco has prepared Bean Blaster Taco. Yummm!
 ```
 {{% /tab %}}
 {{< /tabs >}}

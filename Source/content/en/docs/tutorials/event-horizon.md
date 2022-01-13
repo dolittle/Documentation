@@ -112,29 +112,25 @@ namespace Kitchen
 ```typescript
 // index.ts
 import { DolittleClient } from '@dolittle/sdk';
-import { EventContext, PartitionId } from '@dolittle/sdk.events';
+import { EventContext } from '@dolittle/sdk.events';
 import { PartitionedFilterResult } from '@dolittle/sdk.events.filtering';
 import { TenantId } from '@dolittle/sdk.execution';
+
+import './DishHandler';
 import { DishPrepared } from './DishPrepared';
-import { DishHandler } from './DishHandler';
 
-const client = DolittleClient
-    .forMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
-    .withEventTypes(eventTypes =>
-        eventTypes.register(DishPrepared))
-    .withEventHandlers(builder =>
-        builder.register(DishHandler))
-    .withFilters(filterBuilder =>
-        filterBuilder
-            .createPublicFilter('2c087657-b318-40b1-ae92-a400de44e507', fb =>
-                fb.handle((event: any, context: EventContext) => {
-                    console.log(`Filtering event ${JSON.stringify(event)} to public stream`);
-                    return new PartitionedFilterResult(true, PartitionId.unspecified);
-                })
-            ))
-    .build();
-    // Rest of your code here...
-
+(async () => {
+    const client = await DolittleClient
+        .setup(_ => _
+            .withFilters(_ => _
+                .createPublicFilter('2c087657-b318-40b1-ae92-a400de44e507', _ => _
+                    .handle((event: any, context: EventContext) => {
+                        client.logger.info(`Filtering event ${JSON.stringify(event)} to public stream`);
+                        return new PartitionedFilterResult(true, 'Dolittle Tacos');
+                    })
+                )))
+        .connect();
+})();
 ```
 {{% /tab %}}
 {{< /tabs >}}
@@ -178,18 +174,30 @@ namespace Kitchen
 ```typescript
 // index.ts
 import { DolittleClient } from '@dolittle/sdk';
+import { EventContext } from '@dolittle/sdk.events';
+import { PartitionedFilterResult } from '@dolittle/sdk.events.filtering';
 import { TenantId } from '@dolittle/sdk.execution';
+
+import './DishHandler';
 import { DishPrepared } from './DishPrepared';
-import { DishHandler } from './DishHandler';
 
-// Where you build the client...
+(async () => {
+    const client = await DolittleClient
+        .setup(_ => _
+            .withFilters(_ => _
+                .createPublicFilter('2c087657-b318-40b1-ae92-a400de44e507', _ => _
+                    .handle((event: any, context: EventContext) => {
+                        client.logger.info(`Filtering event ${JSON.stringify(event)} to public stream`);
+                        return new PartitionedFilterResult(true, 'Dolittle Tacos');
+                    })
+                )))
+        .connect();
 
-const preparedTaco = new DishPrepared('Bean Blaster Taco', 'Mr. Taco');
+    const preparedTaco = new DishPrepared('Bean Blaster Taco', 'Mr. Taco');
 
-client.eventStore
-    .forTenant(TenantId.development)
-    .commitPublic(preparedTaco, 'bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9');
-
+    await client.eventStore
+        .forTenant(TenantId.development)
+        .commitPublic(preparedTaco, 'Dolittle Tacos');
 })();
 ```
 {{% /tab %}}
@@ -247,29 +255,31 @@ namespace Kitchen
 // index.ts
 import { DolittleClient } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
-import { PartitionId } from '@dolittle/sdk.events';
+
 import { DishPrepared } from './DishPrepared';
 
-const client = DolittleClient
-    .forMicroservice('a14bb24e-51f3-4d83-9eba-44c4cffe6bb9')
-    .withRuntimeOn('localhost', 50055)
-    .withEventTypes(eventTypes =>
-        eventTypes.register(DishPrepared))
-    .withEventHorizons(_ => {
-        _.forTenant(TenantId.development, ts =>
-            ts.fromProducerMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
-                .fromProducerTenant(TenantId.development)
-                .fromProducerStream('2c087657-b318-40b1-ae92-a400de44e507')
-                .fromProducerPartition(PartitionId.unspecified.value)
-                .toScope('808ddde4-c937-4f5c-9dc2-140580f6919e'))})
-    .withEventHandlers(eventHandlers =>
-        eventHandlers
-            .createEventHandler("6c3d358f-3ecc-4c92-a91e-5fc34cacf27e", _ =>
-                _.inScope("808ddde4-c937-4f5c-9dc2-140580f6919e")
-                .partitioned()
-                .handle(DishPrepared, (event, context) => console.log(`Handled event ${JSON.stringify(event)} from public stream`))))
-    .build();
-
+(async () => {
+    const client = await DolittleClient
+        .setup(_ => _
+            .withEventHorizons(_ => {
+                _.forTenant(TenantId.development, _ => _
+                    .fromProducerMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
+                        .fromProducerTenant(TenantId.development)
+                        .fromProducerStream('2c087657-b318-40b1-ae92-a400de44e507')
+                        .fromProducerPartition('Dolittle Tacos')
+                        .toScope('808ddde4-c937-4f5c-9dc2-140580f6919e'));
+            })
+            .withEventHandlers(_ => _
+                .createEventHandler('6c3d358f-3ecc-4c92-a91e-5fc34cacf27e', _ =>
+                    _.inScope('808ddde4-c937-4f5c-9dc2-140580f6919e')
+                        .partitioned()
+                        .handle(DishPrepared, (event, context) => {
+                            client.logger.info(`Handled event ${JSON.stringify(event)} from public stream`);
+                         }))))
+        .connect(_ => _
+            .withRuntimeOn('localhost', 50055)
+        );
+})();
 ```
 
 {{% /tab %}}
@@ -296,10 +306,7 @@ There's a lot of stuff going on the code so let's break it down:
 
 {{% tab name="TypeScript" %}}
 ```typescript
-// index.ts
 .withRuntimeOn('localhost', 50055)
-// Rest of builder here...
-
 ```
 {{% /tab %}}
 {{< /tabs >}}
@@ -328,15 +335,14 @@ We'll see this reflected in the `docker-compose.yml` file [later]({{< ref "#setu
 
 {{% tab name="TypeScript" %}}
 ```typescript
-// index.ts
-.withEventHorizons(_ =>
-    _.forTenant(TenantId.development, ts =>
-        ts.fromProducerMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
+.withEventHorizons(_ => {
+    _.forTenant(TenantId.development, _ => _
+        .fromProducerMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
             .fromProducerTenant(TenantId.development)
             .fromProducerStream('2c087657-b318-40b1-ae92-a400de44e507')
-            .fromProducerPartition(PartitionId.unspecified.value)
-            .toScope('808ddde4-c937-4f5c-9dc2-140580f6919e')))
-// Rest of builder here...
+            .fromProducerPartition('Dolittle Tacos')
+            .toScope('808ddde4-c937-4f5c-9dc2-140580f6919e'));
+})
 ```
 
 {{% /tab %}}
@@ -374,15 +380,13 @@ The consumer will receive events from the producer and put those events in a spe
 
 {{% tab name="TypeScript" %}}
 ```typescript
-// index.ts
-.withEventHandlers(eventHandlers =>
-    eventHandlers
-        .createEventHandler("6c3d358f-3ecc-4c92-a91e-5fc34cacf27e", _ =>
-            _.inScope("808ddde4-c937-4f5c-9dc2-140580f6919e")
+.withEventHandlers(_ => _
+    .createEventHandler('6c3d358f-3ecc-4c92-a91e-5fc34cacf27e', _ =>
+        _.inScope('808ddde4-c937-4f5c-9dc2-140580f6919e')
             .partitioned()
-            .handle(DishPrepared, (event, context) => console.log(`Handled event ${JSON.stringify(event)} from public stream`))))
-})
-// Rest of builder here...
+            .handle(DishPrepared, (event, context) => {
+                client.logger.info(`Handled event ${JSON.stringify(event)} from public stream`);
+            }))))
 ```
 
 {{% /tab %}}
@@ -396,18 +400,50 @@ Remember, that the events from an event horizon subscription get put into a [sco
 
 ## Setup your environment
 Now we have the producer and consumer microservices [Heads]({{< ref "docs/concepts/overview#components" >}}) coded, we need to setup the environment for them to run in and configure their Runtimes to be connected.
+This configuration is provided by Dolittle when you're running your microservices in our platform, but when running multiple services on your local machine you need to configure some of it yourself.
 
 Let's go to the environment folder we created in the beginning of this tutorial. Here we'll need to configure:
+- [`platform.json`]({{< ref "docs/reference/runtime/configuration#platformjson" >}})
 - [`resources.json`]({{< ref "docs/reference/runtime/configuration#resourcesjson" >}})
 - [`endpoints.json`]({{< ref "docs/reference/runtime/configuration#endpointsjson" >}})
 - [`microservices.json`]({{< ref "docs/reference/runtime/configuration#microservicesjson" >}})
 - [`event-horizon-consents.json`]({{< ref "docs/reference/runtime/configuration#event-horizon-consentsjson" >}}).
 
+### Platform
+[`platform.json`]({{< ref "docs/reference/runtime/configuration#platformjson" >}}) configures the environment of a microservice. We have 2 microservices so they need to be configured with different identifiers and names.
+
+
+Let's create 2 files, `consumer-platform.json` and `producer-producer.json`:
+```json
+//consumer-platform.json
+{
+    "applicationName": "EventHorizon Tutorial",
+    "applicationID": "5bd8762f-6c39-4ba2-a141-d041c8668894",
+    "microserviceName": "Consumer",
+    "microserviceID": "a14bb24e-51f3-4d83-9eba-44c4cffe6bb9",
+    "customerName": "Dolittle Tacos",
+    "customerID": "c2d49e3e-9bd4-4e54-9e13-3ea4e04d8230",
+    "environment": "Tutorial"
+}
+```
+```json
+//producer-platform.json
+{
+    "applicationName": "EventHorizon Tutorial",
+    "applicationID": "5bd8762f-6c39-4ba2-a141-d041c8668894",
+    "microserviceName": "Producer",
+    "microserviceID": "f39b1f61-d360-4675-b859-53c05c87c0e6",
+    "customerName": "Dolittle Tacos",
+    "customerID": "c2d49e3e-9bd4-4e54-9e13-3ea4e04d8230",
+    "environment": "Tutorial"
+}
+```
+
 ### Resources
-[`resources.json`]({{< ref "docs/reference/runtime/configuration#resourcesjson" >}}) define a microservices [event store]({{< ref "docs/concepts/event_store" >}}). We have 2 microservices so they both need their own event store database. By default the database is called `event_store`.
+[`resources.json`]({{< ref "docs/reference/runtime/configuration#resourcesjson" >}}) configures where a microservices stores its [event store]({{< ref "docs/concepts/event_store" >}}). We have 2 microservices so they both need their own event store database. By default the database is called `event_store`.
 
 
-Let's create 2 files, `consumer-resources.json` and `producer-resources.json`:
+Create 2 more files, `consumer-resources.json` and `producer-resources.json`:
 
 ```json
 //consumer-resources.json
@@ -442,29 +478,12 @@ Let's create 2 files, `consumer-resources.json` and `producer-resources.json`:
 }
 ```
 
-Note that the development tenant is `445f8ea8-1a6f-40d7-b2fc-796dba92dc44` (same as `TenantId.Development`).
-
-### Endpoints
-[`endpoints.json`]({{< ref "docs/reference/runtime/configuration#endpointsjson" >}}) defines the private (where the SDK connects) and public port (where other Runtimes can connect) of the Runtime.
-
-We can leave the producer with the default ports (`50052` for public, `50053` for private), but let's create `consumer-endpoints.json` to change the consumer's ports:
-
-```json
-//consumer-endpoints.json
-{
-    "public": {
-        "port": 50054
-    },
-    "private": {
-        "port": 50055
-    }
-}
-```
-
-The `50055` port is the port that we configured the consumer microservice [earlier]({{< ref "#connection-to-the-runtime" >}}) in the `withRuntimeOn()` method.
+{{< alert title="Development Tenant" color="info">}}
+The tenant id `445f8ea8-1a6f-40d7-b2fc-796dba92dc44` is the value of `TenantId.Development`.
+{{< /alert >}}
 
 ### Microservices
-[`microservices.json`]({{< ref "docs/reference/runtime/configuration#microservicesjson" >}}) define where the producer microservices are so that the consumer can subscribe to them.
+[`microservices.json`]({{< ref "docs/reference/runtime/configuration#microservicesjson" >}}) configures where the producer microservice is so that the consumer can connect to it and subscribe to its events.
 
 Let's create a `consumer-microservices.json` file to define where the consumer can find the producer:
 ```json
@@ -479,7 +498,7 @@ Let's create a `consumer-microservices.json` file to define where the consumer c
 ```
 
 ### Consent
-[`event-horizon-consents.json`]({{< ref "docs/reference/runtime/configuration#event-horizon-consentsjson" >}}) defines the [Consents]({{< ref "docs/concepts/event_horizon#consent" >}}) that the producer gives to consumers.
+[`event-horizon-consents.json`]({{< ref "docs/reference/runtime/configuration#event-horizon-consentsjson" >}}) configures the [Consents]({{< ref "docs/concepts/event_horizon#consent" >}}) that the producer gives to consumers.
 
 Let's create `producer-event-horizon-consents.json` where we give a consumer consent to subscribe to our public stream.
 
@@ -494,7 +513,7 @@ Let's create `producer-event-horizon-consents.json` where we give a consumer con
             "tenant": "445f8ea8-1a6f-40d7-b2fc-796dba92dc44",
             // the producer's public stream and partition to give consent to subscribe to
             "stream": "2c087657-b318-40b1-ae92-a400de44e507",
-            "partition": "00000000-0000-0000-0000-000000000000",
+            "partition": "Dolittle Tacos",
             // an identifier for this consent. This is random
             "consent": "ad57aa2b-e641-4251-b800-dd171e175d1f"
         }
@@ -507,7 +526,7 @@ Let's create `producer-event-horizon-consents.json` where we give a consumer con
 Now we can glue all the configuration files together in the `docker-compose.yml`. The configuration files are mounted inside `/app.dolittle/` inside the `dolittle/runtime` image.
 
 ```yml
-version: '3.1'
+version: '3.8'
 services:
   mongo:
     image: dolittle/mongodb
@@ -518,18 +537,19 @@ services:
       driver: none
  
   consumer-runtime:
-    image: dolittle/runtime
+    image: dolittle/runtime:latest
     volumes:
+      - ./consumer-platform.json:/app/.dolittle/platform.json
       - ./consumer-resources.json:/app/.dolittle/resources.json
-      - ./consumer-endpoints.json:/app/.dolittle/endpoints.json
       - ./consumer-microservices.json:/app/.dolittle/microservices.json
     ports:
-      - 50054:50054
-      - 50055:50055
+      - 50054:50052
+      - 50055:50053
 
   producer-runtime:
-    image: dolittle/runtime
+    image: dolittle/runtime:latest
     volumes:
+      - ./producer-platform.json:/app/.dolittle/platform.json
       - ./producer-resources.json:/app/.dolittle/resources.json
       - ./producer-event-horizon-consents.json:/app/.dolittle/event-horizon-consents.json
     ports:
@@ -547,10 +567,10 @@ The configuration files mounted inside the image need to be named as they are de
 Start the docker-compose with this command
 
 ```shell
-$ docker-compose up
+$ docker-compose up -d
 ```
 
-This will spin up a MongoDB container and two Runtimes.
+This will spin up a MongoDB container and two Runtimes in the background.
 
 {{% alert title="Docker on Windows" color="warning" %}}
 Docker on Windows using the WSL2 backend can use massive amounts of RAM if not limited. Configuring a limit in the `.wslconfig` file can help greatly, as mentioned in [this issue](https://github.com/microsoft/WSL/issues/4166#issuecomment-526725261). The RAM usage is also lowered if you disable the WSL2 backend in Docker for Desktop settings.
@@ -579,14 +599,17 @@ Handled event EventHorizon.Consumer.DishPrepared from public stream
 #### Producer
 ```shell
 $ npx ts-node index.ts
-Filtering event {"Dish":"Bean Blaster Taco","Chef":"Mr. Taco"} to public stream
-Mr. Taco has prepared Bean Blaster Taco. Yummm!
+info: EventHandler f2d366cf-c00a-4479-acc4-851e04b6fbba registered with the Runtime, start handling requests.
+info: Public Filter 2c087657-b318-40b1-ae92-a400de44e507 registered with the Runtime, start handling requests.
+info: Filtering event {"Dish":"Bean Blaster Taco","Chef":"Mr. Taco"} to public stream
+info: Mr. Taco has prepared Bean Blaster Taco. Yummm!
 ```
 
 #### Consumer
 ```shell
 $ npx ts-node index.ts
-Handled event {"Dish":"Bean Blaster Taco","Chef":"Mr. Taco"} from public stream
+info: EventHandler 6c3d358f-3ecc-4c92-a91e-5fc34cacf27e registered with the Runtime, start handling requests.
+info: Handled event {"Dish":"Bean Blaster Taco","Chef":"Mr. Taco"} from public stream
 ```
 {{% /tab %}}
 {{< /tabs >}}

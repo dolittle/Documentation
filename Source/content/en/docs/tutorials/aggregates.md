@@ -75,26 +75,26 @@ The GUID given in the `[AggregateRoot()]` attribute is the [`AggregateRootId`]({
 // Kitchen.ts
 import { aggregateRoot, AggregateRoot, on } from '@dolittle/sdk.aggregates';
 import { EventSourceId } from '@dolittle/sdk.events';
+
 import { DishPrepared } from './DishPrepared';
 
 @aggregateRoot('01ad9a9f-711f-47a8-8549-43320f782a1e')
 export class Kitchen extends AggregateRoot {
-    private _counter: number = 0;
+    private _ingredients: number = 2;
 
     constructor(eventSourceId: EventSourceId) {
         super(eventSourceId);
     }
 
     prepareDish(dish: string, chef: string) {
-        if (this._counter >= 2) throw new Error('Cannot prepare more than 2 dishes');
+        if (this._ingredients <= 0) throw new Error('We have run out of ingredients, sorry!');
         this.apply(new DishPrepared(dish, chef));
-        console.log(`Kitchen Aggregate ${this.eventSourceId} has applied ${this._counter} ${DishPrepared.name} events`);
+        console.log(`Kitchen ${this.eventSourceId} prepared a ${dish}, there are ${this._ingredients} ingredients left.`);
     }
-
 
     @on(DishPrepared)
     onDishPrepared(event: DishPrepared) {
-        this._counter++;
+        this._ingredients--;
     }
 }
 ```
@@ -148,23 +148,18 @@ Note that we also register the aggregate root class on the client builder using 
 // index.ts
 import { DolittleClient } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
-import { DishPrepared } from './DishPrepared';
-import { DishHandler } from './DishHandler';
+
+import  './DishHandler';
 import { Kitchen } from './Kitchen';
 
 (async () => {
-    const client = DolittleClient
-        .forMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
-        .withEventTypes(eventTypes =>
-            eventTypes.register(DishPrepared))
-        .withEventHandlers(builder =>
-            builder.register(DishHandler))
-        .withAggregateRoots(aggregateRoots =>
-            aggregateRoots.register(Kitchen))
-        .build();
+    const client = await DolittleClient
+        .setup()
+        .connect();
 
-    await client
-        .aggregateOf(Kitchen, 'Dolittle Tacos', _ => _.forTenant(TenantId.development))
+    await client.aggregates
+        .forTenant(TenantId.development)
+        .get(Kitchen, 'Dolittle Tacos')
         .perform(kitchen => kitchen.prepareDish('Bean Blaster Taco', 'Mr. Taco'));
 })();
 ```
@@ -214,12 +209,12 @@ Mr. Taco has prepared Bean Blaster Taco. Yummm!
 $ npx ts-node index.ts
 info: EventHandler f2d366cf-c00a-4479-acc4-851e04b6fbba registered with the Runtime, start handling requests.
 Kitchen Dolittle Tacos prepared a Bean Blaster Taco, there are 1 ingredients left.
-Mr. Taco has prepared Bean Blaster Taco. Yummm!
+info: Mr. Taco has prepared Bean Blaster Taco. Yummm!
 
 $ npx ts-node index.ts
 info: EventHandler f2d366cf-c00a-4479-acc4-851e04b6fbba registered with the Runtime, start handling requests.
 Kitchen Dolittle Tacos prepared a Bean Blaster Taco, there are 0 ingredients left.
-Mr. Taco has prepared Bean Blaster Taco. Yummm!
+info: Mr. Taco has prepared Bean Blaster Taco. Yummm!
 ```
 {{% /tab %}}
 {{< /tabs >}}
@@ -262,7 +257,11 @@ Unhandled exception. System.Exception: We have run out of ingredients, sorry!
 ```shell
 $ npx ts-node index.ts
 info: EventHandler f2d366cf-c00a-4479-acc4-851e04b6fbba registered with the Runtime, start handling requests.
-(node:9250) UnhandledPromiseRejectionWarning: Error: We have run out of ingredients, sorry!
+
+.../Kitchen.ts:20
+        if (this._ingredients <= 0) throw new Error('We have run out of ingredients, sorry!');
+                                          ^
+Error: We have run out of ingredients, sorry!
 ... stack trace ...
 ```
 {{% /tab %}}
