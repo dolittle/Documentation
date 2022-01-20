@@ -42,10 +42,9 @@ The following code implements an aggregate root for a Kitchen that only has enou
 {{% tab name="C#" %}}
 ```csharp
 // Kitchen.cs
+using System;
 using Dolittle.SDK.Aggregates;
 using Dolittle.SDK.Events;
-
-namespace Kitchen;
 
 [AggregateRoot("01ad9a9f-711f-47a8-8549-43320f782a1e")]
 public class Kitchen : AggregateRoot
@@ -64,7 +63,8 @@ public class Kitchen : AggregateRoot
         Console.WriteLine($"Kitchen {EventSourceId} prepared a {dish}, there are {_ingredients} ingredients left.");
     }
 
-    void On(DishPrepared @event) => _ingredients--;
+    void On(DishPrepared @event)
+        => _ingredients--;
 }
 ```
 The GUID given in the `[AggregateRoot()]` attribute is the [`AggregateRootId`]({{< ref "docs/concepts/aggregates#structure-of-an-aggregateroot" >}}), which is used to identify this `AggregateRoot` in the Runtime.
@@ -75,26 +75,26 @@ The GUID given in the `[AggregateRoot()]` attribute is the [`AggregateRootId`]({
 // Kitchen.ts
 import { aggregateRoot, AggregateRoot, on } from '@dolittle/sdk.aggregates';
 import { EventSourceId } from '@dolittle/sdk.events';
+
 import { DishPrepared } from './DishPrepared';
 
 @aggregateRoot('01ad9a9f-711f-47a8-8549-43320f782a1e')
 export class Kitchen extends AggregateRoot {
-    private _counter: number = 0;
+    private _ingredients: number = 2;
 
     constructor(eventSourceId: EventSourceId) {
         super(eventSourceId);
     }
 
     prepareDish(dish: string, chef: string) {
-        if (this._counter >= 2) throw new Error('Cannot prepare more than 2 dishes');
+        if (this._ingredients <= 0) throw new Error('We have run out of ingredients, sorry!');
         this.apply(new DishPrepared(dish, chef));
-        console.log(`Kitchen Aggregate ${this.eventSourceId} has applied ${this._counter} ${DishPrepared.name} events`);
+        console.log(`Kitchen ${this.eventSourceId} prepared a ${dish}, there are ${this._ingredients} ingredients left.`);
     }
-
 
     @on(DishPrepared)
     onDishPrepared(event: DishPrepared) {
-        this._counter++;
+        this._ingredients--;
     }
 }
 ```
@@ -111,31 +111,22 @@ Let's expand upon the client built in the getting started guide. But instead of 
 // Program.cs
 using Dolittle.SDK;
 using Dolittle.SDK.Tenancy;
+using Microsoft.Extensions.Hosting;
 
-namespace Kitchen;
+var host = Host.CreateDefaultBuilder()
+    .UseDolittle()
+    .Build();
 
-class Program
-{
-    static async Task Main(string[] args)
-    {
-        var client = DolittleClient
-            .ForMicroservice("f39b1f61-d360-4675-b859-53c05c87c0e6")
-            .WithEventTypes(eventTypes =>
-                eventTypes.Register<DishPrepared>())
-            .WithEventHandlers(builder =>
-                builder.RegisterEventHandler<DishHandler>())
-            .WithAggregateRoots(builder =>
-                builder.Register<Kitchen>())
-            .Build();
+await host.StartAsync();
 
-        await client
-            .AggregateOf<Kitchen>("Dolittle Tacos", _ => _.ForTenant(TenantId.Development))
-            .Perform(kitchen => kitchen.PrepareDish("Bean Blaster Taco", "Mr. Taco"));
+var client = await host.GetDolittleClient();
 
-        // Blocks until the EventHandlers are finished, i.e. forever
-        await client.Start();
-    }
-}
+await client.Aggregates
+    .ForTenant(TenantId.Development)
+    .Get<Kitchen>("Dolittle Tacos")
+    .Perform(kitchen => kitchen.PrepareDish("Bean Blaster Taco", "Mr. Taco"));
+
+await host.WaitForShutdownAsync();
 ```
 
 The string given in `AggregateOf<Kitchen>()` is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify the aggregate of the aggregate root to perform the action on.
@@ -148,23 +139,18 @@ Note that we also register the aggregate root class on the client builder using 
 // index.ts
 import { DolittleClient } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
-import { DishPrepared } from './DishPrepared';
-import { DishHandler } from './DishHandler';
+
+import  './DishHandler';
 import { Kitchen } from './Kitchen';
 
 (async () => {
-    const client = DolittleClient
-        .forMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
-        .withEventTypes(eventTypes =>
-            eventTypes.register(DishPrepared))
-        .withEventHandlers(builder =>
-            builder.register(DishHandler))
-        .withAggregateRoots(aggregateRoots =>
-            aggregateRoots.register(Kitchen))
-        .build();
+    const client = await DolittleClient
+        .setup()
+        .connect();
 
-    await client
-        .aggregateOf(Kitchen, 'Dolittle Tacos', _ => _.forTenant(TenantId.development))
+    await client.aggregates
+        .forTenant(TenantId.development)
+        .get(Kitchen, 'Dolittle Tacos')
         .perform(kitchen => kitchen.prepareDish('Bean Blaster Taco', 'Mr. Taco'));
 })();
 ```
@@ -179,7 +165,7 @@ Note that we also register the aggregate root class on the client builder using 
 If you don't have a Runtime already going from a previous tutorial, start the Dolittle environment with all the necessary dependencies with the following command:
 
 ```shell
-$ docker run -p 50053:50053 -p 51052:51052 -p 27017:27017 dolittle/runtime:latest-development -d
+$ docker run -p 50053:50053 -p 51052:51052 -p 27017:27017 -d dolittle/runtime:latest-development
 ```
 
 This will start a container with the Dolittle Development Runtime on port 50053 and 51052 and a MongoDB server on port 27017.
@@ -196,16 +182,36 @@ Run your code twice, and get a two delicious servings of taco:
 {{% tab name="C#" %}}
 ```shell
 $ dotnet run
-Kitchen Dolittle Tacos prepared a Bean Blaster Taco, there are 1 ingredients left.
+info: Dolittle.SDK.DolittleClientService[0]
+      Connecting Dolittle Client
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: .../Aggregates
 info: Dolittle.SDK.Events.Processing.EventProcessors[0]
       EventHandler f2d366cf-c00a-4479-acc4-851e04b6fbba registered with the Runtime, start handling requests
-Mr. Taco has prepared Bean Blaster Taco. Yummm!
+Kitchen Dolittle Tacos prepared a Bean Blaster Taco, there are 1 ingredients left.
+info: DishHandler[0]
+      Mr. Taco has prepared Bean Blaster Taco. Yummm!
+
 
 $ dotnet run
-Kitchen Dolittle Tacos prepared a Bean Blaster Taco, there are 0 ingredients left.
+info: Dolittle.SDK.DolittleClientService[0]
+      Connecting Dolittle Client
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: .../Aggregates
 info: Dolittle.SDK.Events.Processing.EventProcessors[0]
       EventHandler f2d366cf-c00a-4479-acc4-851e04b6fbba registered with the Runtime, start handling requests
-Mr. Taco has prepared Bean Blaster Taco. Yummm!
+Kitchen Dolittle Tacos prepared a Bean Blaster Taco, there are 0 ingredients left.
+info: DishHandler[0]
+      Mr. Taco has prepared Bean Blaster Taco. Yummm!
+
 ```
 
 {{% /tab %}}
@@ -214,12 +220,12 @@ Mr. Taco has prepared Bean Blaster Taco. Yummm!
 $ npx ts-node index.ts
 info: EventHandler f2d366cf-c00a-4479-acc4-851e04b6fbba registered with the Runtime, start handling requests.
 Kitchen Dolittle Tacos prepared a Bean Blaster Taco, there are 1 ingredients left.
-Mr. Taco has prepared Bean Blaster Taco. Yummm!
+info: Mr. Taco has prepared Bean Blaster Taco. Yummm!
 
 $ npx ts-node index.ts
 info: EventHandler f2d366cf-c00a-4479-acc4-851e04b6fbba registered with the Runtime, start handling requests.
 Kitchen Dolittle Tacos prepared a Bean Blaster Taco, there are 0 ingredients left.
-Mr. Taco has prepared Bean Blaster Taco. Yummm!
+info: Mr. Taco has prepared Bean Blaster Taco. Yummm!
 ```
 {{% /tab %}}
 {{< /tabs >}}
@@ -254,6 +260,16 @@ Run your code a third time, and you will see that the exception gets thrown from
 {{% tab name="C#" %}}
 ```shell
 $ dotnet run
+info: Dolittle.SDK.DolittleClientService[0]
+      Connecting Dolittle Client
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: .../Aggregates
+info: Dolittle.SDK.Events.Processing.EventProcessors[0]
+      EventHandler f2d366cf-c00a-4479-acc4-851e04b6fbba registered with the Runtime, start handling requests
 Unhandled exception. System.Exception: We have run out of ingredients, sorry!
 ... stack trace ...
 ```
@@ -262,7 +278,11 @@ Unhandled exception. System.Exception: We have run out of ingredients, sorry!
 ```shell
 $ npx ts-node index.ts
 info: EventHandler f2d366cf-c00a-4479-acc4-851e04b6fbba registered with the Runtime, start handling requests.
-(node:9250) UnhandledPromiseRejectionWarning: Error: We have run out of ingredients, sorry!
+
+.../Kitchen.ts:20
+        if (this._ingredients <= 0) throw new Error('We have run out of ingredients, sorry!');
+                                          ^
+Error: We have run out of ingredients, sorry!
 ... stack trace ...
 ```
 {{% /tab %}}

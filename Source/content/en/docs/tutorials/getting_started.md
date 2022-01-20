@@ -68,16 +68,15 @@ An [`EventType`]({{< ref "docs/concepts/events#eventtype" >}}) is a class that d
 // DishPrepared.cs
 using Dolittle.SDK.Events;
 
-namespace Kitchen;
-
 [EventType("1844473f-d714-4327-8b7f-5b3c2bdfc26a")]
 public class DishPrepared
 {
-    public DishPrepared(string dish, string chef)
+    public DishPrepared (string dish, string chef)
     {
         Dish = dish;
         Chef = chef;
     }
+
     public string Dish { get; }
     public string Chef { get; }
 }
@@ -108,15 +107,21 @@ Now we need something that can react to dishes that have been prepared. Let's cr
 // DishHandler.cs
 using Dolittle.SDK.Events;
 using Dolittle.SDK.Events.Handling;
-
-namespace Kitchen;
+using Microsoft.Extensions.Logging;
 
 [EventHandler("f2d366cf-c00a-4479-acc4-851e04b6fbba")]
 public class DishHandler
 {
-    public void Handle(DishPrepared @event, EventContext context)
+    readonly ILogger _logger;
+
+    public DishHandler(ILogger<DishHandler> logger)
     {
-        Console.WriteLine($"{@event.Chef} has prepared {@event.Dish}. Yummm!");
+        _logger = logger;
+    }
+
+    public void Handle(DishPrepared @event, EventContext eventContext)
+    {
+        _logger.LogInformation("{Chef} has prepared {Dish}. Yummm!", @event.Chef, @event.Dish);
     }
 }
 ```
@@ -128,16 +133,22 @@ The `[EventHandler()]` attribute identifies this event handler in the Runtime, a
 {{% tab name="TypeScript" %}}
 ```typescript
 // DishHandler.ts
+import { inject } from '@dolittle/sdk.dependencyinversion';
 import { EventContext } from '@dolittle/sdk.events';
 import { eventHandler, handles } from '@dolittle/sdk.events.handling';
+import { Logger } from 'winston';
+
 import { DishPrepared } from './DishPrepared';
 
 @eventHandler('f2d366cf-c00a-4479-acc4-851e04b6fbba')
 export class DishHandler {
+    constructor(
+        @inject('Logger') private readonly _logger: Logger
+    ) {}
 
     @handles(DishPrepared)
     dishPrepared(event: DishPrepared, eventContext: EventContext) {
-        console.log(`${event.Chef} has prepared ${event.Dish}. Yummm!`);
+        this._logger.info(`${event.Chef} has prepared ${event.Dish}. Yummm!`);
     }
 }
 ```
@@ -158,34 +169,21 @@ While configuring the client we register the `EventTypes` and `EventHandlers` so
 // Program.cs
 using Dolittle.SDK;
 using Dolittle.SDK.Tenancy;
+using Microsoft.Extensions.Hosting;
 
-namespace Kitchen;
+var host = Host.CreateDefaultBuilder()
+    .UseDolittle()
+    .Build();
 
-class Program
-{
-    static async Task Main(string[] args)
-    {
-        var client = DolittleClient
-            .ForMicroservice("f39b1f61-d360-4675-b859-53c05c87c0e6")
-            .WithEventTypes(eventTypes =>
-                eventTypes.Register<DishPrepared>())
-            .WithEventHandlers(builder =>
-                builder.RegisterEventHandler<DishHandler>())
-            .Build();
+await host.StartAsync();
 
-        var preparedTaco = new DishPrepared("Bean Blaster Taco", "Mr. Taco");
+var client = await host.GetDolittleClient();
+await client.EventStore
+    .ForTenant(TenantId.Development)
+    .CommitEvent(new DishPrepared("Bean Blaster Taco", "Mr. Taco"), "Dolittle Tacos");
 
-        await client.EventStore
-            .ForTenant(TenantId.Development)
-            .Commit(eventsBuilder =>
-                eventsBuilder
-                    .CreateEvent(preparedTaco)
-                    .FromEventSource("Dolittle Tacos"));
+await host.WaitForShutdownAsync();
 
-        // Blocks until the EventHandlers are finished, i.e. forever
-        await client.Start();
-    }
-}
 ```
 
 The string given in `FromEventSource()` is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify where the events come from.
@@ -196,22 +194,21 @@ The string given in `FromEventSource()` is the [`EventSourceId`]({{< ref "docs/c
 // index.ts
 import { DolittleClient } from '@dolittle/sdk';
 import { TenantId } from '@dolittle/sdk.execution';
+
+import './DishHandler';
 import { DishPrepared } from './DishPrepared';
-import { DishHandler } from './DishHandler';
 
-const client = DolittleClient
-    .forMicroservice('f39b1f61-d360-4675-b859-53c05c87c0e6')
-    .withEventTypes(eventTypes =>
-        eventTypes.register(DishPrepared))
-    .withEventHandlers(builder =>
-        builder.register(DishHandler))
-    .build();
+(async () => {
+    const client = await DolittleClient
+        .setup()
+        .connect();
 
-const preparedTaco = new DishPrepared('Bean Blaster Taco', 'Mr. Taco');
+    const preparedTaco = new DishPrepared('Bean Blaster Taco', 'Mr. Taco');
 
-client.eventStore
-    .forTenant(TenantId.development)
-    .commit(preparedTaco, 'Dolittle Tacos');
+    await client.eventStore
+        .forTenant(TenantId.development)
+        .commit(preparedTaco, 'Dolittle Tacos');
+})();
 ```
 
 The string given in the `commit()` call is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify where the events come from.
@@ -222,7 +219,7 @@ The string given in the `commit()` call is the [`EventSourceId`]({{< ref "docs/c
 Start the Dolittle environment with all the necessary dependencies with the following command:
 
 ```shell
-$ docker run -p 50053:50053 -p 51052:51052 -p 27017:27017 dolittle/runtime:latest-development -d
+$ docker run -p 50053:50053 -p 51052:51052 -p 27017:27017 -d dolittle/runtime:latest-development
 ```
 
 This will start a container with the Dolittle Development Runtime on port 50053 and 51052 and a MongoDB server on port 27017.
@@ -239,9 +236,19 @@ Run your code, and get a delicious serving of taco:
 {{% tab name="C#" %}}
 ```shell
 $ dotnet run
+info: Dolittle.SDK.DolittleClientService[0]
+      Connecting Dolittle Client
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: .../GettingStarted
 info: Dolittle.SDK.Events.Processing.EventProcessors[0]
       EventHandler f2d366cf-c00a-4479-acc4-851e04b6fbba registered with the Runtime, start handling requests
-Mr. Taco has prepared Bean Blaster Taco. Yummm!
+info: DishHandler[0]
+      Mr. Taco has prepared Bean Blaster Taco. Yummm!
+
 ```
 
 {{% /tab %}}
@@ -249,7 +256,7 @@ Mr. Taco has prepared Bean Blaster Taco. Yummm!
 ```shell
 $ npx ts-node index.ts
 info: EventHandler f2d366cf-c00a-4479-acc4-851e04b6fbba registered with the Runtime, start handling requests.
-Mr. Taco has prepared Bean Blaster Taco. Yummm!
+info: Mr. Taco has prepared Bean Blaster Taco. Yummm!
 ```
 {{% /tab %}}
 {{< /tabs >}}
