@@ -23,4 +23,4 @@ Dolittle is based on Event Sourcing, which means that the systems state is based
 EDA promotes loose coupling because the producers of events do not know about subscribers that are listening to this event. This makes an Event-Driven Architecture more suited to today’s distributed applications than the traditional request-response model.
 
 ### PaaS Ready
-Dolittle has it's own PaaS (Platform as a Service) for hosting your Dolittle code, get in [contact with us](https://dolittle.com/contact-us) to learn more!
+Dolittle has it's own PaaS (Platform as a Service) for hosting your Dolittle code, get in [contact with us](https://dolittle.com/contact) to learn more!

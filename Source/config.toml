@@ -156,7 +156,7 @@ enable = false
 # End user relevant links. These will show up on left side of footer and in the community page if you have one.
 [[params.links.user]]
 	name = "Contact us"
-	url = "https://www.dolittle.com/contact-us"
+	url = "https://www.dolittle.com/contact"
 	icon = "fa fa-envelope"
         desc = "Contact us!"
 # Developer relevant links. These will show up on right side of footer and in the community page if you have one.
