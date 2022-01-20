@@ -65,7 +65,7 @@ Before getting started, your directory should look something like this:
 If you don't have a Runtime already going from a previous tutorial, start the Dolittle environment with all the necessary dependencies with the following command:
 
 ```shell
-$ docker run -p 50053:50053 -p 51052:51052 -p 27017:27017 dolittle/runtime:latest-development -d
+$ docker run -p 50053:50053 -p 51052:51052 -p 27017:27017 -d dolittle/runtime:latest-development
 ```
 
 This will start a container with the Dolittle Development Runtime on port 50053 and 51052 and a MongoDB server on port 27017.
@@ -88,17 +88,12 @@ In this example, we want to [event source]({{< ref "docs/concepts/event_sourcing
 // EmployeeHired.cs
 using Dolittle.SDK.Events;
 
-namespace Kitchen;
-
 [EventType("8fdf45bc-f484-4348-bcb0-4d6f134aaf6c")]
 public class EmployeeHired
 {
-    public EmployeeHired(string name)
-    {
-        Name = name;
-    }
+    public string Name { get; set; }
 
-    public string Name { get; }
+    public EmployeeHired(string name) => Name = name;
 }
 ```
 
@@ -108,21 +103,19 @@ public class EmployeeHired
 // EmployeeTransferred.cs
 using Dolittle.SDK.Events;
 
-namespace Kitchen;
-
 [EventType("b27f2a39-a2d4-43a7-9952-62e39cbc7ebc")]
 public class EmployeeTransferred
 {
+    public string Name { get; set; }
+    public string From { get; set; }
+    public string To { get; set; }
+
     public EmployeeTransferred(string name, string from, string to)
     {
         Name = name;
         From = from;
         To = to;
     }
-
-    public string Name { get; }
-    public string From { get; }
-    public string To { get; }
 }
 ```
 
@@ -131,17 +124,12 @@ public class EmployeeTransferred
 // EmployeeRetired.cs
 using Dolittle.SDK.Events;
 
-namespace Kitchen;
-
 [EventType("1932beb4-c8cd-4fee-9a7e-a92af3693510")]
 public class EmployeeRetired
 {
-    public EmployeeRetired(string name)
-    {
-        Name = name;
-    }
+    public string Name { get; set; }
 
-    public string Name { get; }
+    public EmployeeRetired(string name) => Name = name;
 }
 ```
 
@@ -192,10 +180,9 @@ In this example, we want to events source the data coming from a mocked HR syste
 {{% tab name="C#" %}}
 ```csharp
 // Employee.cs
+using System;
 using Dolittle.SDK.Embeddings;
 using Dolittle.SDK.Projections;
-
-namespace Kitchen;
 
 [Embedding("e5577d2c-0de7-481c-b5be-6ef613c2fcd6")]
 public class Employee
@@ -329,52 +316,39 @@ Let's register the new event types and the embedding. Then we can update and del
 {{% tab name="C#" %}}
 ```csharp
 // Program.cs
+using System;
+using System.Threading.Tasks;
 using Dolittle.SDK;
 using Dolittle.SDK.Tenancy;
+using Microsoft.Extensions.Hosting;
 
-namespace Kitchen;
+var host = Host.CreateDefaultBuilder()
+    .UseDolittle()
+    .Build();
 
-class Program
+await host.StartAsync();
+
+var client = await host.GetDolittleClient();
+
+var updatedEmployee = new Employee
 {
-    static async Task Main(string[] args)
-    {
-        var client = DolittleClient
-            .ForMicroservice("f39b1f61-d360-4675-b859-53c05c87c0e6")
-            .WithEventTypes(eventTypes =>
-            {
-                eventTypes.Register<EmployeeHired>();
-                eventTypes.Register<EmployeeTransferred>();
-                eventTypes.Register<EmployeeRetired>();
-            })
-            .WithEmbeddings(builder =>
-                builder.RegisterEmbedding<Employee>())
-            .Build();
-        _ = client.Start();
+    Name = "Mr. Taco",
+    Workplace = "Street Food Taco Truck"
+};
 
-        // wait for the registration to complete
-        await Task.Delay(TimeSpan.FromSeconds(2));
+await Task.Delay(TimeSpan.FromSeconds(4));
 
-        // mock of the state from the external HR system
-        var updatedEmployee = new Employee
-        {
-            Name = "Mr. Taco",
-            Workplace = "Street Food Taco Truck"
-        };
+await client.Embeddings
+    .ForTenant(TenantId.Development)
+    .Update(updatedEmployee.Name, updatedEmployee);
+Console.WriteLine($"Updated {updatedEmployee.Name}.");
 
-        await client.Embeddings
-            .ForTenant(TenantId.Development)
-            .Update(updatedEmployee.Name, updatedEmployee);
-        Console.WriteLine($"Updated {updatedEmployee.Name}.");
+await client.Embeddings
+    .ForTenant(TenantId.Development)
+    .Delete<Employee>(updatedEmployee.Name);
+Console.WriteLine($"Deleted {updatedEmployee.Name}.");
 
-        await client.Embeddings
-            .ForTenant(TenantId.Development)
-            .Delete<Employee>(updatedEmployee.Name);
-        Console.WriteLine($"Deleted {updatedEmployee.Name}.");
-
-        // wait for the processing to finish before severing the connection
-        await Task.Delay(TimeSpan.FromSeconds(1));
-    }
-}
+await host.WaitForShutdownAsync();
 ```
 The `Update()` method tries to update the embeddings read model with the specified key to match the updated state by calling the embeddings `ResolveUpdateToEvents()` method. If no read model exists with the key, it will create one with the read model set to the embedding's initial state.
 
@@ -427,6 +401,14 @@ Let's run the code! It should commit events to the event log, one for hiring `"M
 {{% tab name="C#" %}}
 ```shell
 $ dotnet run
+info: Dolittle.SDK.DolittleClientService[0]
+      Connecting Dolittle Client
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: .../Embeddings
 info: Dolittle.SDK.Events.Processing.EventProcessors[0]
       Embedding e5577d2c-0de7-481c-b5be-6ef613c2fcd6 registered with the Runtime, start handling requests
 Updated Mr. Taco.
@@ -473,30 +455,48 @@ For example, the HR system might only return the currently hired employees. Any 
 {{< tabs name="get_tab" >}}
 {{% tab name="C#" %}}
 ```csharp
-/*
-setup builder and update the read model first
-*/
+using System;
+using System.Threading.Tasks;
+using Dolittle.SDK;
+using Dolittle.SDK.Tenancy;
+using Microsoft.Extensions.Hosting;
+
+var host = Host.CreateDefaultBuilder()
+    .UseDolittle()
+    .Build();
+
+await host.StartAsync();
+
+var client = await host.GetDolittleClient();
+
+var updatedEmployee = new Employee
+{
+    Name = "Mr. Taco",
+    Workplace = "Street Food Taco Truck"
+};
+
+await Task.Delay(TimeSpan.FromSeconds(4));
+
 await client.Embeddings
     .ForTenant(TenantId.Development)
     .Update(updatedEmployee.Name, updatedEmployee);
 Console.WriteLine($"Updated {updatedEmployee.Name}.");
-
 var mrTaco = await client.Embeddings
     .ForTenant(TenantId.Development)
-    .Get<Employee>("Mr. Taco")
-    .ConfigureAwait(false);
+    .Get<Employee>("Mr. Taco");
 Console.WriteLine($"Mr. Taco is now working at {mrTaco.State.Workplace}");
 
 var allEmployeeNames = await client.Embeddings
     .ForTenant(TenantId.Development)
-    .GetKeys<Employee>()
-    .ConfigureAwait(false);
+    .GetKeys<Employee>();
 Console.WriteLine($"All current employees are {string.Join(",", allEmployeeNames)}");
 
 await client.Embeddings
     .ForTenant(TenantId.Development)
     .Delete<Employee>(updatedEmployee.Name);
 Console.WriteLine($"Deleted {updatedEmployee.Name}.");
+
+await host.WaitForShutdownAsync();
 ```
 {{% /tab %}}
 {{% tab name="TypeScript" %}}
@@ -547,6 +547,14 @@ Running the code with the modifications above, should print the following:
 {{% tab name="C#" %}}
 ```shell
 $ dotnet run
+info: Dolittle.SDK.DolittleClientService[0]
+      Connecting Dolittle Client
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: .../Embeddings
 info: Dolittle.SDK.Events.Processing.EventProcessors[0]
       Embedding e5577d2c-0de7-481c-b5be-6ef613c2fcd6 registered with the Runtime, start handling requests
 Updated Mr. Taco.

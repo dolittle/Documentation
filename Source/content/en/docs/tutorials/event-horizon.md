@@ -76,35 +76,23 @@ Only public events get filtered through the public filters.
 using System;
 using System.Threading.Tasks;
 using Dolittle.SDK;
-using Dolittle.SDK.Tenancy;
-using Dolittle.SDK.Events;
 using Dolittle.SDK.Events.Filters;
+using Dolittle.SDK.Tenancy;
+using Microsoft.Extensions.Hosting;
 
-namespace Kitchen
-{
-    class Program
-    {
-        public static void Main()
-        {
-            var client = DolittleClient
-                .ForMicroservice("f39b1f61-d360-4675-b859-53c05c87c0e6")
-                .WithEventTypes(eventTypes =>
-                    eventTypes.Register<DishPrepared>())
-                .WithEventHandlers(builder =>
-                    builder.RegisterEventHandler<DishHandler>())
-                .WithFilters(filtersBuilder =>
-                    filtersBuilder
-                        .CreatePublicFilter("2c087657-b318-40b1-ae92-a400de44e507", filterBuilder =>
-                            filterBuilder.Handle((@event, eventContext) =>
-                            {
-                                Console.WriteLine($"Filtering event {@event} to public stream");
-                                return Task.FromResult(new PartitionedFilterResult(true, PartitionId.Unspecified));
-                            })))
-                .Build();
-            // Rest of your code here...
-        }
-    }
-}
+var host = Host.CreateDefaultBuilder()
+    .UseDolittle(_ => _
+        .WithFilters(_ => _
+            .CreatePublic("2c087657-b318-40b1-ae92-a400de44e507")
+            .Handle((@event, eventContext) =>
+            {
+                Console.WriteLine($"Filtering event {@event} to public streams");
+                return Task.FromResult(new PartitionedFilterResult(true, eventContext.EventSourceId.Value));
+            })))
+    .Build();
+
+await host.StartAsync();
+await host.WaitForShutdownAsync();
 ```
 {{% /tab %}}
 
@@ -145,29 +133,33 @@ Now that we have a public stream we can commit public events to start filtering 
 {{% tab name="C#" %}}
 ```csharp
 // Program.cs
+using System;
+using System.Threading.Tasks;
 using Dolittle.SDK;
+using Dolittle.SDK.Events.Filters;
 using Dolittle.SDK.Tenancy;
+using Microsoft.Extensions.Hosting;
 
-namespace Kitchen
-{
-    class Program
-    {
-        public static void Main()
-        {
-            // Where you build the client...
+var host = Host.CreateDefaultBuilder()
+    .UseDolittle(_ => _
+        .WithFilters(_ => _
+            .CreatePublic("2c087657-b318-40b1-ae92-a400de44e507")
+            .Handle((@event, eventContext) =>
+            {
+                Console.WriteLine($"Filtering event {@event} to public streams");
+                return Task.FromResult(new PartitionedFilterResult(true, eventContext.EventSourceId.Value));
+            })))
+    .Build();
 
-            var preparedTaco = new DishPrepared("Bean Blaster Taco", "Mr. Taco");
+await host.StartAsync();
 
-            client.EventStore
-                .ForTenant(TenantId.Development)
-                .CommitPublicEvent(preparedTaco, "bfe6f6e4-ada2-4344-8a3b-65a3e1fe16e9")
-                .GetAwaiter().GetResult();
+var client = await host.GetDolittleClient();
+var preparedTaco = new DishPrepared("Bean Blaster Taco", "Mr. Taco");
+await client.EventStore
+    .ForTenant(TenantId.Development)
+    .CommitPublicEvent(preparedTaco, "Dolittle Tacos");
 
-            // Blocks until the EventHandlers are finished, i.e. forever
-            client.Start().Wait();
-        }
-    }
-}
+await host.WaitForShutdownAsync();
 ```
 {{% /tab %}}
 
@@ -218,37 +210,28 @@ Let's create another microservice that [subscribes]({{< ref "docs/concepts/event
 using System;
 using Dolittle.SDK;
 using Dolittle.SDK.Tenancy;
-using Dolittle.SDK.Events;
+using Microsoft.Extensions.Hosting;
 
-namespace Kitchen
-{
-    class Program
-    {
-        public static void Main()
-        {
-            var client = DolittleClient.ForMicroservice("a14bb24e-51f3-4d83-9eba-44c4cffe6bb9")
-                .WithRuntimeOn("localhost", 50055)
-                .WithEventTypes(eventTypes =>
-                    eventTypes.Register<DishPrepared>())
-                .WithEventHorizons(eventHorizons =>
-                    eventHorizons.ForTenant(TenantId.Development, subscriptions =>
-                        subscriptions
-                            .FromProducerMicroservice("f39b1f61-d360-4675-b859-53c05c87c0e6")
-                            .FromProducerTenant(TenantId.Development)
-                            .FromProducerStream("2c087657-b318-40b1-ae92-a400de44e507")
-                            .FromProducerPartition(PartitionId.Unspecified)
-                            .ToScope("808ddde4-c937-4f5c-9dc2-140580f6919e")))
-                .WithEventHandlers(_ =>
-                    _.CreateEventHandler("6c3d358f-3ecc-4c92-a91e-5fc34cacf27e")
-                        .InScope("808ddde4-c937-4f5c-9dc2-140580f6919e")
-                        .Partitioned()
-                        .Handle<DishPrepared>((@event, context) => Console.WriteLine($"Handled event {@event} from public stream")))
-                .Build();
-            // Blocks until the EventHandlers are finished, i.e. forever
-            client.Start().Wait();
-        }
-    }
-}
+Host.CreateDefaultBuilder()
+    .UseDolittle(_ => _
+        .WithEventHorizons(_ => _
+            .ForTenant(TenantId.Development, subscriptions => 
+                subscriptions
+                    .FromProducerMicroservice("f39b1f61-d360-4675-b859-53c05c87c0e6")
+                    .FromProducerTenant(TenantId.Development)
+                    .FromProducerStream("2c087657-b318-40b1-ae92-a400de44e507")
+                    .FromProducerPartition("Dolittle Tacos")
+                    .ToScope("808ddde4-c937-4f5c-9dc2-140580f6919e"))
+        )
+        .WithEventHandlers(_ => _
+            .Create("6c3d358f-3ecc-4c92-a91e-5fc34cacf27e")
+            .InScope("808ddde4-c937-4f5c-9dc2-140580f6919e")
+            .Partitioned()
+            .Handle<DishPrepared>((@event, context) => Console.WriteLine($"Handled event {@event} from public stream"))
+        ),
+        configuration => configuration.WithRuntimeOn("localhost", 50055))
+    .Build()
+    .Run();
 ```
 {{% /tab %}}
 
@@ -301,10 +284,7 @@ There's a lot of stuff going on the code so let's break it down:
 {{< tabs name="with-runtime-on-tab" >}}
 {{% tab name="C#" %}}
 ```csharp
-// Program.cs
-.WithRuntimeOn("localhost", 50055)
-// Rest of builder here...
-
+configuration => configuration.WithRuntimeOn("localhost", 50055))
 ```
 {{% /tab %}}
 
@@ -325,15 +305,15 @@ We'll see this reflected in the `docker-compose.yml` file [later]({{< ref "#setu
 {{% tab name="C#" %}}
 ```csharp
 // Program.cs
-.WithEventHorizons(eventHorizons =>
-    eventHorizons.ForTenant(TenantId.Development, subscriptions =>
+.WithEventHorizons(_ => _
+    .ForTenant(TenantId.Development, subscriptions => 
         subscriptions
             .FromProducerMicroservice("f39b1f61-d360-4675-b859-53c05c87c0e6")
             .FromProducerTenant(TenantId.Development)
             .FromProducerStream("2c087657-b318-40b1-ae92-a400de44e507")
-            .FromProducerPartition(PartitionId.Unspecified)
-            .ToScope("808ddde4-c937-4f5c-9dc2-140580f6919e")))
-// Rest of builder here...
+            .FromProducerPartition("Dolittle Tacos")
+            .ToScope("808ddde4-c937-4f5c-9dc2-140580f6919e"))
+)
 ```
 {{% /tab %}}
 
@@ -373,12 +353,12 @@ The consumer will receive events from the producer and put those events in a spe
 {{% tab name="C#" %}}
 ```csharp
 // Program.cs
-.WithEventHandlers(_ =>
-    _.CreateEventHandler("6c3d358f-3ecc-4c92-a91e-5fc34cacf27e")
-        .InScope("808ddde4-c937-4f5c-9dc2-140580f6919e")
-        .Partitioned()
-        .Handle<DishPrepared>((@event, context) => Console.WriteLine($"Handled event {@event} from public stream")))
-// Rest of builder here...
+.WithEventHandlers(_ => _
+    .Create("6c3d358f-3ecc-4c92-a91e-5fc34cacf27e")
+    .InScope("808ddde4-c937-4f5c-9dc2-140580f6919e")
+    .Partitioned()
+    .Handle<DishPrepared>((@event, context) => Console.WriteLine($"Handled event {@event} from public stream"))
+)
 ```
 {{% /tab %}}
 
@@ -589,14 +569,37 @@ Run both the consumer and producer microservices in their respective folders, an
 #### Producer
 ```shell
 $ dotnet run
-Filtering event EventHorizon.Producer.DishPrepared to public streams
-Mr. Taco has prepared Bean Blaster Taco. Yummm!
+info: Dolittle.SDK.DolittleClientService[0]
+      Connecting Dolittle Client
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/jakob/Git/dolittle/DotNET.SDK/Samples/Tutorials/EventHorizon/Producer
+info: Dolittle.SDK.Events.Processing.EventProcessors[0]
+      Public Filter 2c087657-b318-40b1-ae92-a400de44e507 registered with the Runtime, start handling requests
+info: Dolittle.SDK.Events.Processing.EventProcessors[0]
+      EventHandler f2d366cf-c00a-4479-acc4-851e04b6fbba registered with the Runtime, start handling requests
+Filtering event DishPrepared to public streams
+info: DishHandler[0]
+      Mr. Taco has prepared Bean Blaster Taco. Yummm!
 ```
 
 #### Consumer
 ```shell
 $ dotnet run
-Handled event EventHorizon.Consumer.DishPrepared from public stream
+info: Dolittle.SDK.DolittleClientService[0]
+      Connecting Dolittle Client
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /Users/jakob/Git/dolittle/DotNET.SDK/Samples/Tutorials/EventHorizon/Consumer
+info: Dolittle.SDK.Events.Processing.EventProcessors[0]
+      EventHandler 6c3d358f-3ecc-4c92-a91e-5fc34cacf27e registered with the Runtime, start handling requests
+Handled event DishPrepared from public stream
 ```
 
 {{% /tab %}}
