@@ -82,11 +82,13 @@ using Dolittle.SDK.Projections;
 [Projection("98f9db66-b6ca-4e5f-9fc3-638626c9ecfa")]
 public class DishCounter
 {
+    public string Name = "Unknown";
     public int NumberOfTimesPrepared = 0;
 
     [KeyFromProperty("Dish")]
     public void On(DishPrepared @event, ProjectionContext context)
     {
+        Name = @event.Dish;
         NumberOfTimesPrepared ++;
     }
 }
@@ -107,10 +109,12 @@ import { DishPrepared } from './DishPrepared';
 
 @projection('98f9db66-b6ca-4e5f-9fc3-638626c9ecfa')
 export class DishCounter {
+    name: string = 'Unknown';
     numberOfTimesPrepared: number = 0;
 
     @on(DishPrepared, _ => _.keyFromProperty('Dish'))
     on(event: DishPrepared, projectionContext: ProjectionContext) {
+        this.name = event.Dish;
         this.numberOfTimesPrepared ++;
     }
 }
@@ -152,15 +156,15 @@ var dishes = await client.Projections
     .ForTenant(TenantId.Development)
     .GetAll<DishCounter>().ConfigureAwait(false);
 
-foreach (var (dish, state) in dishes )
+foreach (var dish in dishes)
 {
-    Console.WriteLine($"The kitchen has prepared {dish} {state.State.NumberOfTimesPrepared} times");
+    Console.WriteLine($"The kitchen has prepared {dish.Name} {dish.NumberOfTimesPrepared} times");
 }
 
 await host.WaitForShutdownAsync();
 ```
 
-The `GetAll<DishCounter>()` method returns all Projections for that particular type. The returned object is a dictionary of each projections' key and that projections' current state.
+The `GetAll<DishCounter>()` method returns all read models of that Projection as an `IEnumerable<DishCounter>`.
 
 The string given in `FromEventSource()` is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify where the events come from.
 
@@ -190,14 +194,13 @@ import { DishPrepared } from './DishPrepared';
 
     await setTimeout(1000);
 
-    for (const [dish, { state: counter }] of await client.projections.forTenant(TenantId.development).getAll(DishCounter)) {
-        client.logger.info(`The kitchen has prepared ${dish} ${counter.numberOfTimesPrepared} times`);
+    for (const { name, numberOfTimesPrepared } of await client.projections.forTenant(TenantId.development).getAll(DishCounter)) {
+        client.logger.info(`The kitchen has prepared ${name} ${numberOfTimesPrepared} times`);
     }
-})();
 })();
 ```
 
-The `getAll(DishCounter)` method returns all Projections for that particular type. The returned object is a map of each projections' key and that projections' current state.
+The `getAll(DishCounter)` method returns all read models for that Projection as an array `DishCounter[]`.
 
 The string given in `commit(event, 'event-source-id')` is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify where the events come from.
 {{% /tab %}}
@@ -320,20 +323,20 @@ var dishes = await client.Projections
     .ForTenant(TenantId.Development)
     .GetAll<DishCounter>().ConfigureAwait(false);
 
-foreach (var (dish, state) in dishes )
+foreach (var dish in dishes)
 {
-    Console.WriteLine($"The kitchen has prepared {dish} {state.State.NumberOfTimesPrepared} times");
+    Console.WriteLine($"The kitchen has prepared {dish.Name} {dish.NumberOfTimesPrepared} times");
 }
 
 var chef = await client.Projections
     .ForTenant(TenantId.Development)
     .Get<Chef>("Mrs. Tex Mex").ConfigureAwait(false);
-Console.WriteLine($"{chef.Key} has prepared {string.Join(", ", chef.State.Dishes)}");
+Console.WriteLine($"{chef.Name} has prepared {string.Join(", ", chef.Dishes)}");
 
 await host.WaitForShutdownAsync();
 ```
 
-The `Get<Chef>('key')` method returns a Projection instance with that particular key. The key is declared by the `KeyFromProperty(_.Chef)` callback function on the `On()` method. In this case, the id of each `Chef` projection instance is based on the chefs name.
+The `Get<Chef>('key')` method returns a Projection instance with that particular key. The key is declared by the `KeyFromProperty(_.Chef)` callback function on the `On()` method. In this case, the key of each `Chef` projection instance is based on the chefs name.
 
 {{% /tab %}}
 
@@ -364,16 +367,16 @@ The `Get<Chef>('key')` method returns a Projection instance with that particular
 
     await setTimeout(1000);
 
-    for (const [dish, { state: counter }] of await client.projections.forTenant(TenantId.development).getAll(DishCounter)) {
-        client.logger.info(`The kitchen has prepared ${dish} ${counter.numberOfTimesPrepared} times`);
+    for (const { name, numberOfTimesPrepared } of await client.projections.forTenant(TenantId.development).getAll(DishCounter)) {
+        client.logger.info(`The kitchen has prepared ${name} ${numberOfTimesPrepared} times`);
     }
 
-    const chef = await client.projections.forTenant(TenantId.development).get<Chef>(Chef, 'Mrs. Tex Mex');
-    client.logger.info(`${chef.key} has prepared ${chef.state.dishes}`);
+    const chef = await client.projections.forTenant(TenantId.development).get(Chef, 'Mrs. Tex Mex');
+    client.logger.info(`${chef.name} has prepared ${chef.dishes.join(', ')}`);
 })();
 ```
 
-The `get<Chef>(Chef, 'key')` method returns a Projection instance with that particular key. The key is declared by the `keyFromProperty('Chef')` callback function on the `on()` method. In this case, the id of each `Chef` projection instance is based on the chefs name.
+The `get(Chef, 'key')` method returns a Projection instance with that particular key. The key is declared by the `keyFromProperty('Chef')` callback function on the `on()` method. In this case, the key of each `Chef` projection instance is based on the chefs name.
 {{% /tab %}}
 {{< /tabs >}}
 
