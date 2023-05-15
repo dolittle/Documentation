@@ -15,11 +15,11 @@
 <link rel="preload" as="image" href="{{ $promo_image_big.RelPermalink }}" media="(min-width: 1200px)">
 <style>
 #{{ $blockID }} {
-    background-image: url({{ $promo_image_small.RelPermalink }}); 
+    background-image: url({{ $promo_image_small.RelPermalink }});
 }
 @media only screen and (min-width: 1200px) {
     #{{ $blockID }} {
-        background-image: url({{ $promo_image_big.RelPermalink }}); 
+        background-image: url({{ $promo_image_big.RelPermalink }});
     }
 }
 </style>
@@ -31,8 +31,8 @@
         <div class="text-center">
           <!-- Custom image and text-->
           <h1 class="display-1 mt-0 pb-3">
-            <img alt="dolittle" width="100" src="images/dolittle_symbol_orange.svg" />
-              Dolittle
+            <img alt="dolittle" width="60" src="images/logo-symbol-dark.svg" />
+              Dolittle SDK
           </h1>
           <p class="display-2 mb-0">Build Event-Driven Microservices</p>
           {{ with .Get "title" }}<h1 class="display-1 mt-0 mt-md-5 pb-4">{{ $title := . }}{{ with $logo_image }}{{ $logo_image_resized := (.Fit (printf "70x70 %s" $logo_anchor)) }}<img class="td-cover-logo" src="{{ $logo_image_resized.RelPermalink }}" alt="{{ $title | html }} Logo">{{ end }}{{ $title | html }}</h1>{{ end }}

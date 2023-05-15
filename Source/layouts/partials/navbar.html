@@ -1,8 +1,8 @@
 {{ $cover := .HasShortcode "blocks/cover" }}
 <!-- Set the dark logo if we're on the cover page-->
-{{ $logo := "icons/logo.svg" }}
+{{ $logo := "icons/logo-symbol-light.svg" }}
 {{ if $cover }}
-	{{ $logo = "icons/dark-logo.svg" }}
+	{{ $logo = "icons/logo-dark.svg" }}
 {{ end }}
 <!-- change navbar from dark to light depending on if were on cover page -->
 <nav class="js-navbar-scroll navbar navbar-expand {{ if $cover}} td-navbar-cover navbar-light {{ else }} navbar-dark {{ end }}flex-column flex-md-row td-navbar">
