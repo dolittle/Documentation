@@ -10,3 +10,5 @@ Source/public/
 Source/resources/
 Source/node_modules/
 Source/tech-doc-hugo
+
+.DS_Store
