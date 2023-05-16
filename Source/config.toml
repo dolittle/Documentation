@@ -56,8 +56,8 @@ anchor = "smart"
 
 [languages]
 [languages.en]
-title = "Dolittle"
-description = "Dolittle documentation site"
+title = "Dolittle SDK by Aigonix"
+description = "Dolittle SDK documentation site"
 languageName ="English"
 # Weight used for sorting.
 weight = 1
