@@ -17,19 +17,19 @@
 			"extensions": [
 				"bierner.markdown-mermaid",
 				"yzhang.markdown-all-in-one",
-				"eamodio.gitlens"
+				"eamodio.gitlens",
+				"kahole.magit",
+				"mhutchie.git-graph",
+				"streetsidesoftware.code-spell-checker"
 			]
 		}
-	}
-
-	// Features to add to the dev container. More info: https://containers.dev/features.
-	// "features": {},
+	},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "yarn install",
+	"postCreateCommand": "chmod +x /workspaces/Documentation/.devcontainer/postCreate.sh;/workspaces/Documentation/.devcontainer/postCreate.sh"
 
 
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.

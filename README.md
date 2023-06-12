@@ -36,7 +36,7 @@ npm install
 
 ### Running the website locally
 
-Once you've cloned the site repo, from the repo root folder, run:
+Once you've cloned the site repo, from the Source -folder, run:
 
 ```
 hugo server
