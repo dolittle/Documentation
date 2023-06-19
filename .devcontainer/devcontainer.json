@@ -9,7 +9,8 @@
 		"ghcr.io/devcontainers/features/hugo:1": {
 			"version": "0.105.0",
 			"extended": true
-		}
+		},
+		"ghcr.io/devcontainers/features/github-cli:1": {}
 	},
 	// Configure tool-specific properties.
 	"customizations": {
@@ -20,7 +21,8 @@
 				"eamodio.gitlens",
 				"kahole.magit",
 				"mhutchie.git-graph",
-				"streetsidesoftware.code-spell-checker"
+				"streetsidesoftware.code-spell-checker",
+				"bungcip.better-toml"
 			]
 		}
 	},
