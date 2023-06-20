@@ -173,3 +173,11 @@ enable = false
 	url = "https://github.com/dolittle/Documentation"
 	icon = "fab fa-github"
         desc = "Development takes place here!"
+
+[module]
+[[module.mounts]]
+  source = 'repositories/whitepapers/images'
+  target = 'static/images/whitepapers'
+[[module.mounts]]
+  source = 'static'
+  target = 'static'
