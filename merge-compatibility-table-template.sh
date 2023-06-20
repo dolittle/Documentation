@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TEMPLATE="Documentation/References/compatibility.md"
+TEMPLATE="Source/content/en/docs/reference/runtime/compatibility.md"
 GENERATED="$1"
 
 if [ ! -f "$GENERATED" ]; then
@@ -31,7 +31,7 @@ function set_github_output {
     fi
 }
 
-if [ "$CHANGED" -ne 0 ]; then 
+if [ "$CHANGED" -ne 0 ]; then
     echo "The update has changed the compatibility table"
     set_github_output "changed" "true"
 else
