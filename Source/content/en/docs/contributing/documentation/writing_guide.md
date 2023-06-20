@@ -6,7 +6,7 @@ author: einari, joel
 weight: 2
 ---
 
-This document is meant to be read alongside the [style guide](./style_guide) to provide concrete examples on formatting the document and syntax of different Hugo shortcodes.
+This document is meant to be read alongside the [style guide]({{< ref "style_guide" >}}) to provide concrete examples on formatting the document and syntax of different Hugo shortcodes.
 
 # Documentation overview
 
@@ -42,21 +42,17 @@ All files **MUST** be lower cased, words **MUST** be separated with a dash. Exam
 
 ### Within same repository
 
-When adding links to other pages inside the same repository **DO NOT USE** the file extension `.md` - otherwise the link
-will be broken. For instance, linking to the [API](./api) documentation is done by adding a markdown link
+When adding links to other pages inside the same repository you need to refer to the page file-name without the file extension (`.md`). Also, you cannot use the "normal markdown" link `[text](filename)`, you need to place the filename inside `{{</*ref "filename"*/>}} - otherwise the link
+will be broken. For instance, linking to the [API]({{< ref "api" >}}) documentation is done by adding a markdown link
 as follows:
 
 ```markdown
-[API](./api)
+[API]({{</* ref "api" */>}})
 ```
 
 Renders to:
 
-[API](./api)
-
-
-### Cross Repositories
-Link pages from other repositories using Hugos [`relref/ref` functions](https://gohugo.io/content-management/shortcodes/#ref-and-relref) inside the markdown.
+[API]({{< ref "api" >}})
 
 ### External resources
 
@@ -74,7 +70,7 @@ Looks like this:
 ## Diagrams / Figures
 Hugo supports [Mermaid](https://mermaidjs.github.io) shortcodes to write diagrams. Mermaid **SHOULD** be favored over using images when possible. [Examples of Mermaid](https://docdock.netlify.com/shortcodes/mermaid/)
 
-Some diagrams/figures might not be possible to do using Mermaid, these can then be images. Beware however how you create these images and make sure they comply with the look and feel.
+Some diagrams/figures might not be possible to do using Mermaid, these can then be images. Beware however how you create these images and make sure they comply with the look and feel. Also remember to add alt text to all images explaining them for screen readers.
 
 ## Images
 
