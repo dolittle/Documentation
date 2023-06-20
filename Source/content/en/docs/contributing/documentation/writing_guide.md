@@ -40,9 +40,9 @@ All files **MUST** be lower cased, words **MUST** be separated with a dash. Exam
 
 ## Links
 
-### Within same repository
+### Within the documentation -site
 
-When adding links to other pages inside the same repository you need to refer to the page file-name without the file extension (`.md`). Also, you cannot use the "normal markdown" link `[text](filename)`, you need to place the filename inside `{{</*ref "filename"*/>}} - otherwise the link
+When adding links to other pages inside this site you need to refer to the page file-name without the file extension (`.md`). Also, you cannot use the "normal markdown" link `[text](filename)`, you need to place the filename inside `{{</*ref "filename"*/>}} - otherwise the link
 will be broken. For instance, linking to the [API]({{< ref "api" >}}) documentation is done by adding a markdown link
 as follows:
 
@@ -68,7 +68,16 @@ Looks like this:
 
 
 ## Diagrams / Figures
-Hugo supports [Mermaid](https://mermaidjs.github.io) shortcodes to write diagrams. Mermaid **SHOULD** be favored over using images when possible. [Examples of Mermaid](https://docdock.netlify.com/shortcodes/mermaid/)
+Hugo supports [Mermaid](https://mermaidjs.github.io) shortcodes to write diagrams. Mermaid **SHOULD** be favored over using images when possible. [Mermaid documentation](https://mermaid.js.org/intro/)
+
+```mermaid
+flowchart TB
+    Understand --> Describe --> Understand
+    Describe --> Implement --> Understand
+    Implement --> Verify --> Understand
+    Verify --> Deploy --> Understand
+    Deploy --> Operate --> Understand
+```
 
 Some diagrams/figures might not be possible to do using Mermaid, these can then be images. Beware however how you create these images and make sure they comply with the look and feel. Also remember to add alt text to all images explaining them for screen readers.
 
