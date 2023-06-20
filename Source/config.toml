@@ -70,7 +70,7 @@ weight = 1
       # See a complete list of available styles at https://xyproto.github.io/splash/docs/all.html
       style = "monokai"
       # Uncomment if you want your chosen highlight style used for code blocks without a specified language
-      guessSyntax = "true"
+      guessSyntax = "false"
 
 # Everything below this are Site Params
 
@@ -153,8 +153,15 @@ no = 'Sorry to hear that. Please <a href="https://github.com/USERNAME/REPOSITORY
 [params.ui.readingtime]
 enable = false
 
+[params.mermaid]
+  enable = true
+
+[params.mermaid.flowchart]
+  diagramPadding = 6
+
 [params.links]
 # End user relevant links. These will show up on left side of footer and in the community page if you have one.
+
 [[params.links.user]]
 	name = "Contact us"
 	url = "https://www.dolittle.com/contact"
