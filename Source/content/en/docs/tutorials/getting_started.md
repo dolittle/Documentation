@@ -36,7 +36,7 @@ Prerequisites:
 Setup a .NET Core console project:
 ```shell
 $ dotnet new console
-$ dotnet add package Dolittle.SDK 
+$ dotnet add package Dolittle.SDK
 ```
 {{% /tab %}}
 
@@ -180,13 +180,15 @@ await host.StartAsync();
 var client = await host.GetDolittleClient();
 await client.EventStore
     .ForTenant(TenantId.Development)
-    .CommitEvent(new DishPrepared("Bean Blaster Taco", "Mr. Taco"), "Dolittle Tacos");
+    .CommitEvent(
+        content: new DishPrepared("Bean Blaster Taco", "Mr. Taco"),
+        eventSourceId: "Dolittle Tacos");
 
 await host.WaitForShutdownAsync();
 
 ```
 
-The string given in `FromEventSource()` is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify where the events come from.
+The string given as `eventSourceId` is the [`EventSourceId`]({{< ref "docs/concepts/events#eventsourceid" >}}), which is used to identify where the events come from.
 {{% /tab %}}
 
 {{% tab name="TypeScript" %}}
@@ -269,7 +271,7 @@ Open a new terminal.
 Now you can list the registered event types with the following command:
 ```shell
 $ dolittle runtime eventtypes list
-EventType   
+EventType
 ------------
 DishPrepared
 ```
@@ -279,7 +281,7 @@ And check the status of the event handler with the following commands:
 $ dolittle runtime eventhandlers list
 EventHandler  Scope    Partitioned  Status
 ------------------------------------------
-DishHandler   Default  ✅            ✅ 
+DishHandler   Default  ✅            ✅
 
 $ dolittle runtime eventhandlers get DishHandler
 Tenant                                Position  Status

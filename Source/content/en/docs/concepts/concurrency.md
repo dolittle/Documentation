@@ -1,19 +1,37 @@
 ---
 title: Concurrency
-description: Running event-handlers in concurrent-mode
+description: On the benefits and complexities of running event handlers concurrently
 weight: 80
 reposoitory: https://github.com/dolittle/Runtime
 ---
-
-# Concurrency
 
 {{% alert color="warning" %}}
 Concurrent processing of event-handlers is a feature of v9 of the Runtime. To use it you require a v9 Runtime and a compatible SDK (v22 or later of the .NET SDK).
 {{% /alert %}}
 
-When your [Event handlers]({{<ref "event_handlers_and_filters.md">}}) are processing long streams of events you might want to have them processed concurrently to speed up the processing. This can be achieved by setting the `concurrency` -attribute on the processor.
+# Introduction
 
-Here are two examples: the "default" and a concurrent event-handler.
+When your [Event handlers]({{<ref "event_handlers_and_filters.md">}}) are processing long streams of events you might want to have them processed concurrently to speed up the processing. This can be achieved by setting the `concurrency` -attribute on the processor's `EventHandler` -attribute.
+
+```csharp
+// instead of
+[EventHandler("...")]
+public class SequentialHandler
+{
+    // ..
+}
+
+// use
+[EventHandler(eventHandlerId: "...", concurrency: 100)]
+public class ConcurrentHandler
+{
+    // ..
+}
+```
+
+### Sequential processing
+
+An event handler with just an ID set in the `EventHandler` -attribute, the events will be processed sequentially. Having no concurrency set is the same as setting it to 1.
 
 ```csharp
 [EventHandler("...")]
@@ -28,9 +46,16 @@ public class HandleSequentially
     {
         //..
     }
-
 }
+```
 
+This is the default. All the events in the stream will be processed in-order as they arrive. When running a re-play or with an existing stream of events the processing will happen one-by-one.
+
+### Concurrent processing
+
+An event handler with concurrency set in the `EventHandler` -attribute, the events will be processed concurrently.
+
+```csharp
 [EventHandler(eventHandlerId: "...", concurrency: 100)]
 public class HandleConcurrently
 {
@@ -46,21 +71,15 @@ public class HandleConcurrently
 }
 ```
 
-Both will handle the `CustomerCreated` and `CustomerDeleted` -events, and when the system is running normally they will perform very similarly. However, if there is a large back-log of unprocessed events (for example during a re-play or if the event-handler is new and has to process an existing stream of many events) the differences will show up.
+**The stream of events will be split up by the [`EventSourceId`]({{<ref "events#eventsourceid">}}) of the events**, and up to 100 (in this case) of these will be processed concurrently. This means that an event-stream of a million events with a thousand different event-sources will be processed 100 at a time. There will be one event-handler -instance per event-source.
 
-### Sequential processing
+If you are using [Aggregates]({{< ref aggregates >}}) to commit events the `EventSourceId` will be the `EventSourceId` of the aggregate-root. If you are committing events directly to the [Event Store]({{< ref event_store >}}) as demonstrated in the [Getting started tutorial]({{<ref "getting_started#connect-the-client-and-commit-an-event">}}) the `EventSourceId` will be part of the call to the Event Store.
 
-This is the default. All the events in the stream will be processed in-order as they arrive. When running a re-play or with an existing stream of events the processing will happen one-by-one.
+Enabling concurrency often yields a dramatic increase in speed of processing large streams of events, but there are consequences you need to be aware of when writing concurrent event-handlers.
 
-### Concurrent processing
+## Consequences
 
-The stream of events will be split up by the `EventSourceId` of the events, and up to 100 (in this case) of these will be processed concurrently. This means that an event-stream of a million events with a thousand different event-sources will be processed 100 at a time. There will be one event-handler -instance per event-source.
-
-This leads to a dramatic increase in speed of processing large streams of events, but this has some consequences you need to be aware of when writing concurrent event-handlers.
-
-## Beware
-
-Your event-handler will no longer be a single processor moving along a stream of events, and this can give surprising results. You can no longer assume that something that happened "earlier" in the event-stream will have happened in your current handling-method, as it might still be waiting for processing on a different event-source-id. This introduces a dependency between the part of your system that inserts events (in particular the event-source and its Id), and the processing of these events.
+Your event-handler will no longer be a single processor moving along a stream of events, which will affect how they behave. You may no longer assume that something that happened "earlier" in the event-stream will have happened in your current handling-method, as it might still be waiting for processing on a different event-source-id. This introduces a dependency between the part of your system that inserts events (in particular the event-source and its Id), and the processing of these events.
 
 ### Example
 Let's illustrate with an example.
@@ -227,7 +246,7 @@ Is this a good thing, is it even acceptable? That is up to you to decide. It is 
 
 If your processing exists to create an order-page for the customer, having the customer deletion happen before all the order-events might be a good thing, as you know this customer will end up deleting their account and you do not need to create a page that will never be shown. However, you need to be aware of it, and make sure that the handler does not crash when the customer has been deleted.
 
-## Mitigation
+## Mitigations
 
 Concurrency adds complexity to your system, and you need to be aware of this complexity and design your system accordingly. There are ways to mitigate this complexity.
 
@@ -318,6 +337,16 @@ public class Customer : AggregateRoot
 When you write your event-handlers you may be able to write them such that they can handle the events out of order, or at least only guaranteed in-order within an event-source. This is not always possible, but if it is, it is a good way to mitigate the complexity of concurrent processing.
 
 This depends on what you do in your handler. If you are storing a read-model you may have to deal with partial or missing data, if you are calling on external services you might have to deal with them being unavailable, or not supporting the order in which you are calling them.
+
+## Summary
+
+Activating concurrency can lead to great performance improvements, but it comes at a cost. To safely use concurrency you should be aware of the implications of concurrent processing, and design your system accordingly.
+
+- handling order will depend on the `EventSourceId` of the events
+- multiple event-handlers will be running concurrently
+  - watch out for shared state
+  - watch out for resource-usage
+- good to have a single `EventSourceId` per unit of replay
 
 
 ## Conclusion
