@@ -59,12 +59,100 @@ Event handlers can be either partitioned or unpartitioned. Partitioned event han
 
 As event handlers create a stream based on the types of events they handles, they have to uphold the [rules of streams]({{< ref "streams#rules" >}}). Every time an event handler is registered the Runtime will check that these rules are upheld and that the event handlers definition wouldn't invalidate the already existing stream. Most common ways of breaking the rules are:
 
-- The event handler stops handling an event type that it has already handled. This would mean that events would have to be _removed_ from the stream, breaking the _append-only_ rule.
+### Disallowed: Removing events from the stream
+The event handler stops handling an event type that it has already handled. This would mean that events would have to be _removed_ from the stream, breaking the _append-only_ rule.
 
-![Event Handler creates an invalid stream by removing an already handled event type](/images/concepts/eventhandler_removed.png)
-- The event handler starts handling a new event type that has already occurred in the event log. This would mean changing the _ordering_ of events in the streams and break the _append-only_ rule.
+Given an event handler that handles DishPrepared and RecipeAdded events, and the following event log we would get the stream as follows:
 
-![Event Handler creates an invalid stream by adding a new event type](/images/concepts/eventhandler_added.png)
+```mermaid
+flowchart LR
+    subgraph Log[Event Log]
+        DP1L[1: DishPrepared]
+        RA1L[2: RecipeAdded]
+        DA1L[3: DishAddedToMenu]:::Dashed
+        DP2L[4: DishPrepared]
+    end
+    EH[Event Handler v1<br/>Handles:<br/>DishPrepared<br/>DishServed]
+    DP1L --> EH --> DP1S
+    RA1L --> EH --> RA1S
+    DP2L --> EH --> DP2S
+    subgraph S1[Stream before]
+        DP1S[1: DishPrepared]
+        RA1S[2: RecipeAdded]
+        DP2S[3: DishPrepared]
+    end
+
+    classDef Dashed stroke-dasharray: 5, 5
+```
+The Event Handler creates an invalid stream by removing an already handled event type:
+
+```mermaid
+flowchart LR
+    subgraph Log[Event Log]
+        DP1L[1: DishPrepared]
+        RA1L[2: RecipeAdded]:::Dashed
+        DA1L[3: DishAddedToMenu]:::Dashed
+        DP2L[4: DishPrepared]
+    end
+    EH2[Event Handler v2<br/>Handles:<br/>DishPrepared]
+    DP1L --> EH2 --> DP1S2
+    DP2L --> EH2 --> DP2S2
+
+    subgraph S2[Stream after]
+        DP1S2[1: DishPrepared]
+        RA1S2{{?: RecipeAdded}}:::Error
+        DP2S2[2: DishPrepared]
+    end
+
+    classDef Dashed stroke-dasharray: 5, 5
+    classDef Error stroke:#ff0000,stroke-width:2px,stroke-dasharray: 5, 5
+```
+Since the RecipeAdded event-type has already been committed to the stream, the stream would have to be changed to remove the RecipeAdded event-type. This would break the _append-only_ rule, as the stream would have to be changed. **This change is invalid, and will be rejected by the Runtime**.
+
+### Disallowed: Adding events in positions other than the end of the stream
+The event handler starts handling a new event type that has already occurred in the event log. This would mean changing the _ordering_ of events in the streams and break the _append-only_ rule.
+```mermaid
+flowchart LR
+    subgraph Log[Event Log]
+        DP1L[1: DishPrepared]
+        RA1L[2: RecipeAdded]:::Dashed
+        DA1L[3: DishAddedToMenu]:::Dashed
+        DP2L[4: DishPrepared]
+    end
+    EH[Event Handler v1<br/>Handles:<br/>DishPrepared]
+    DP1L --> EH --> DP1S
+    DP2L --> EH --> DP2S
+    subgraph S1[Stream before]
+        DP1S[1: DishPrepared]
+        DP2S[3: DishPrepared]
+    end
+
+    classDef Dashed stroke-dasharray: 5, 5
+```
+The Event Handler creates an invalid stream by adding a new event at a position before the end of the existing stream:
+
+```mermaid
+flowchart LR
+    subgraph Log[Event Log]
+        DP1L[1: DishPrepared]
+        RA1L[2: RecipeAdded]
+        DA1L[3: DishAddedToMenu]:::Dashed
+        DP2L[4: DishPrepared]
+    end
+    EH2[Event Handler v2<br/>Handles:<br/>DishPrepared<br/>RecipeAdded]
+    DP1L --> EH2 --> DP1S2
+    RA1L --> EH2 --> RA1S2
+    DP2L --> EH2 --> DP2S2
+
+    subgraph S2[Stream after]
+        DP1S2[1: DishPrepared]
+        RA1S2{{2: RecipeAdded}}:::Error
+        DP2S2[3: DishPrepared]
+    end
+
+    classDef Dashed stroke-dasharray: 5, 5
+    classDef Error stroke:#ff0000,stroke-width:2px
+```
 
 It is possible to add a new type of event into the handler if it doesn't invalidate the stream. For example, you can add a new event type to the handler if it hasn't ever been committed _before_ any of the other types of events into the [event log]({{< ref "event_store#event-log" >}}).
 
@@ -77,7 +165,7 @@ The replay does not allow you to change what event types the event handler handl
 If you want to have an event handler for read models which replays all of its events whenever it changes, try using [Projections]({{< ref "projections" >}}) instead, as they are designed to allow frequent changes.
 
 {{< alert title="Idempotence" color="warning" >}}
-As creating a new event handler will handle all of its events, it's very important to take care of the handle methods side effects. For example, if the handler sends out emails those emails would be resent.
+As creating a new event handler will handle all of its events, it's _very important_ to take care of the handle methods' side effects. For example, if the handler sends out emails those emails would be re-sent.
 {{< /alert >}}
 
 {{< alert title="New functionality" color="info" >}}
