@@ -9,7 +9,7 @@ Event Sourcing is an approach that derives the current state of an application f
 
 [Events]({{< ref "events" >}}) are facts and Event Sourcing is based on the incremental accretion of knowledge about our application / domain.  Events in the [log]({{< ref "event_store#event-log" >}}) **cannot be changed or deleted**. They represent things that have happened. Thus, in the absence of a time machine, they cannot be made to un-happen.
 
-Here's an overview of Event Sourcing:
+Here's an overview of the data-flow in Event Sourcing:
 
 ```mermaid
 flowchart TB
@@ -57,11 +57,11 @@ A traditional model of dealing with data in applications is [CRUD](https://en.wi
 
 ## Projections
 
-The Event Store defines how the events are written in the system, it does not define or prescribe how things are read or interpreted. Committed events will be made available to any potential subscribers, which can process the events in any way they require. One common scenario is to update a read model/cache of one or multiple views, also known as a _projections_ or _materialized view_. As the Event Store is not ideal for querying data, a prepopulated view that reacts to changes is used instead. Dolittle has no built-in support for a specific style of projection as the requirements for that are out of scope of the platform.
+The Event Store defines how the events are written in the system, it does not define or prescribe how things are read or interpreted. Committed events will be made available to any potential subscribers, which can process the events in any way they require. One common scenario is to update a read model/cache of one or multiple views, also known as a [_projections_]({{< ref projections >}}) or _materialized views_. As the Event Store is not ideal for querying data, a prepopulated view that reacts to changes is used instead. Dolittle has built-in support for a specific style of projection, and allows free-form handling of events through [_event handlers_]({{< ref "event_handlers_and_filters#event-handlers" >}}).
 
 ## Compensating events
 
-To negate the effect of an Event that has happened, another Event has to occur that reverses the effect. This can be seen in any mature Accounting domain where the Ledger is an immutable event store or journal. Entries in the ledger cannot be changed. The current balance can be derived at any point by accumulating all the changes (entries) that have been made and summing them up (credits and debts). In the case of mistakes, an explicit correcting action would be made to fix the ledger.
+To negate the effect of an Event that has happened, another Event has to occur that reverses its effect. This can be seen in any mature Accounting domain where the Ledger is an immutable event store or journal. Entries in the ledger cannot be changed. The current balance can be derived at any point by accumulating all the changes (entries) that have been made and summing them up (credits and debts). In the case of mistakes, an explicit correcting action would be made to fix the ledger.
 
 ## Commit vs Publish
 
