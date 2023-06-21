@@ -10,7 +10,33 @@ Read models defines the data views that you are interested in presenting, while 
 
 Example of a projection:
 
-![Diagram of projections](/images/concepts/projections_v2.png)
+```mermaid
+flowchart LR
+    subgraph Business moments
+        direction LR
+        CR["Customer Registered<br/>Id: 123<br/>Name: John Doe"]
+        DAO["Debit Account Opened<br/>Id: 456<br/>Balance: 0"]
+        DP["Debit Performed<br/>Account: 456<br/>Amount: $20"]
+        WP["Withdrawal Performed<br/>Account: 56<br/>Amount: $10"]
+    end
+    subgraph Operations
+        CR --> O1["Customer = Id<br/>Name = Name"]
+        DAO --> O2["Id = Id<br/>Type = Debit"]
+        DP --> O3["Id = Id<br/>Amount += Amount"]
+        WP --> O4["Id = Id<br/>Amount -= Amount"]
+    end
+    subgraph Read Model
+        O1 --> RM
+        O2 --> RM
+        O3 --> RM
+        O4 --> RM["Account Details
+        Id: 456
+        Type: Debit
+        Customer: 123
+        Name: John Doe
+        Balance: $10"]
+    end
+```
 
 ## Read model
 

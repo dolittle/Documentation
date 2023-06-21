@@ -16,7 +16,15 @@ In a multi-tenant application, the same instance of the software is used to serv
 
 Multi-tenancy allows for easier scaling, sharing of infrastructure resources, and easier maintenance and updates to the software.
 
-![Simple explanation of multi tenancy](/images/concepts/multitenant-explanation.png)
+```mermaid
+flowchart TB
+    T1((Tenant A)) --> A[Application]
+    T2((Tenant B)) --> A
+    T3((Tenant C)) --> A
+    A --> DB1[(Tenant A)]
+    A --> DB2[(Tenant B)]
+    A --> DB3[(Tenant C)]
+```
 
 ## Multi-tenancy in Dolittle
 

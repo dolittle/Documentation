@@ -25,7 +25,10 @@ Each processor processes events within a single [scope]({{< ref "event_store#sco
 
 The filter is a processor that creates a new stream of events from the [event log]({{< ref "event_store#event-log" >}}). It is identified by a `FilterId` and it can create either a partitioned or unpartitioned stream. The processing in the filter itself is however not partitioned since it can only operate on the event log stream which is an unpartitioned stream.
 
-![Filter](/images/concepts/filter.png)
+```mermaid
+flowchart LR
+    EL[(Event Log)] --> StreamProcessor --> F[EventProcessor<br/>Filter code] --> S[(Stream)]
+```
 
 The filter is a powerful tool because it can create an entirely customized stream of events. It is up to the developer on how to filter the events, during filtering both the content and the metadata of the event is available for the filter to consider. If the filter creates a partitioned stream it also needs to include which partition the event belongs to.
 
@@ -39,8 +42,15 @@ Since there are [two types of streams]({{< ref "streams.md#public-vs-private-str
 
 The event handler is a combination of a filter and an event processor. It is identified by an `EventHandlerId` which will be both the id of both the filter and the event processor.
 
-![Event Handler](/images/concepts/eventhandler.png)
-
+```mermaid
+flowchart LR
+    subgraph implicit filter
+        direction LR
+        EL[(Event Log)] --> FSP[StreamProcessor] --> F[Filter based on<br/>EventType] --> S[(Stream)]
+    end
+    S --> SP[StreamProcessor]
+    SP --> EP["EventProcessor<br/>Handle() function"]
+```
 The event handler's filter is filtering events based on the [`EventType`]({{< ref "events.md#event-type" >}}) that the event handler handles.
 
 Event handlers can be either partitioned or unpartitioned. Partitioned event handlers uses, by default, the [`EventSourceId`]({{< ref "event_sourcing#event-source-id" >}}) of each event as the partition id. The filter follows the same rules [for streams]({{< ref "streams#rules" >}}) as other filters.

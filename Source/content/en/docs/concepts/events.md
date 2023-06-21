@@ -12,7 +12,7 @@ An event is a change (fact) within our system. The event itself contains all the
 
 More usually, it is a simple Data Transfer Object (DTO) that contains state and properties that describe the change. It does not contain any calculations or behavior.
 
-## “that has happened” 
+## “that has happened”
 As the event has happened, it cannot be changed, rejected, or deleted. This forms the basis of [Event Sourcing]({{< ref "event_sourcing" >}}) If you wish to change the action or the state change that the event encapsulates, then it is necessary to initiate an action that results in another event that nullifies the impact of the first event.
 
 This is common in accounting, for example:
@@ -90,7 +90,18 @@ For the Runtime, the event is just a JSON-string. It doesn't know about the even
 
 This diagram shows us a simplified view of committing a single event with the type of `DishPrepared`. The Runtime receives the event, and sends it back to us to be handled. Without the event type, the SDK wouldn't know how to deserialize the JSON message coming from the Runtime.
 
-![Flow of committing an event type](/images/concepts/eventtype.png)
+```mermaid
+sequenceDiagram
+    participant SDK
+    participant Runtime
+    participant Event Store
+    SDK->>Runtime: Commit(DishPrepared)
+    Runtime->>Event Store: Serialize the event into<br/>JSON and save it
+    Runtime->>SDK: Commit successful
+    Runtime->>Runtime: Process the event in<br/>handlers and filters
+    Runtime->>SDK: Send the JSON of the event<br/>to the event-handler
+    SDK->>SDK: Deserialize according to EventTypeId<br/>found in JSON and call on the handler
+```
 
 Event types are also important when wanting to deserialize events coming from other microservices. As the other microservice could be written in a completely different programming language, event types provide a level of abstraction for deserializing the events.
 
