@@ -13,17 +13,14 @@ Here's an overview of Event Sourcing:
 
 ```mermaid
 flowchart TB
-    P[Presentation] --> DP[/DishPrepared/]
-    subgraph write
-        DP --> RA[/RecipeAdded/] --> DATM[/DishAddedToMenu/]
-        DATM --> ES[(Event Store)]
-    end
-    ES --> Ext([External Systems])
-    subgraph read
-        ES --> Consumer -->|Generates the read cache| RC[(Read Cache)]
-    end
-    RC -->|Query for read data| P
+    Presentation --produces--> Events[/Events/]
+    Events --stored in--> EventStore[(Event Store)]
+    EventStore --- SendToConsumers["Events are<br/>sent to consumers"]:::transparent
+    SendToConsumers --> External([External Systems])
+    SendToConsumers --> Consumer --Generates the read cache--> ReadCache[(Read Cache)]
+    ReadCache -->|Query for read data| Presentation
 
+    classDef transparent stroke-width:0px,fill:#fff0;
 ```
 
 ## Problem
