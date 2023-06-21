@@ -11,7 +11,20 @@ Event Sourcing is an approach that derives the current state of an application f
 
 Here's an overview of Event Sourcing:
 
-![Basic anatomy of event sourcing](/images/concepts/eventsourcing.png)
+```mermaid
+flowchart TB
+    P[Presentation] --> DP[/DishPrepared/]
+    subgraph write
+        DP --> RA[/RecipeAdded/] --> DATM[/DishAddedToMenu/]
+        DATM --> ES[(Event Store)]
+    end
+    ES --> Ext([External Systems])
+    subgraph read
+        ES --> Consumer -->|Generates the read cache| RC[(Read Cache)]
+    end
+    RC -->|Query for read data| P
+
+```
 
 ## Problem
 A traditional model of dealing with data in applications is [CRUD](https://en.wikipedia.org/wiki/Create,_read,_update_and_delete) (create, read, update, delete). A typical example is to read data from the database, modify it, and update the current state of the data. Simple enough, but it has some limitations:

@@ -6,7 +6,20 @@ weight: 15
 
 At the heart of the Dolittle runtime sits the concept of Event Horizon. Event horizon is the mechanism for a microservice to give [Consent]({{< ref "#consent" >}}) for another microservice to [Subscribe]({{< ref "#subscription" >}}) to its [Public Stream]({{< ref "streams#public-vs-private-streams" >}}) and receive [Public Events]({{< ref "events#public-vs-private" >}}).
 
-![Anatomy of an Event Horizon subscription](/images/concepts/eventhorizon.png)
+```mermaid
+flowchart BT
+    subgraph Producer
+        ProdEventLog[(Event Log)] -->|Public events| PublicFilter[Public Filter]
+        PublicFilter -->|matches go into| PublicStream[(Public Stream)]
+        Consent(((Consent))) -->|gives access to| PublicStream
+    end
+    subgraph Consumer
+        direction LR
+        Subscription(((Subscription)))
+        Subscription -->|stores| ConEventLog[(Scoped Event Log)]
+    end
+    Subscription -->|asks for events| Consent
+```
 
 ## Producer
 
@@ -39,7 +52,7 @@ Subscription {
     TenantId Guid
     PublicStreamId Guid
     PartitionId string
-    // the consumers scoped event log 
+    // the consumers scoped event log
     ScopeId Guid
 }
 ```

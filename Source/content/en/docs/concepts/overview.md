@@ -33,11 +33,20 @@ Dolittle applications are built from microservices that communicate with each ot
 ## Microservice
 A _microservice_ consists of one or many heads talking to one Runtime. Each microservice is autonomous and has its own resources and [event store]({{< ref "event_store" >}}).
 
-The core idea is that a microservice is an independently scalable unit of deployment that can be reused in other parts of the software however you like. You could compose it back in one application running inside a single process, or you could spread it across a cluster. It really is a deployment choice once the software is giving you this freedom. 
+The core idea is that a microservice is an independently scalable unit of deployment that can be reused in other parts of the software however you like. You could compose it back in one application running inside a single process, or you could spread it across a cluster. It really is a deployment choice once the software is giving you this freedom.
 
 This diagram shows the anatomy of a microservice with one head.
 
-![Example anatomy of a Dolittle microservice](/images/concepts/anatomy.png)
+```mermaid
+flowchart LR
+    Frontend --> Backend
+    subgraph Head
+        Backend --> SDK
+    end
+    SDK --> Runtime
+    Runtime --> ES[(Event Store)]
+    Runtime --> RC[(Read Cache)]
+```
 
 {{< alert title="Read Cache" color="info" >}}
 The _Read Cache_ in these pictures is not part of Dolittle. Different [projections]({{< ref "event_sourcing#projections" >}}) call for different solutions depending on the sort of load and data to be stored.
@@ -49,7 +58,22 @@ Since computing is the most expensive resource, the Dolittle Runtime and SDK's h
 
 This diagram shows a microservice with 2 tenants, each of them with their own resources.
 
-![Example of multi-tenant microservice](/images/concepts/multitenant.png)
+```mermaid
+flowchart LR
+    Frontend --> Backend
+    subgraph Head
+        Backend --> SDK
+    end
+    SDK --> Runtime
+    Runtime --> ES1[("Tenant 1
+    Event Store")]
+    Runtime --> RC1[("Tenant 1
+    Read Cache")]
+    Runtime --> ES2[("Tenant 2
+    Event Store")]
+    Runtime --> RC2[("Tenant 2
+    Read Cache")]
+```
 
 ## What Dolittle isn't
 Dolittle is not a traditional backend library nor an event driven message bus like [Kafka](https://kafka.apache.org/). Dolittle uses [Event Sourcing]({{< ref "event_sourcing" >}}), which means that the state of the system is built from an append-only [Event Store]({{< ref "event_store" >}}) that has all the events ever produced by the application.
