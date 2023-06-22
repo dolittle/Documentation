@@ -1,6 +1,6 @@
 ---
 title: Tooling
-description: Tooling for Dolittle platform developers
+description: Tooling for developers
 author: Dolittle
 keywords: contribute, tooling
 weight: 1

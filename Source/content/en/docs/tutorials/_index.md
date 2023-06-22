@@ -1,7 +1,7 @@
 ---
 title: Tutorials
-description: Tutorials for the Dolittle platform
-keywords: overview, dolittle, why dolittle, what is dolittle, 
+description: Tutorials for the Dolittle open-source framework
+keywords: overview, dolittle, why dolittle, what is dolittle,
 author: Dolittle
 weight: 5
 type: "space"

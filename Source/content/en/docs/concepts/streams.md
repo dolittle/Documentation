@@ -13,7 +13,7 @@ An event stream is simply a stream of events. Each stream is uniquely identified
 
 As streams are append-only, an event can be uniquely identified by its position in a stream, including in the [event log]({{< ref "event_sourcing.md#event-log" >}}).
 
-Event streams are perhaps the most important part of the Dolittle platform. To get a different and more detailed perspective on streams, please read our section on [event sourcing and streams]({{< ref "event_sourcing.md#streams" >}}).
+Event streams are perhaps the most important part of the Dolittle Runtime. To get a different and more detailed perspective on streams, please read our section on [event sourcing and streams]({{< ref "event_sourcing.md#streams" >}}).
 
 ## Rules
 

@@ -1,13 +1,13 @@
 ---
 title: Requirements
-description: Requirements for running microservices in the Dolittle platform
+description: Requirements for running microservices in the Aigonix platform
 keywords: Platform, PaaS, Requirements
 weight: 1
 aliases:
 - /platform/general/requirements/
 ---
 
-To be compatible with the environment of the Dolittle platform, there are certain requirements we impose on your microservices.
+To be compatible with the environment of the Aigonix platform, there are certain requirements we impose on your microservices.
 If they are not met, your application might behave unexpectedly - or in the worst case - not work at all.
 The following list of requirements is subject to change, but we will always notify you when you have an application running in our platform before making any changes.
 
@@ -16,7 +16,7 @@ To ensure data privacy, security and proper segregation of your tenant's data, o
 This system controls access and connection settings for resources on a per request basis and will provide your microservice with the necessary information for accessing these resources programmatically.
 The connection information will not be the same as when developing locally, so you must not embed connection settings in your code.
 
-This requirement applies to read and write data to databases or files, or while making API-calls to services, both to internal resources provided by the Dolittle platform and external 3rd party services.
+This requirement applies to read and write data to databases or files, or while making API-calls to services, both to internal resources provided by the Aigonix platform and external 3rd party services.
 
 ### 2. All your applications external endpoints must be configured and exposed through the platform
 For the resource management system to work, and to protect your application and users from data leakage, we encrypt and authenticate all interactions with your application through the platform.

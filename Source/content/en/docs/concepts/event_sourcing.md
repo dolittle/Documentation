@@ -1,6 +1,6 @@
 ---
 title: Event Sourcing
-description: Overview of Event Sourcing in the Dolittle Platform
+description: Overview of Event Sourcing with the Dolittle SDK and Runtime
 keywords: Overview, Domain Events, Event Sourcing, Event Store, Log
 weight: 30
 ---

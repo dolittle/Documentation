@@ -1,6 +1,6 @@
 ---
 title: Update secrets
-description: How to update secrets in the Dolittle Platform
+description: How to update secrets in the Aigonix Platform
 weight: 15
 ---
 
@@ -43,7 +43,7 @@ data:
 ```
 
 
-The files represent the [Secrets](https://kubernetes.io/docs/concepts/configuration/secret/) -resource in Kubernetes. We recommend that you store the files in a version control system(VCS) of your choice. 
+The files represent the [Secrets](https://kubernetes.io/docs/concepts/configuration/secret/) -resource in Kubernetes. We recommend that you store the files in a version control system(VCS) of your choice.
 
 ## Purpose
 

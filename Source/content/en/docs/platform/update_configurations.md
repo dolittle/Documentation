@@ -1,6 +1,6 @@
 ---
 title: Update configurations
-description: How to update configuration files in the Dolittle Platform
+description: How to update configuration files in the Aigonix Platform
 weight: 10
 ---
 
@@ -60,7 +60,7 @@ data:
     }
 ```
 
-The files represent configmap resources in Kubernetes. We recommend that you store the files in a version control system(VCS) of your choice. 
+The files represent configmap resources in Kubernetes. We recommend that you store the files in a version control system(VCS) of your choice.
 
 ## Purpose
 
