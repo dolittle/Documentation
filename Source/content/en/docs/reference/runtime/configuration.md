@@ -61,19 +61,19 @@ Contains a feature-flag for whether or not to use reverse calls implemented with
 Defines the platform specific information related to the running microservice.
 * CustomerName
   * Type: string
-  * Default: '[Not Set]' 
+  * Default: '[Not Set]'
 * CustomerID
   * Type: GUID
   * Default: 'ca900ec9-bae8-462e-b262-fa3efc825ca8'
 * ApplicationName
   * Type: string
-  * Default: '[Not Set]' 
+  * Default: '[Not Set]'
 * ApplicationID
   * Type: GUID
   * Default: '4fe9492c-1d19-4e6b-be72-03208789906e'
 * MicroserviceName
   * Type: string
-  * Default: '[Not Set]' 
+  * Default: '[Not Set]'
 * MicroserviceID
   * Type: GUID
   * Default: '4a5d2bc3-543f-459a-ab0b-e8e924093260'
@@ -91,25 +91,14 @@ This is a dictionary mapping specifying the host:port address for reaching the P
     * Type: Integer
 
 # Tenant-Specific Configuration
-Configurations that are specific to a single tenant. All of the configurations for a tenant is behind the configuration key tenants:\<Tenant-Guid\> 
+Configurations that are specific to a single tenant. All of the configurations for a tenant is behind the configuration key tenants:\<Tenant-Guid\>
 ## Resources
-### Embeddings [Obsolete]
-* Servers
-  * Description: The name of the host server. (Usually 'localhost')
-  * Type: Array[string]
-* Database
-  * Description: The name of the mongo database 
-  * Type: string
-* MaxConnectionPoolSize
-  * Description: The max number of concurrent MongoDB connections
-  * Type: Integer
-  * Default: 1000
 ### EventStore
 * Servers
   * Description: The name of the host server. (Usually 'localhost')
   * Type: Array[string]
 * Database
-  * Description: The name of the mongo database 
+  * Description: The name of the mongo database
   * Type: string
 * MaxConnectionPoolSize
   * Description: The max number of concurrent MongoDB connections
@@ -120,7 +109,7 @@ Configurations that are specific to a single tenant. All of the configurations f
   * Description: The name of the host server. (Usually 'localhost')
   * Type: Array[string]
 * Database
-  * Description: The name of the mongo database 
+  * Description: The name of the mongo database
   * Type: string
 * MaxConnectionPoolSize
   * Description: The max number of concurrent MongoDB connections
@@ -132,7 +121,7 @@ Configurations that are specific to a single tenant. All of the configurations f
   * Description: The full host connection string of the MongoDB connection. (Usually `mongodb://localhost:27017`)
   * Type: string
 * Database
-  * Description: The name of the mongo database 
+  * Description: The name of the mongo database
   * Type: string
 * MaxConnectionPoolSize
   * Description: The max number of concurrent MongoDB connections
@@ -181,10 +170,6 @@ microservices:
 tenants:
     1c707441-95b3-4214-a4d1-4199c58afa23:
         resources:
-            embeddings:
-            servers:
-            - my.host
-            database: embeddings
             eventStore:
             servers:
             - my.host
@@ -219,11 +204,6 @@ tenants:
         servers:
           - localhost
         database: projections
-        maxConnectionPoolSize: 1000
-      embeddings:
-        servers:
-          - localhost
-        database: embeddings
         maxConnectionPoolSize: 1000
       readModels:
         host: mongodb://localhost:27017
@@ -312,7 +292,6 @@ The legacy file provider for `event-horizon-consents.json` is buggy. So if a Run
 **Required.** Configurations for the resources available per [Tenant]({{< ref "docs/concepts/tenants" >}}):
 - `eventStore`: MongoDB configuration for the [Event Store]({{< ref "docs/concepts/event_store" >}})
 - `projections`: MongoDB configuration for the storage of [Projections]({{< ref "docs/concepts/projections" >}})
-- `embeddings`: MongoDB configuration for the storage of [Embeddings]({{< ref "docs/concepts/embeddings" >}})
 - `readModels`: MongoDB configuration for a database that can be used for any storage and accessed through the SDKs directly. This database should only be used to store data that can be rebuilt from replaying events.
 
 The `database` name must be unique for all resources and tenants, reusing the same name will cause undefined behaviour in the Runtime and potential dataloss.
@@ -327,13 +306,6 @@ The `database` name must be unique for all resources and tenants, reusing the sa
             "maxConnectionPoolSize": 1000
         },
         "projections": {
-            "servers": [
-                <MongoDB connection URI>
-            ],
-            "database": <MongoDB database name>,
-            "maxConnectionPoolSize": 1000
-        },
-        "embeddings": {
             "servers": [
                 <MongoDB connection URI>
             ],
@@ -362,7 +334,7 @@ The `database` name must be unique for all resources and tenants, reusing the sa
             // the producers public stream and partition to give consent to
             "stream": <stream-id>,
             "partition": <partition-id>,
-            // an identifier for this consent 
+            // an identifier for this consent
             "consent": <consent-id>
         }
     ]
