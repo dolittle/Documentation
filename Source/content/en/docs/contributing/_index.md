@@ -1,6 +1,6 @@
 ---
 title: Contributing
-description: Contribute to the Dolittle platform
+description: Contribute to the Dolittle open-source framework
 author: Dolittle
 keywords: contribute, guidelines
 weight: 90

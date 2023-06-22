@@ -1,6 +1,6 @@
 ---
 title: FAQ
-description: Frequently asked questions about the Dolittle Platform
+description: Frequently asked questions about the Aigonix Platform
 weight: 20
 ---
 

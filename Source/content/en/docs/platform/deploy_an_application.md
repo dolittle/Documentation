@@ -1,6 +1,6 @@
 ---
 title: Deploy an application
-description: How to deploy an application in the Dolittle Platform
+description: How to deploy an application in the Aigonix Platform
 weight: 5
 ---
 {{% pageinfo color="info" %}}
@@ -10,7 +10,7 @@ This guide is for the users of our [Platform]({{< ref "platform" >}}). If you ar
 ## Prerequisites
 
 Familiar with the following:
-- Docker containers 
+- Docker containers
 - Kubernetes
 - Microsoft Azure
 
@@ -68,7 +68,7 @@ az acr login -n <ACR Registry> --subscription <Subscription ID>
 
 ## Deployment
 
-To deploy a new version of your application, follow these steps. For <Tag> use semantic versioning, e.g. "1.0.0". 
+To deploy a new version of your application, follow these steps. For <Tag> use semantic versioning, e.g. "1.0.0".
 
 
 ### Docker

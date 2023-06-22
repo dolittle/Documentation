@@ -1,6 +1,6 @@
 ---
 title: Getting started
-description: Get started with the Dolittle platform
+description: Get started with the Dolittle open-source framework
 keywords: Learning, Quickstart, setup, prerequisites, how to, guide, walkthrough, csharp, c#, dotnet, .NET, typescript, javascript
 author: joel, jakob, sindre
 weight: 1
