@@ -84,7 +84,6 @@ flowchart TB
                 Logs1prod[\Log viewer/] -.gathers logs.-> app1prodms1head
                 Logs1prod[\Log viewer/]  -.gathers logs.-> app1prodms2head
             end
-            ACR1[\Container Registry/]
             Docs1[\Documentation/]
 
 
@@ -110,10 +109,10 @@ flowchart TB
                 Logs2prod -.gathers logs.-> app2prodms2head
             end
 
-            ACR2[\Container Registry/]
             Docs2[\Documentation/]
 
             app2prodDB -.regular backups.-> Backups2[\Backups/]
         end
+        ACR[\Container Registry/]
     end
 ```
