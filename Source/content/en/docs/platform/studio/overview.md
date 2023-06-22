@@ -5,30 +5,29 @@ keywords: Studio, PaaS, General
 weight: 1
 ---
 
-Aigonix Studio is the web-based interface for managing your applications and microservices in the Aigonix Platform. It is the main interface for interacting with the platform and is where you will spend most of your time when interacting with the platform.
+Aigonix Studio is the web-based interface for managing your [Applications]({{<ref application>}}) and [Microservices]({{<ref microservice>}}) in the Aigonix Platform. It is the main interface for interacting with the platform and is where you will spend most of your time when interacting with the platform.
 
-In Studio you can create and manage [Applications]({{<ref application>}}), [Environments]({{<ref environment>}} ), [Microservices]({{<ref microservice>}}) and other products and services.
+In Studio you can create and manage Applications, [Environments]({{<ref environment>}} ), Microservices and other products and services.
 
 ## Getting started
 
-To access Studio you need to be a customer of Aigonix. If you are not a customer, you can [contact us](https://dolittle.com/contact) to learn more and hopefully become one.
+To access Studio you need to be a customer of Aigonix. If you are not a customer, you can [contact us](https://aigonix.com/contact) to learn more and hopefully become one.
 
 Once you have access to Studio, you can log in using your credentials at [dolittle.studio](https://dolittle.studio). You can now create your first Application and start deploying your Microservices into that application.
 
 ## Components
 
-When you run your Microservices in the Aigonix Platform you will have access to a number of components that will help you manage your services.
+When you run your [Microservices]({{<ref microservice>}}) in the Aigonix Platform you will have access to a number of components that will help you manage your services.
 
-You will define each Application with its Environments, and add Microservices to them. You define which Docker image to use for each Microservice, and whether or not you want to use the Dolittle Runtime. You can use a publically available image, or store your container image in the provided container-registry.
+You will define each [Application]({{<ref application>}}) with its [Environments]({{<ref environment>}}), and add Microservices to them. You define which Docker image to use for each Microservice, and whether or not you want to use the Dolittle Runtime. You can use a publically available image, or store your container image in the provided [container-registry]({{<ref container_registry>}}).
 
-If you use the Dolittle Runtime one will be made available to your Head and through it you will have access to Tenanted resources like the Event Store and Read Cache. If you do not use the Dolittle Runtime the service will run the assigned Docker-image without permanent storage (stateless).
+If you use the Dolittle Runtime one will be made available to your [Head]({{<ref "microservice#head">}}) and through it you will have access to [Tenanted resources]({{<ref tenants>}}) like the [Event Store]({{<ref event_store>}}) and [Read Cache]({{<ref read_cache>}}). If you do not use the [Dolittle Runtime]({{<ref runtime>}}) the service will run the assigned Docker-image without permanent storage (stateless).
 
 You can make your services available to the internet if you so wish. If you do not they will only be available within the platform.
 
 ```mermaid
 flowchart TB
     subgraph Legend
-        direction LR
         S[Docker Container]
         R>Dolittle Runtime]
         D[(Database)]
