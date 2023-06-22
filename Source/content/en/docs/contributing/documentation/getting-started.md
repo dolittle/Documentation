@@ -13,19 +13,13 @@ All of Dolittles documentation is open-source and hosted on GitHub.
 
 This guide teaches you how to add a new repository to the Dolittle documentation [structure]({{< ref "structure" >}}).
 
-Start by cloning the [Documentation repository](https://github.com/dolittle/Documentation) and its submodules:
+Start by cloning the [Documentation repository](https://github.com/dolittle/Documentation):
 
 ```shell
-$ git clone --recursive https://github.com/dolittle/documentation
+$ git clone https://github.com/dolittle/documentation
 ```
 
-The docsy -theme is included as a git submodule, you need to initialize it:
-
-```shell
-$ git submodule update --init --recursive
-```
-
-Put your documentation in markdown files under the `Source/content` folder. You can also add images and other assets in the same folder.
+Put your documentation in markdown files under the `Source/content` folder. You can also add images and other assets in the same folder. Please consult the [writing guide]({{<ref writing_guide>}}) for more information on how to write documentation.
 
 {{% alert %}}
 All folder names given in this process will act as URL segments, take care not to change these after they have been deployed.
