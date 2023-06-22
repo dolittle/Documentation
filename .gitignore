@@ -12,3 +12,4 @@ Source/node_modules/
 Source/tech-doc-hugo
 
 .DS_Store
+.hugo_build.lock

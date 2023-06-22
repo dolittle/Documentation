@@ -7,9 +7,9 @@ weight: 4
 ---
 
 ## Structure internally
-All documentation is inside Dolittles [Documentation](https://github.com/dolittle/Documentation) repositorys `Source` folder. The 2 main pieces of this folder are `content` and `repositories`:
+Documentation lives in our [Documentation](https://github.com/dolittle/Documentation) repository's `Source` folder. The 2 main pieces of this folder are `content` and `repositories`:
 
-* `Source/repositories` contain submodules to Dolittle repositories.
+* `Source/repositories` contain submodules to Dolittle repositories. **We are moving away from this, please don't add new submodules.**
 
 * `Source/content` is the folder that Hugo uses to render dolittle.io, making it the root of the pages. It contains documentation and symlinks to each `Source/repositories` submodules Documentation folder.
 
