@@ -21,7 +21,7 @@ When you run your [Microservices]({{<ref microservice>}}) in the Aigonix Platfor
 
 You will define each [Application]({{<ref application>}}) with its [Environments]({{<ref environment>}}), and add Microservices to them. You define which Docker image to use for each Microservice, and whether or not you want to use the Dolittle Runtime. You can use a publically available image, or store your container image in the provided [container-registry]({{<ref container_registry>}}).
 
-If you use the Dolittle Runtime one will be made available to your [Head]({{<ref "microservice#head">}}) and through it you will have access to [Tenanted resources]({{<ref tenants>}}) like the [Event Store]({{<ref event_store>}}) and [Read Cache]({{<ref read_cache>}}). If you do not use the [Dolittle Runtime]({{<ref runtime>}}) the service will run the assigned Docker-image without permanent storage (stateless).
+If you use the Dolittle Runtime one will be made available to your [Head]({{<ref "microservice#head">}}) and through it you will have access to [Tenanted resources]({{<ref tenants>}}) like the [Event Store]({{<ref event_store>}}) and [Read Cache]({{<ref "resource_system#read_cache" >}}). If you do not use the [Dolittle Runtime](https://github.com/dolittle/runtime) the service will run the assigned Docker-image without permanent storage (stateless).
 
 You can make your services available to the internet if you so wish. If you do not they will only be available within the platform.
 

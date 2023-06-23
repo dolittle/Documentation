@@ -9,7 +9,7 @@ A Microservice is a single unit of deployment in the Aigonix Platform. It is a c
 
 A Microservice lives inside an [Application]({{<ref application>}}) and can be deployed to multiple [Environments]({{<ref environment>}}) in that application.
 
-A Microservice in the Aigonix Platform is a Head and optionally a Runtime and data-storage. If you use the Dolittle Runtime you will have access to the [Event Store]({{<ref event_store>}}) and [Read Cache]({{<ref read_cache>}}) for that Microservice.
+A Microservice in the Aigonix Platform is a Head and optionally a Runtime and data-storage. If you use the Dolittle Runtime you will have access to the [Event Store]({{<ref event_store>}}) and [Read Cache]({{<ref "resource_system#read_cache">}}) for that Microservice.
 
 If you do not use the Dolittle Runtime the Microservice will be stateless and will not have access to any storage. Any state you need to store will have to be stored in an external service. You will have access to the local file-system, but that is not persisted between Microservice restarts, and we do not recommend relying upon it.
 
@@ -23,7 +23,7 @@ Head is the name of the pod where your Microservice Docker image is deployed. It
 
 ## Dolittle Runtime
 
-Each Microservice can be deployed with the [Dolittle Runtime]({{<ref runtime>}}). The Dolittle Runtime is available as a docker image, and will be deployed alongside your Head. Your code communicates with the Runtime through the [Dolittle SDK]({{<ref sdk>}}). The Runtime is used to connect to the [Event Store]({{<ref event_store>}}) and will make the resource-system available to you, where you can get the Tenanted [Read Cache]({{<ref read_cache>}}) and to publish events to the [Event Horizon]({{<ref event_horizon>}}).
+Each Microservice can be deployed with the [Dolittle Runtime](https://github.com/dolittle/runtime). The Dolittle Runtime is available as a docker image, and will be deployed alongside your Head. Your code communicates with the Runtime through the [Dolittle SDK](https://github.com/dolittle/dotnet.sdk). The Runtime is used to connect to the [Event Store]({{<ref event_store>}}) and will make the resource-system available to you, where you can get the Tenanted [Read Cache]({{<ref "resource_system#read_cache">}}) and to publish events to the [Event Horizon]({{<ref event_horizon>}}).
 
 ## Configuration
 
