@@ -28,4 +28,4 @@ flowchart TB
 
 ## Multi-tenancy in Dolittle
 
-In Dolittle, every tenant in a [Microservice]({{< ref "overview#Microservice" >}}) is identified by a GUID. Each tenant has their own [Event Store]({{< ref "event_store" >}}), managed by the [Runtime]({{< ref "overview#components" >}}). These event stores are defined in the Runtime [configuration files]({{< ref "docs/reference/runtime/configuration" >}}). The tenants all share the same Runtime, which is why you need to specify the tenant which to connect to when using the SDKs.
+In Dolittle, every tenant in a [Microservice]({{< ref "overview#Microservice" >}}) is identified by a GUID. Each tenant has their own [Event Store]({{< ref "event_store" >}}), and [Read Cache]({{<ref resource_system>}}) managed by the [Runtime]({{< ref "overview#components" >}}). These event stores are defined in the Runtime [configuration files]({{< ref "docs/reference/runtime/configuration" >}}). The tenants all share the same Runtime, which is why you need to specify the tenant which to connect to when using the SDKs.
