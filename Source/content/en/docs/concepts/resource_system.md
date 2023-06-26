@@ -1,14 +1,20 @@
 ---
 title: Resource System
 description: How to get access to storage
+tags:
+    - resource system
+    - read cache
+    - event store
+    - read models
+    - mongodb
 weight: 90
 ---
 
-When using the [Dolittle SDK](https://github.com/dolittle/dotnet.sdk) you get access to the Resource System which is a way to get access to storage. The Resources you get will be separated by [Tenants]({{<ref tenants>}}) and unique in your current context. This means that you can depend on the stored data not leaking between tenants.
+When using the [Dolittle SDK](https://github.com/dolittle/dotnet.sdk) you get access to the Resource System which is a way to get access to storage. The Resources you get will be separated by [Tenants]({{<ref tenants>}}) and unique in your current context. This means that you can depend on the stored data not leaking between tenants. The event-store and the read-cache are the only permanent storage options available through the Resource System.
 
 ## Read Cache
 
-The Read Cache is available from the Resource System as an `IMongoDatabase` that you can reference in your code. The database will be connected, and you can use normal MongoDB queries to get access to the data you store there.
+The Read Cache, or `ReadModels`, is available from the Resource System as an `IMongoDatabase` that you can reference in your code. The database will be connected, and you can use normal MongoDB queries to get access to the data you store there.
 
 ### Example
 
@@ -115,7 +121,7 @@ tenantedEventStore
 
 ### Getting events for an aggregate-root
 
-It is only possible to get events from the Event Store if they are associated with an [aggregate-root]({{<ref aggregates>}}). This means that you need to know the aggregate-root's ID and the event-source id to get the events. Remember that the aggregate-root ID identifies the type of aggregate-root and event-source ID identifies the instance of that aggregate-root-type.
+Committed events from the Event Store are available if they are associated with an [aggregate-root]({{<ref aggregates>}}). You need to know the aggregate-root's ID and the event-source id to get the events. Remember that the aggregate-root ID identifies the type of aggregate-root and event-source ID identifies the instance of that aggregate-root-type.
 
 You can either get all the events as a collection, or you can get it as a streaming [`IAsyncEnumerable`](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/statements/iteration-statements#await-foreach).
 
@@ -124,9 +130,8 @@ We have a minimal aggregate-root type called `Lookout` with an aggregate-root id
 [AggregateRoot("B92DE697-2E09-4AE1-99A2-3BB72925B0AF")]
 public class Lookout : AggregateRoot
 {
-    public void SeeSomething() => Apply(new SomeEvent(
-        Id: Guid.NewGuid().ToString(),
-        Value: "something happened"));
+    public void SeeSomething() =>
+        Apply(new SomeEvent(Guid.NewGuid(), "something happened"));
 }
 ```
 
@@ -158,9 +163,7 @@ If we want to get the events as a streaming `IAsyncEnumerable` (there may be man
 ```csharp
 var stream = dolittleClient
     .EventStore
-    .FetchStreamForAggregate(
-        "B92DE697-2E09-4AE1-99A2-3BB72925B0AF",
-        "Alice");
+    .FetchStreamForAggregate("B92DE697-2E09-4AE1-99A2-3BB72925B0AF", "Alice");
 
 await foreach (var chunk in stream)
 {
@@ -171,6 +174,8 @@ await foreach (var chunk in stream)
     }
 }
 ```
+
+A much simpler way to handle events is usually to write an [EventHandler]({{<ref event_handlers_and_filters>}}) or [Projection]({{<ref projections>}}) that will handle the events for you.
 
 ## Summary
 
