@@ -188,6 +188,85 @@ Clicking on the button to create a new message-type will let you name and descri
 
 </div>
 
+### Step 2: Select the table
+<div style="display: flex; flex-flow: row; gap: 3em;">
+<div>
+Once you have named your message-type you can select the table that you want to map. It may be hard to know which table contains the data you need - this is where an M3 -expert would be very helpful. Luckily the mapping-wizard can help you find the table you need, and the fields in that table.
+
+You begin by searching for the table - if you know its name you can type it in, otherwise you can search for it. The wizard will display a list of tables that match your search. You can click on a table to select it.
+
+In our example we want to create a message-type for items in the master catalogue. We search for "item master" and find some tables. The "MITMAS" table is the one we want, so we select it.
+</div>
+
+![Search for table](../images/02_mapping/04_search_for_table.png)
+</div>
+
+### Step 3: Select the fields
+<div style="display: flex; flex-flow: row; gap: 3em;">
+<div>
+Once you have selected the table you can select the fields that you want to map. The wizard will display a list of fields that are available in the table, with their description from the metadata. You can click on any number of fields to select them. There is also a toggle to only display the selected fields, as tables can have hundreds of fields.
+</div>
+
+![Clicked table shows fields](../images/02_mapping/05_clicked_table_shows_fields.png)
+
+</div>
+
+### Step 4: Name the fields
+<div style="display: flex; flex-flow: row; gap: 3em;">
+<div>
+Once you have selected the fields you want to map you can name them. This is where you translate from the field-names in the M3 -instance to the field-names in your message-type. The wizard will suggest a name based on the description of the field in the M3 -instance, but you can change it to whatever you want.
+
+Setting a relevant message-type -name and field -names is how you translate from the "language" of your M3 -instance to the "language" of your services. This is how you make the data from your M3 -instance available to your services in a language they understand.
+
+Remember that you can map tables to many message-types. There is no need to map all the fields in a table to one message-type that simply represents that table. Doing this can be useful in some cases, but doing the work to come up with a relevant message-type -name and field -names is often more valuable, and it protects the services that consume the messages from the details of the M3 -instance.
+
+In our example we have selected some fields from the "MITMAS" table. We have named the message-type "Item" and the fields "GrossWeight", "Height", "Length", "Name", "Category", "ItemNumber" and "Width". As the picture shows direct access to the business-data in M3 would have required the knowledge that the MITMAS -table had the relevant fields MNGRWE, MMHEI, MMLEN, MMITDS, MMITGR, MMITNO and MMWTD in whatever service needed to work with the data. By mapping the fields we have made the data available in a language that is more relevant to our services.
+</div>
+
+![Name the fields](../images/02_mapping/07_name_fields.png)
+</div>
+
+### Step 5: Save the message-type
+
+<div style="display: flex; flex-flow: row; gap: 3em;">
+<div>
+
+Once you have named the fields you can save the mapping. This saves your mapping, but it does not yet deploy it to the connector, which means that the connector will not yet start translating data from the M3 -instance into messages. You can deploy the mapping by clicking the "Deploy" -button in the top right corner of the mapping interface.
+
+Having a separate deployment-step lets you "play" with message-types and mappings without affecting the connector. Finding good terms to use is often an iterative process, and we recommend working with the message-type -mappings for a while until you are happy with it.
+
+Saving will show the new message-type in the list of message-types. You can see from the illustration that this message-type has not yet been deployed, as it has no date in the "Deployed" -column.
+</div>
+
+![Message type not yet deployed](../images/02_mapping/08_message_type_not_yet_deployed.png)
+</div>
+
+### Step 6: Deploy the message-type
+<div style="display: flex; flex-flow: row; gap: 3em;">
+<div>
+
+Once you are happy with your mapping you can deploy it to the connector. This will make the connector start translating data from the M3 -instance into messages. You can deploy multiple mappings by marking them in the list and clicking the "Deploy" -button in the top right corner of the mapping interface.
+
+</div>
+
+![Deploy message type](../images/02_mapping/09_deploy_message_type.png)
+
+</div>
+
+### Step N: Refine the message-types
+
+<div style="display: flex; flex-flow: row; gap: 3em;">
+<div>
+
+By navigating into the "message types" -tab in the connection you can always go back and refine your message-types. You can add more fields, remove fields, rename fields and change the name of the message-type. You can also delete the message-type if you no longer need it.
+
+You can delete message-types on the connection, or you can add new ones. You also control deployment of the message-type -mappings from this list.
+</div>
+
+![Message type deployed](../images/02_mapping/10_message_type_deployed.png)
+</div>
+
+
 
 
 ## Consuming messages
