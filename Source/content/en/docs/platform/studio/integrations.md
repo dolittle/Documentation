@@ -9,13 +9,19 @@ Integrations in Aigonix lets you work with your existing business-data in an ERP
 
 By setting up integrations your business data from an ERP -system (Infor M3) can be synchronized to the Aigonix Platform. This data can then be used by your [Microservices]({{<ref "../../concepts/overview#microservice">}}) to provide functionality to your users and customers.
 
+This article will introduce you to the concepts of the Aigonix integrations and show you how to set up a connection to an ERP -system and how to map data from the ERP -system into messages. It will also show you how to consume these messages in your services.
+
 ## Conceptual overview
+
+<div style="display: flex; flex-flow: row; gap: 3em; width: 80%">
+<div style="width: 100%">
 
 The integration with an ERP -system is built to support an Event Driven Architecture. By using it the business data in the ERP -system is translated to messages, which your services can consume and react to. Your services can also affect changes in the ERP -system by sending messages through the integration. This allows you to build services that can react to changes in the business data, and that can affect changes in the business data, without needing a direct connection to the ERP -system.
 
 The Aigonix integrations acts as a bridge for your organization's valuable business data that exists in the ERP-system. Working directly with ERP-systems is often difficult, as they are locked down and frequently store the data in terms that are difficult to work with. The Aigonix integration is designed to make it easy to map the data in the ERP -system into messages with domain-names and terms that your services can understand. These messages are then securely available in standard message formats. For ease of use a REST -interface with resources in the domain-terms can be made available.
+</div>
 
-Central to this is the concept of a message-type-mapping (or just a "mapping"). A mapping defines how to translate data from the ERP -system into messages and vice versa. Mappings are defined in the Aigonix Studio -interface where you can select the data you want to translate and specify how to translate it. The mapping is then used to translate the changes in business-data into messages whenever such a change is detected.
+<div style="width: 50%;">
 
 ```mermaid
 graph TB
@@ -25,14 +31,30 @@ graph TB
     Connection <--messages--> KT[/Messages/]
     Services <--reacts to--> KT
 ```
+</div>
+
+</div>
+
+
+Central to this is the concept of a message-type-mapping (or just a "mapping"). A mapping defines how to translate data from the ERP -system into messages and vice versa. Mappings are defined in the Aigonix Studio -interface where you can select the data you want to translate and specify how to translate it. The mapping is then used to translate the changes in business-data into messages whenever such a change is detected.
+
+### Connections
 
 In order to translate data from the ERP -system into messages a connection must be specified and a mapping must be defined. The connection specifies how to connect to the ERP -system and the mapping specifies how to translate the data into messages. Once you define the connection you can either run an instance of the ERP Integration service yourself (on-premises), or automatically host one in the Aigonix platform. This service is the conduit between the messages and the ERP -system. It is responsible for translating the messages into changes in the ERP -system and for translating changes in the ERP -system into messages.
 
+### Message-types
+
 The mappings themselves are defined in the Aigonix Studio -interface, and transferred to the ERP Integration service. They are defined in terms of the data in the ERP -system. The ERP integration service exposes webhooks that ION can use to notify of changes, or it can do regular polling to discover changes.
+
+### Details (for the technically inclined)
+
+In slightly more detail the Aigonix integration works by connecting to the ERP -system (M3) and translating changes in the business-data into messages. This is done by the ERP Integration service, which knows how to poll and to set up webhooks for ION. It translates to messages, and sends that to the correct streams.
+
+An interface configure the ERP Integrations service exists in Aigonix studio, which is how you can configure message-types and set up new connections. The ERP Integration service can run on-premises, or it can be hosted in the Aigonix platform. In either case it is controlled by your setup in Aigonix studio.
 
 
 ```mermaid
-graph LR
+graph TB
     subgraph Enterprise with M3
         ION --calls--> M3P[Programs]
         M3P --enact changes--> M3DB
@@ -267,16 +289,66 @@ You can delete message-types on the connection, or you can add new ones. You als
 </div>
 
 
+## Consuming data
 
+Having mapped the data from your M3 -instance into messages you can now consume these messages in your services. The connector will translate changes in the M3 -instance into messages that are available on a Kafka -topic. If you do not want or need a full stream of changes, just the "latest state" of the message-type (in our example - the latest state of an item in the catalogue) you can use the REST -interface. This is usually what you need if you want to display the data in a user interface, or work with it in tools like Power BI.
 
-## Consuming messages
+### Option 1: Event stream (messages on a Kafka topic)
+<div style="display: flex; flex-flow: row; gap: 3em;">
+<div>
 
-***TODO: screenshots and description of the message consumption process***
+Once you have set up a connection and mapped some data you can start consuming the data in your services. The data is transferred from your ERP -system and translated into the message-types you have defined. These messages are then available on a Kafka-topic that you can consume from your services.
 
-## Publishing messages
+Consuming this stream of messages will give you a full history of the changes in the ERP -system from when the connector first accesses the table. This is useful if you want to build services that react to changes in the ERP -system, or if you want to build services that affect changes in the ERP -system. Building services that communicate through events that communicate changes is the core of an [Event Driven Architecture]({{<ref "../../concepts/overview#event-driven">}}).
 
-***TODO: screenshots and description of the message publishing process***
+To know what kinds of messages to expect on the Kafka -topic and how to connect to it you navigate to the "consume data (event streams)" -tab in the connection. Here you will find a link to an [Async API Specification](https://www.asyncapi.com/) -document that describes the messages that are available on the Kafka -topic. You can use this document to generate code for your services that will consume the messages.
 
-## Exposing data
+</div>
 
-***TODO: screenshots and description of the ERP read-models***
+![Consume event-streams](../images/03_consuming/04_consume_event_streams.png)
+</div>
+
+<div style="display: flex; flex-flow: row; gap: 3em;">
+<div>
+The data in the event-stream is only available through credentialed access. This means that you need to create a credential for your service to use when it connects to the Kafka -topic. You can create a credential by clicking the "Generate new service account" -button. This will create a new service account that can connect to the Kafka -topic.
+
+You can download the credentials for the service account by clicking the "Download credentials" -button.
+
+You can also delete credentials that you no longer need by selecting the credential entries in the list and clicking the "Delete" -button.
+</div>
+
+![Generate service account](../images/03_consuming/05_event_stream_credentials.png)
+</div>
+
+### Option 2: REST API (latest state of a message-type)
+<div style="display: flex; flex-flow: row; gap: 3em;">
+<div>
+It is common to need to display or use the business-data, without actually dealing with the changes in the ERP -system. For example: you may want to display the latest state of an item in the catalogue, but you do not need to know about all the changes that have happened to the item.
+
+In our experience this is the most common use-case for working with business-data. More involved scenarios benefit greatly from an [Event Driven Architecture]({{<ref "../../concepts/overview#event-driven">}}), but for simple scenarios it is often overkill.
+
+The Aigonix integration does not just transfer the messages, it also provides such a service that projects these changes into a "latest-state" view automatically. In this case you can use the REST -interface to get the latest state of the message-type. We chose to create this as a REST -service because many toolsets and frameworks have good support for consuming REST -services.
+
+This is available under the "consume data (REST)" -tab in the connection. Here you will find a link to a Swagger interface where you can exercise the service, and a link to an [Open API Specification](https://www.openapis.org/) -document that describes the REST -service. You can use this document to generate code for your services that will consume the REST -service.
+
+Similarly to the event-stream the data in the REST -service is only available through credentialed access. You can create a credential by clicking the "Generate new credentials" -button. This will create a new credential that can be used to access the REST -service. You set the name and description for the credential, and a token will be generated for you. This token is a bearer-token that should be in the "Authorization" -header of the HTTP -requests to the REST service.
+
+{{% alert %}}
+The token is only shown once, so make sure to copy it and store it somewhere safe. If you lose the token you will have to generate a new credential.
+{{% /alert %}}
+
+You can also delete credentials that you no longer need by selecting the credential entries in the list and clicking the "Delete" -button.
+
+</div>
+
+![Consume REST](../images/03_consuming/02_consume_rest_data_created_credentials.png)
+
+</div>
+
+## Summary
+
+In this article we have seen how to set up a connection to an ERP -system and how to map data from the ERP -system into messages. We have also shown how to consume these messages in your services. This is the core of the Aigonix integration, and it is how you can make your business-data available to your services.
+
+The Aigonix integration is designed to make it easy to work with your business-data and to make it easy to translate from the "language" of your ERP -system to the "language" of your services. This is done by mapping the data from the ERP -system into messages that are available on a Kafka -topic. You can also use the REST -interface to get the latest state of the message-type.
+
+By setting up a connection to your organization's ERP -system you can make the business-data available to your services. This lets you build services that react to changes in the business-data expressed in your domain-language and that affect changes in the business-data, without needing a direct connection to the ERP -system.
