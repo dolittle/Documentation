@@ -70,7 +70,7 @@ Setting up a connection to an ERP -system -instance is done by clicking the "Set
 During the wizard the connection will come alive as it gets configured. This gives you immediate feedback on whether the connection is working or not.
 </div>
 
-![an empty integrations list](../images/01_empty_connections.png)
+![an empty integrations list](../images/01_connection/01_empty_connections.png)
 
 </div>
 
@@ -91,13 +91,13 @@ If you choose to use the hosted version of the connection you must provide the U
 {{% /alert %}}
 </div>
 
-![Named connection](../images/03_configure_connection_naming.png)
+![Named connection](../images/01_connection/03_config_naming.png)
 </div>
 
 <div style="display: flex; flex-flow: row; gap: 3em;">
 Once the connector has started and "called home" the wizard will display this information and you can proceed to the next step, configuring the metadata-publisher and ION-access.
 
-![Connected connection](../images/04_configure_connection_hosted_deployed.png)
+![Connected connection](../images/01_connection/04_config_hosted_deployed.png)
 </div>
 
 ### Step 1: Connect to the Metadata Publisher
@@ -116,7 +116,7 @@ If you do not configure the Metadata Publisher -service you will not be able to 
 {{% /alert %}}
 </div>
 
-![Metadata Publisher](../images/05_configure_connection_enter_mdp_credentials.png)
+![Metadata Publisher](../images/01_connection/05_config_enter_mdp_credentials.png)
 </div>
 
 ### Step 2: Connect to ION
@@ -158,12 +158,37 @@ The steps to create ION -credentials are as follows:
 
 </div>
 
-![ION](../images/06_configure_connection_upload_ion_credentials.png)
+![ION](../images/01_connection/06_config_upload_ion_credentials.png)
 </div>
 
 ## Mapping tables
 
-***TODO: screenshots and description of the mapping process***
+At this point you should have a connection to your M3 -instance, and you are ready to start mapping data from it to messages with the mapping interface. This interface is available by clicking on the "message types", next to "configuration".
+
+### Step 0: Create a message-type
+<div style="display: flex; flex-flow: row; gap: 3em;">
+<div>
+A message-type -mapping is a mapping between a table in your M3 -instance and a message-type in Aigonix. The mapping tells the connector which table to get data from, and how to transform that data into a message that can be consumed by your services. This is where you translate from the "language" of your M3 -instance to the "language" of your services.
+
+You can map a table to many different messages, picking the relevant fields for each message.
+
+Initially you will see an empty list of message-types, with a button to create your first one.
+</div>
+
+![Empty message types](../images/02_mapping/01_empty.png)
+</div>
+
+### Step 1: Name the message-type
+<div style="display: flex; flex-flow: row; gap: 3em;">
+<div>
+Clicking on the button to create a new message-type will let you name and describe your new message, type. The name will be used to identify the message-type, and will be the basis for the messages you receive. For example: if you name your message-type "Item" you will receive messages with the type "ItemUpdated" and "ItemDeleted". When you use the REST API to it will interpret these messages and create a "Item" resource for you, with the fields you mapped.
+</div>
+
+![The empty message type](../images/02_mapping/03_create_named.png)
+
+</div>
+
+
 
 ## Consuming messages
 
